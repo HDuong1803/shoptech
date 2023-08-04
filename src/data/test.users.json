@@ -1,0 +1,162 @@
+[{
+  "_id": {
+    "$oid": "64c86f953c878fe128ffbad0"
+  },
+  "name": "admin",
+  "email": "administrator@gmail.com",
+  "password": "$2b$10$BHme9v/hsxucxLB9k4kROeDWcoxkI7N2wYhRMpH3Jd2fVWX6enE2q",
+  "role": 1,
+  "phone": "0000000000",
+  "refresh_token": "",
+  "createdAt": {
+    "$date": "2023-08-01T02:36:05.987Z"
+  },
+  "updatedAt": {
+    "$date": "2023-08-01T02:36:05.987Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64c87021dd08b118fc16339f"
+  },
+  "name": "John Doe",
+  "email": "jdoe@gmail.com",
+  "password": "$2b$10$EbORlrX5qXf4K037H8ynheagG9.rqJatlnmMj.TTu66qmtLGAdew2",
+  "role": 0,
+  "phone": "0987654321",
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Impkb2VAZ21haWwuY29tIiwicm9sZSI6MCwicGhvbmUiOiIwOTg3NjU0MzIxIiwiaWF0IjoxNjkwODU3NTA1LCJleHAiOjE2OTE0NjIzMDV9.FO-B872AsKouuEaxGyZ8ThnGJjx9bG7ZSy6WZgkPVf8",
+  "createdAt": {
+    "$date": "2023-08-01T02:38:25.319Z"
+  },
+  "updatedAt": {
+    "$date": "2023-08-01T02:38:25.319Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64c8703cdd08b118fc1633a5"
+  },
+  "name": "John Smith",
+  "email": "john@gmail.com",
+  "password": "$2b$10$UO2Tx1bLmIwNdURBNecCYOiPEIrRMPw1V/WSNz1yHQC5.OB8szbgO",
+  "role": 0,
+  "phone": "0987654322",
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZ21haWwuY29tIiwicm9sZSI6MCwicGhvbmUiOiIwOTg3NjU0MzIyIiwiaWF0IjoxNjkwODU3NTMyLCJleHAiOjE2OTE0NjIzMzJ9.dbsUA4kwqDLUN1-hsmhB6wtr50BAQwGI8YIYBzC45rk",
+  "createdAt": {
+    "$date": "2023-08-01T02:38:52.296Z"
+  },
+  "updatedAt": {
+    "$date": "2023-08-01T02:38:52.296Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64c870c5e0e1d76116d4b299"
+  },
+  "name": "Jake Doe",
+  "email": "jake@gmail.com",
+  "password": "$2b$10$11yshjf2nQoPmFxA31spOO8XV/sFqtU.3e6GKQralKIxEsJqSee2G",
+  "role": 0,
+  "phone": "0987654323",
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Impha2VAZ21haWwuY29tIiwicm9sZSI6MCwicGhvbmUiOiIwOTg3NjU0MzIzIiwiaWF0IjoxNjkwODU3NjY5LCJleHAiOjE2OTE0NjI0Njl9.gTNMgWiycSasFjiR6jBVBJZXqKd5VTGn9NXBDAkv7q0",
+  "createdAt": {
+    "$date": "2023-08-01T02:41:09.867Z"
+  },
+  "updatedAt": {
+    "$date": "2023-08-01T02:41:09.867Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64c8711ed8767114beeb0f83"
+  },
+  "name": "Steve Smith",
+  "email": "steve@gmail.com",
+  "password": "$2b$10$OEVApOjZK7SIz5BwZJWSHueSS7rJvgWGzcDZ0SM8CPe2U3M2N/9WG",
+  "role": 0,
+  "phone": "0987654324",
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InN0ZXZlQGdtYWlsLmNvbSIsInJvbGUiOjAsInBob25lIjoiMDk4NzY1NDMyNCIsImlhdCI6MTY5MDg1Nzc1OCwiZXhwIjoxNjkxNDYyNTU4fQ.hX31cdo-0huBTKKHE6djF17P8Aly9A0xOsQWyiQ-wI0",
+  "createdAt": {
+    "$date": "2023-08-01T02:42:38.956Z"
+  },
+  "updatedAt": {
+    "$date": "2023-08-01T02:42:38.956Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64c87136d8767114beeb0f86"
+  },
+  "name": "Rich Smith",
+  "email": "rich@gmail.com",
+  "password": "$2b$10$YoC8Z8huVlY/NAIMt8gnF.9C7zdhqgjw/Wp4d33kNLJwCkBgx2jbO",
+  "role": 0,
+  "phone": "0987654325",
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJpY2hAZ21haWwuY29tIiwicm9sZSI6MCwicGhvbmUiOiIwOTg3NjU0MzI1IiwiaWF0IjoxNjkwODU3NzgyLCJleHAiOjE2OTE0NjI1ODJ9.pppzX5Im4bizZ_Fu0iEwKxThYC4-9_A3H_ik6vZLwRs",
+  "createdAt": {
+    "$date": "2023-08-01T02:43:02.387Z"
+  },
+  "updatedAt": {
+    "$date": "2023-08-01T02:43:02.387Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64c8714dd8767114beeb0f8c"
+  },
+  "name": "Adithya",
+  "email": "janakea.e@gmail.com",
+  "password": "$2b$10$HbZVlXBnAKFXydhZ2XFmYOTgfT00z/zcyxv6G/vkLiZIbAU1D8Ssy",
+  "role": 0,
+  "phone": "0987654326",
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphbmFrZWEuZUBnbWFpbC5jb20iLCJyb2xlIjowLCJwaG9uZSI6IjA5ODc2NTQzMjYiLCJpYXQiOjE2OTA4NTc4MDUsImV4cCI6MTY5MTQ2MjYwNX0.DTekqxYnJiuxLXmMrDb-ULgw65aW6elh5faRNEcnBns",
+  "createdAt": {
+    "$date": "2023-08-01T02:43:25.078Z"
+  },
+  "updatedAt": {
+    "$date": "2023-08-01T02:43:25.078Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64c8715cd8767114beeb0f8f"
+  },
+  "name": "Steve",
+  "email": "steve1@gmail.com",
+  "password": "$2b$10$GI.QIARKR7nYzQ3PKl70DutvyHiry7N/3P6YL7dOEWXVXCqeskosu",
+  "role": 0,
+  "phone": "0987654327",
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InN0ZXZlMUBnbWFpbC5jb20iLCJyb2xlIjowLCJwaG9uZSI6IjA5ODc2NTQzMjciLCJpYXQiOjE2OTA4NTc4MjAsImV4cCI6MTY5MTQ2MjYyMH0.4Oue6nre9yTxMCJPPE_bpebwWnxx4FMBh5zlghx6HxE",
+  "createdAt": {
+    "$date": "2023-08-01T02:43:40.845Z"
+  },
+  "updatedAt": {
+    "$date": "2023-08-01T02:43:40.845Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64c87168d8767114beeb0f92"
+  },
+  "name": "Jay",
+  "email": "janaka.e@gmail.com",
+  "password": "$2b$10$1duI52Rt7Isb7cvyR5uDveq.aPTfiyBldPU/WsT6p/dg/fmSK1AHC",
+  "role": 0,
+  "phone": "0987654328",
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphbmFrYS5lQGdtYWlsLmNvbSIsInJvbGUiOjAsInBob25lIjoiMDk4NzY1NDMyOCIsImlhdCI6MTY5MDg1NzgzMiwiZXhwIjoxNjkxNDYyNjMyfQ.exad5hUVoSIDPiHhDIdSFSsT2WK1UDTs0RxOgDyP3Wc",
+  "createdAt": {
+    "$date": "2023-08-01T02:43:52.074Z"
+  },
+  "updatedAt": {
+    "$date": "2023-08-01T02:43:52.074Z"
+  },
+  "__v": 0
+}]

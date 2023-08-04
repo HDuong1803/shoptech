@@ -1,0 +1,90 @@
+[
+  {
+    "_id": {
+      "$oid": "64c0d65ead7e34ecaf0806d4"
+    },
+    "user": {
+      "$oid": "61f541ad28c60fb31a63c900"
+    },
+    "orderItems": [
+      {
+        "name": "Apple MacBook Pro 13.3 inch",
+        "quantity": 1,
+        "image": "/images/macbook.jpeg",
+        "price": 1299.99,
+        "product": {
+          "$oid": "61f55a5762a68fe81c96d895"
+        },
+        "_id": {
+          "$oid": "64c0d65ead7e34ecaf0806d5"
+        }
+      }
+    ],
+    "shippingAddress": {
+      "address": "aaaaaaaaa",
+      "city": "aaaaaa",
+      "postalCode": "111111",
+      "country": "aaaaaaaaa"
+    },
+    "paymentMethod": "PayPal",
+    "taxPrice": 195,
+    "shippingPrice": 0,
+    "totalPrice": 1494.99,
+    "isPaid": true,
+    "isDelivered": true,
+    "createdAt": {
+      "$date": "2023-07-26T08:16:30.250Z"
+    },
+    "updatedAt": {
+      "$date": "2023-07-26T08:18:46.328Z"
+    },
+    "__v": 0,
+    "deliveredAt": {
+      "$date": "2023-07-26T08:18:46.327Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "64c0e03b0d24e062cc042b37"
+    },
+    "user": {
+      "$oid": "61f541ad28c60fb31a63c900"
+    },
+    "orderItems": [
+      {
+        "name": "Apple MacBook Air 13-inch ",
+        "quantity": 1,
+        "image": "/images/macbookair.jpeg",
+        "price": 1449.99,
+        "product": {
+          "$oid": "61fa90db54d0d0a51edccc40"
+        },
+        "_id": {
+          "$oid": "64c0e03b0d24e062cc042b38"
+        }
+      }
+    ],
+    "shippingAddress": {
+      "address": "aaaaaaa",
+      "city": "aaaaaaaaaa`",
+      "postalCode": "11111111",
+      "country": "aaaaaaaaaaa"
+    },
+    "paymentMethod": "PayPal",
+    "taxPrice": 217.5,
+    "shippingPrice": 0,
+    "totalPrice": 1667.49,
+    "isPaid": true,
+    "isDelivered": true,
+    "createdAt": {
+      "$date": "2023-07-26T08:58:35.369Z"
+    },
+    "updatedAt": {
+      "$date": "2023-07-26T09:00:14.686Z"
+    },
+    "__v": 0,
+    "deliveredAt": {
+      "$date": "2023-07-26T09:00:14.684Z"
+    }
+  }
+]
