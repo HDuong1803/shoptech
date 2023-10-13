@@ -10,16 +10,12 @@ import swaggerUi from 'swagger-ui-express'
 import responseTime from 'response-time'
 import { RegisterRoutes } from '../build/routes'
 import { Constant, logRequest, logger, onError } from '@constants'
-import {  initialAdmin, initialDatabase } from '@providers'
+import { initialAdmin, initialDatabase } from '@providers'
 import { type FieldErrors, ValidateError } from 'tsoa'
 import JSONBigint from 'json-bigint'
 
 initialDatabase()
   .then(() => {
-    /**
-     * Initializes the admin user with the username specified in the environment variables.
-     * Logs a success message if the initialization is successful, and logs an error message if it fails.
-     */
     initialAdmin()
       .then(() => {
         logger.info(`[InitialAdmin] ${Constant.ADMIN_INITIAL_USERNAME}`)
@@ -75,7 +71,7 @@ app.use(responseTime(logRequest))
 app.use('/docs', swaggerUi.serve, (_req: Request, res: Response): any => {
   return new Promise((resolve, reject) => {
     import('../build/swagger.json')
-      .then((swaggerDocument) => {
+      .then(swaggerDocument => {
         resolve(res.send(swaggerUi.generateHTML(swaggerDocument)))
       })
       .catch(reject)
