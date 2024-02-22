@@ -65,9 +65,7 @@ const AdminMiddleware = async (
      * Finds a user in the database with the given address and role of "admin".
      */
     const userRes = await UserDB.findOne({
-      where: {
         role: Constant.USER_ROLE.ADMIN
-      }
     })
     /**
      * Checks if the user response exists. If it does not exist, returns an error response

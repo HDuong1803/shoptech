@@ -1,10 +1,7 @@
 import { IOrders, InputOrderItem } from '@app'
 import { type Option } from '@constants'
 import { Constant, logError, onError, onSuccess } from '@constants'
-import { 
-  AdminMiddleware, 
-  AuthMiddleware 
-} from '@middlewares'
+import { AdminMiddleware, AuthMiddleware } from '@middlewares'
 import { Singleton } from '@providers'
 import { Request as ExpressRequest } from 'express'
 import {
@@ -21,7 +18,7 @@ import {
   Security,
   Tags,
   Path,
-  Put,
+  Put
 } from 'tsoa'
 const { NETWORK_STATUS_MESSAGE } = Constant
 
@@ -33,40 +30,38 @@ const { NETWORK_STATUS_MESSAGE } = Constant
 @Middlewares([AuthMiddleware])
 export class OrdersController extends Controller {
   @Post('/add')
-  @Example<Option<any>>(
-    {
-      data: {
-        _id: '64cb170a7422d358400df762',
-        user_id: '64c87021dd08b118fc16339f',
-        orderItems: [
-          {
-            product_id: '61f65428e1273b6867abb86c',
-            name: 'Microsoft Surface Laptop 13.5 inch',
-            quantity: 2,
-            image: '/images/surface.jpeg',
-            price: 3199.98,
-            _id: '64cb170a7422d358400df763'
-          }
-        ],
-        shippingAddress: {
-          _id: '64cb170a7422d358400df764',
-          address: 'Cau Giay',
-          city: 'Ha Noi'
-        },
-        paymentMethod: 'QRPAY',
-        shippingPrice: 0,
-        totalPrice: 3199.98,
-        isPaid: false,
-        isDelivered: false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        __v: 0
+  @Example<Option<any>>({
+    data: {
+      _id: '64cb170a7422d358400df762',
+      user_id: '64c87021dd08b118fc16339f',
+      orderItems: [
+        {
+          product_id: '61f65428e1273b6867abb86c',
+          name: 'Microsoft Surface Laptop 13.5 inch',
+          quantity: 2,
+          image: '/images/surface.jpeg',
+          price: 3199.98,
+          _id: '64cb170a7422d358400df763'
+        }
+      ],
+      shippingAddress: {
+        _id: '64cb170a7422d358400df764',
+        address: 'Cau Giay',
+        city: 'Ha Noi'
       },
-      success: true,
-      message: 'Success',
-      count: 1
-    }
-  )
+      paymentMethod: 'QRPAY',
+      shippingPrice: 0,
+      totalPrice: 3199.98,
+      isPaid: false,
+      isDelivered: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      __v: 0
+    },
+    success: true,
+    message: 'Success',
+    count: 1
+  })
   @Example<Option<any>>(
     {
       data: {
@@ -89,17 +84,13 @@ export class OrdersController extends Controller {
     success: false,
     message: NETWORK_STATUS_MESSAGE.NOT_FOUND
   })
-  @Response<Option<any>>(
-    '500',
-    NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR,
-    {
-      success: false,
-      message: NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR
-    }
-  )
+  @Response<Option<any>>('500', NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR, {
+    success: false,
+    message: NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR
+  })
   public async addOrderItems(
     @Request() req: ExpressRequest,
-    @Body() body: InputOrderItem,
+    @Body() body: InputOrderItem
   ): Promise<Option<IOrders>> {
     try {
       const { user_id, product_id } = req.body
@@ -117,43 +108,41 @@ export class OrdersController extends Controller {
 
   @Get('/list')
   @Middlewares([AdminMiddleware])
-  @Example<Option<any>>(
-    {
-      data: [
-        {
-          _id: '64cb170a7422d358400df762',
-          user_id: '64c87021dd08b118fc16339f',
-          orderItems: [
-            {
-              product_id: '61f65428e1273b6867abb86c',
-              name: 'Microsoft Surface Laptop 13.5 inch',
-              quantity: 2,
-              image: '/images/surface.jpeg',
-              price: 3199.98,
-              _id: '64cb170a7422d358400df763'
-            }
-          ],
-          shippingAddress: {
-            address: 'Cau Giay',
-            city: 'Ha Noi',
-            _id: '64cb170a7422d358400df764'
-          },
-          paymentMethod: 'Cod',
-          shippingPrice: 0,
-          totalPrice: 3199.98,
-          isPaid: false,
-          isDelivered: false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          __v: 0
-        }
-      ],
-      success: true,
-      message: 'Success',
-      count: 1,
-      total: 1
-    }
-  )
+  @Example<Option<any>>({
+    data: [
+      {
+        _id: '64cb170a7422d358400df762',
+        user_id: '64c87021dd08b118fc16339f',
+        orderItems: [
+          {
+            product_id: '61f65428e1273b6867abb86c',
+            name: 'Microsoft Surface Laptop 13.5 inch',
+            quantity: 2,
+            image: '/images/surface.jpeg',
+            price: 3199.98,
+            _id: '64cb170a7422d358400df763'
+          }
+        ],
+        shippingAddress: {
+          address: 'Cau Giay',
+          city: 'Ha Noi',
+          _id: '64cb170a7422d358400df764'
+        },
+        paymentMethod: 'Cod',
+        shippingPrice: 0,
+        totalPrice: 3199.98,
+        isPaid: false,
+        isDelivered: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        __v: 0
+      }
+    ],
+    success: true,
+    message: 'Success',
+    count: 1,
+    total: 1
+  })
   @Response<Option<any>>('401', NETWORK_STATUS_MESSAGE.UNAUTHORIZED, {
     success: false,
     message: NETWORK_STATUS_MESSAGE.UNAUTHORIZED
@@ -162,21 +151,20 @@ export class OrdersController extends Controller {
     success: false,
     message: NETWORK_STATUS_MESSAGE.NOT_FOUND
   })
-  @Response<Option<any>>(
-    '500',
-    NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR,
-    {
-      success: false,
-      message: NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR
-    }
-  )
+  @Response<Option<any>>('500', NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR, {
+    success: false,
+    message: NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR
+  })
   public async getListOrders(
     @Request() req: ExpressRequest,
     @Query() page: number = 1,
     @Query() limit: number = 5
   ): Promise<Option<any>> {
     try {
-      const {data, total} = await Singleton.getOrderInstance().getListOrders(page, limit)
+      const { data, total } = await Singleton.getOrderInstance().getListOrders(
+        page,
+        limit
+      )
       return onSuccess(data, total)
     } catch (error: any) {
       logError(error, req)
@@ -186,43 +174,41 @@ export class OrdersController extends Controller {
 
   @Get('/{id}')
   @Middlewares([AdminMiddleware])
-  @Example<Option<any>>(
-    {
-      data: [
-        {
-          _id: '64cb170a7422d358400df762',
-          user_id: '64c87021dd08b118fc16339f',
-          orderItems: [
-            {
-              product_id: '61f65428e1273b6867abb86c',
-              name: 'Microsoft Surface Laptop 13.5 inch',
-              quantity: 2,
-              image: '/images/surface.jpeg',
-              price: 3199.98,
-              _id: '64cb170a7422d358400df763'
-            }
-          ],
-          shippingAddress: {
-            address: 'Cau Giay',
-            city: 'Ha Noi',
-            _id: '64cb170a7422d358400df764'
-          },
-          paymentMethod: 'Cod',
-          shippingPrice: 0,
-          totalPrice: 3199.98,
-          isPaid: false,
-          isDelivered: false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          __v: 0
-        }
-      ],
-      success: true,
-      message: 'Success',
-      count: 1,
-      total: 1
-    }
-  )
+  @Example<Option<any>>({
+    data: [
+      {
+        _id: '64cb170a7422d358400df762',
+        user_id: '64c87021dd08b118fc16339f',
+        orderItems: [
+          {
+            product_id: '61f65428e1273b6867abb86c',
+            name: 'Microsoft Surface Laptop 13.5 inch',
+            quantity: 2,
+            image: '/images/surface.jpeg',
+            price: 3199.98,
+            _id: '64cb170a7422d358400df763'
+          }
+        ],
+        shippingAddress: {
+          address: 'Cau Giay',
+          city: 'Ha Noi',
+          _id: '64cb170a7422d358400df764'
+        },
+        paymentMethod: 'Cod',
+        shippingPrice: 0,
+        totalPrice: 3199.98,
+        isPaid: false,
+        isDelivered: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        __v: 0
+      }
+    ],
+    success: true,
+    message: 'Success',
+    count: 1,
+    total: 1
+  })
   @Response<Option<any>>('401', NETWORK_STATUS_MESSAGE.UNAUTHORIZED, {
     success: false,
     message: NETWORK_STATUS_MESSAGE.UNAUTHORIZED
@@ -231,14 +217,10 @@ export class OrdersController extends Controller {
     success: false,
     message: NETWORK_STATUS_MESSAGE.NOT_FOUND
   })
-  @Response<Option<any>>(
-    '500',
-    NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR,
-    {
-      success: false,
-      message: NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR
-    }
-  )
+  @Response<Option<any>>('500', NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR, {
+    success: false,
+    message: NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR
+  })
   public async getOrderById(
     @Request() req: ExpressRequest,
     @Path() id: string
@@ -253,43 +235,41 @@ export class OrdersController extends Controller {
   }
 
   @Get('/myorders')
-  @Example<Option<any>>(
-    {
-      data: [
-        {
-          _id: '64cb170a7422d358400df762',
-          user_id: '64c87021dd08b118fc16339f',
-          orderItems: [
-            {
-              product_id: '61f65428e1273b6867abb86c',
-              name: 'Microsoft Surface Laptop 13.5 inch',
-              quantity: 2,
-              image: '/images/surface.jpeg',
-              price: 3199.98,
-              _id: '64cb170a7422d358400df763'
-            }
-          ],
-          shippingAddress: {
-            address: 'Cau Giay',
-            city: 'Ha Noi',
-            _id: '64cb170a7422d358400df764'
-          },
-          paymentMethod: 'Cod',
-          shippingPrice: 0,
-          totalPrice: 3199.98,
-          isPaid: false,
-          isDelivered: false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          __v: 0
-        }
-      ],
-      success: true,
-      message: 'Success',
-      count: 1,
-      total: 1
-    }
-  )
+  @Example<Option<any>>({
+    data: [
+      {
+        _id: '64cb170a7422d358400df762',
+        user_id: '64c87021dd08b118fc16339f',
+        orderItems: [
+          {
+            product_id: '61f65428e1273b6867abb86c',
+            name: 'Microsoft Surface Laptop 13.5 inch',
+            quantity: 2,
+            image: '/images/surface.jpeg',
+            price: 3199.98,
+            _id: '64cb170a7422d358400df763'
+          }
+        ],
+        shippingAddress: {
+          address: 'Cau Giay',
+          city: 'Ha Noi',
+          _id: '64cb170a7422d358400df764'
+        },
+        paymentMethod: 'Cod',
+        shippingPrice: 0,
+        totalPrice: 3199.98,
+        isPaid: false,
+        isDelivered: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        __v: 0
+      }
+    ],
+    success: true,
+    message: 'Success',
+    count: 1,
+    total: 1
+  })
   @Response<Option<any>>('401', NETWORK_STATUS_MESSAGE.UNAUTHORIZED, {
     success: false,
     message: NETWORK_STATUS_MESSAGE.UNAUTHORIZED
@@ -298,14 +278,10 @@ export class OrdersController extends Controller {
     success: false,
     message: NETWORK_STATUS_MESSAGE.NOT_FOUND
   })
-  @Response<Option<any>>(
-    '500',
-    NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR,
-    {
-      success: false,
-      message: NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR
-    }
-  )
+  @Response<Option<any>>('500', NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR, {
+    success: false,
+    message: NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR
+  })
   public async getOrderOfUser(
     @Request() req: ExpressRequest
   ): Promise<Option<IOrders>> {
@@ -321,43 +297,41 @@ export class OrdersController extends Controller {
 
   @Put('/{id}/pay')
   @Middlewares([AdminMiddleware])
-  @Example<Option<any>>(
-    {
-      data: [
-        {
-          _id: '64cb170a7422d358400df762',
-          user_id: '64c87021dd08b118fc16339f',
-          orderItems: [
-            {
-              product_id: '61f65428e1273b6867abb86c',
-              name: 'Microsoft Surface Laptop 13.5 inch',
-              quantity: 2,
-              image: '/images/surface.jpeg',
-              price: 3199.98,
-              _id: '64cb170a7422d358400df763'
-            }
-          ],
-          shippingAddress: {
-            address: 'Cau Giay',
-            city: 'Ha Noi',
-            _id: '64cb170a7422d358400df764'
-          },
-          paymentMethod: 'Cod',
-          shippingPrice: 0,
-          totalPrice: 3199.98,
-          isPaid: false,
-          isDelivered: false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          __v: 0
-        }
-      ],
-      success: true,
-      message: 'Success',
-      count: 1,
-      total: 1
-    }
-  )
+  @Example<Option<any>>({
+    data: [
+      {
+        _id: '64cb170a7422d358400df762',
+        user_id: '64c87021dd08b118fc16339f',
+        orderItems: [
+          {
+            product_id: '61f65428e1273b6867abb86c',
+            name: 'Microsoft Surface Laptop 13.5 inch',
+            quantity: 2,
+            image: '/images/surface.jpeg',
+            price: 3199.98,
+            _id: '64cb170a7422d358400df763'
+          }
+        ],
+        shippingAddress: {
+          address: 'Cau Giay',
+          city: 'Ha Noi',
+          _id: '64cb170a7422d358400df764'
+        },
+        paymentMethod: 'Cod',
+        shippingPrice: 0,
+        totalPrice: 3199.98,
+        isPaid: false,
+        isDelivered: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        __v: 0
+      }
+    ],
+    success: true,
+    message: 'Success',
+    count: 1,
+    total: 1
+  })
   @Response<Option<any>>('401', NETWORK_STATUS_MESSAGE.UNAUTHORIZED, {
     success: false,
     message: NETWORK_STATUS_MESSAGE.UNAUTHORIZED
@@ -366,14 +340,10 @@ export class OrdersController extends Controller {
     success: false,
     message: NETWORK_STATUS_MESSAGE.NOT_FOUND
   })
-  @Response<Option<any>>(
-    '500',
-    NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR,
-    {
-      success: false,
-      message: NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR
-    }
-  )
+  @Response<Option<any>>('500', NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR, {
+    success: false,
+    message: NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR
+  })
   public async updateOrderToPaid(
     @Request() req: ExpressRequest,
     @Path() id: string
@@ -389,43 +359,41 @@ export class OrdersController extends Controller {
 
   @Put('/{id}/deliver')
   @Middlewares([AdminMiddleware])
-  @Example<Option<any>>(
-    {
-      data: [
-        {
-          _id: '64cb170a7422d358400df762',
-          user_id: '64c87021dd08b118fc16339f',
-          orderItems: [
-            {
-              product_id: '61f65428e1273b6867abb86c',
-              name: 'Microsoft Surface Laptop 13.5 inch',
-              quantity: 2,
-              image: '/images/surface.jpeg',
-              price: 3199.98,
-              _id: '64cb170a7422d358400df763'
-            }
-          ],
-          shippingAddress: {
-            address: 'Cau Giay',
-            city: 'Ha Noi',
-            _id: '64cb170a7422d358400df764'
-          },
-          paymentMethod: 'Cod',
-          shippingPrice: 0,
-          totalPrice: 3199.98,
-          isPaid: false,
-          isDelivered: false,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          __v: 0
-        }
-      ],
-      success: true,
-      message: 'Success',
-      count: 1,
-      total: 1
-    }
-  )
+  @Example<Option<any>>({
+    data: [
+      {
+        _id: '64cb170a7422d358400df762',
+        user_id: '64c87021dd08b118fc16339f',
+        orderItems: [
+          {
+            product_id: '61f65428e1273b6867abb86c',
+            name: 'Microsoft Surface Laptop 13.5 inch',
+            quantity: 2,
+            image: '/images/surface.jpeg',
+            price: 3199.98,
+            _id: '64cb170a7422d358400df763'
+          }
+        ],
+        shippingAddress: {
+          address: 'Cau Giay',
+          city: 'Ha Noi',
+          _id: '64cb170a7422d358400df764'
+        },
+        paymentMethod: 'Cod',
+        shippingPrice: 0,
+        totalPrice: 3199.98,
+        isPaid: false,
+        isDelivered: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        __v: 0
+      }
+    ],
+    success: true,
+    message: 'Success',
+    count: 1,
+    total: 1
+  })
   @Response<Option<any>>('401', NETWORK_STATUS_MESSAGE.UNAUTHORIZED, {
     success: false,
     message: NETWORK_STATUS_MESSAGE.UNAUTHORIZED
@@ -434,14 +402,10 @@ export class OrdersController extends Controller {
     success: false,
     message: NETWORK_STATUS_MESSAGE.NOT_FOUND
   })
-  @Response<Option<any>>(
-    '500',
-    NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR,
-    {
-      success: false,
-      message: NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR
-    }
-  )
+  @Response<Option<any>>('500', NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR, {
+    success: false,
+    message: NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR
+  })
   public async updateOrderToDelivered(
     @Request() req: ExpressRequest,
     @Path() id: string

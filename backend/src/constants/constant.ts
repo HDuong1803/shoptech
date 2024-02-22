@@ -24,6 +24,12 @@ const Constant = {
   JWT_SECRET_REFRESH: `${process.env.JWT_SECRET_REFRESH}`,
   ADMIN_INITIAL_PASSWORD: `${process.env.ADMIN_INITIAL_PASSWORD}`,
   ADMIN_INITIAL_USERNAME: `${process.env.ADMIN_INITIAL_USERNAME}`,
+  SECRET: `${process.env.SECRET}`,
+  GOOGLE_ID: `${process.env.GOOGLE_ID}`,
+  GOOGLE_SECRET: `${process.env.GOOGLE_SECRET}`,
+  S3_SECRET_ACCESS_KEY: `${process.env.S3_SECRET_ACCESS_KEY}`,
+  S3_ACCESS_KEY: `${process.env.S3_ACCESS_KEY}`,
+  BUCKET_NAME: `${process.env.BUCKET_NAME}`,
   ADMIN_NAME: 'admin',
   ADMIN_PHONE_NUMBER: '0000000000',
   PORT: `${process.env.PORT}`,
@@ -61,7 +67,6 @@ const Constant = {
     ADMIN_NOT_FOUND: 'Admin not found'
   },
   USER_ROLE,
-  HASH_ROUNDS: 10,
   SHIPPING_PRICE: 0
 }
 

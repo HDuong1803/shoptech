@@ -29,7 +29,7 @@ const ReviewSchema = new Schema<reviewAttributes>(
   { timestamps: true }
 ) 
 
-const ProductSchema = new Schema<productAttributes>(
+const productSchema = new Schema<productAttributes>(
   {
     name: {
       type: String,
@@ -82,6 +82,6 @@ const ProductSchema = new Schema<productAttributes>(
   }
 ) 
 
-export const ProductDB = mongoose.model("product", ProductSchema, undefined, {
+export const ProductDB = mongoose.model("product", productSchema, undefined, {
   overwriteModels: true,
 })

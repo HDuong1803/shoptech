@@ -1,17 +1,18 @@
 import mongoose, { Schema } from "mongoose";
 
 export interface userAttributes {
-  name?: string
+  username?: string
   email?: string
   password: string
   role?: number
   phone?: string
   refresh_token?: string
+  last_login_at: Date
 }
 
-const UserSchema = new Schema<userAttributes>(
+const userSchema = new Schema<userAttributes>(
   {
-    name: {
+    username: {
       type: String,
       required: true,
     },
@@ -33,16 +34,18 @@ const UserSchema = new Schema<userAttributes>(
       required: true,
       unique: true
     },
-    refresh_token: { 
-      type: String, 
-      unique: true 
+    refresh_token: {
+      type: String,
     },
+    last_login_at: {
+      type: Date,
+    }
   },
   {
     timestamps: true,
   }
 );
 
-export const UserDB = mongoose.model("user", UserSchema, undefined, {
+export const UserDB = mongoose.model("users", userSchema, undefined, {
   overwriteModels: true,
 });

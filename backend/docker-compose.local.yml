@@ -9,7 +9,7 @@ services:
       - dbdata:/data/db
 
 networks:
-  shop_backend:
+  shop_network:
     driver: bridge
     name: ${NETWORK}
 

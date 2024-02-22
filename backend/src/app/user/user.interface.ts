@@ -22,7 +22,6 @@ export interface OutputLogin {
     detail: IUser | null
     access_token: string | null
     refresh_token: string | null
-    otp_code: string | null
 }
 
 export interface InputSignUp {
@@ -36,5 +35,4 @@ export interface OutputSignUp {
     detail: IUser | null
     access_token: string | null
     refresh_token: string | null
-    otp_code: string | null
 }

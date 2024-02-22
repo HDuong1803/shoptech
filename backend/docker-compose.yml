@@ -27,7 +27,7 @@ services:
       - ${NETWORK}
 
 networks:
-  shop_backend:
+  shop_network:
     driver: bridge
     name: ${NETWORK}
 
