@@ -2,7 +2,9 @@ import {
   InputLoginAdmin,
   InputRefreshToken,
   InputVerifyPassword,
+  OutputLoginUser,
   OutputVerifyPassword,
+  VerifyGoogleInput,
   type OutputLogout,
   type OutputRefreshToken,
 //   VerifyGoogleInput,
@@ -128,26 +130,24 @@ export class AuthController extends Controller {
     }
   }
 
-//   @Post('user/login/google')
-//   @Security({
-//     platform: []
-//   })
-//   public async loginGoogle(
-//     @Body() payload: VerifyGoogleInput,
-//     @Request() req: ExpressRequest
-//   ): Promise<Option<OutputLoginUser>> {
-//     try {
-//       const platform = req.headers.platform as string
-//       const res = await Singleton.getAuthInstance().verifyGoogle(
-//         payload.google_token_id,
-//         platform
-//       )
-//       return onSuccess(res)
-//     } catch (error: any) {
-//       logError(error, req)
-//       return onError(error, this)
-//     }
-//   }
+  @Post('user/login/google')
+  // @Security({
+  //   platform: []
+  // })
+  public async loginGoogle(
+    @Body() payload: VerifyGoogleInput,
+    @Request() req: ExpressRequest
+  ): Promise<Option<OutputLoginUser>> {
+    try {
+      const res = await Singleton.getAuthInstance().verifyGoogle(
+        payload.google_token_id,
+      )
+      return onSuccess(res)
+    } catch (error: any) {
+      logError(error, req)
+      return onError(error, this)
+    }
+  }
 
   @Post('user/token')
   public async refreshTokenUser(

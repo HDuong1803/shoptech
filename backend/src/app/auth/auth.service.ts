@@ -4,20 +4,21 @@ import type {
   InputVerifyPassword,
   OutputLogout,
   OutputRefreshToken,
+  OutputSubmitUser,
   OutputVerifyPassword
 } from '@app'
 import { Constant, ErrorHandler } from '@constants'
 import { hashText, renewJWT, signJWT } from '@providers'
 import { TokenDB, UserDB } from '@schemas'
-// import { OAuth2Client, type TokenPayload } from 'google-auth-library'
+import { OAuth2Client, type TokenPayload } from 'google-auth-library'
 
 class AuthService {
   public async loginAdmin(body: InputLoginAdmin): Promise<any> {
     const isAdminExist = await UserDB.findOne({
-        username: body.username,
-        role: Constant.USER_ROLE.ADMIN
+      username: body.username,
+      role: Constant.USER_ROLE.ADMIN
     })
-    
+
     if (!isAdminExist) {
       throw new ErrorHandler(
         {
@@ -32,8 +33,8 @@ class AuthService {
 
     const hashed_password = hashText(body.password)
     const res = await UserDB.findOne({
-        username: body.username,
-        password: hashed_password
+      username: body.username,
+      password: hashed_password
     })
     if (res) {
       res.last_login_at = new Date()
@@ -44,21 +45,18 @@ class AuthService {
         phone: res.phone
       })
       await UserDB.findOneAndUpdate(
-        { username: body.username,
-          role: Constant.USER_ROLE.ADMIN
-        },
+        { username: body.username, role: Constant.USER_ROLE.ADMIN },
         { $set: { refresh_token: hashText(jwtPayload.refresh_token) } },
         { upsert: true }
       )
       await TokenDB.findOneAndUpdate(
-        { user_id: res.id,
-        },
+        { user_id: res.id },
         { $set: { token: hashText(jwtPayload.access_token) } },
         { upsert: true }
       )
       return {
         detail: res.toJSON(),
-        ...jwtPayload,
+        ...jwtPayload
       }
     }
     throw new ErrorHandler(
@@ -76,7 +74,7 @@ class AuthService {
     try {
       const { access_token, payload } = renewJWT(body.refresh_token)
       const userRes = await UserDB.findOne({
-          email: payload.email
+        email: payload.email
       })
       if (!userRes) {
         throw new Error(Constant.NETWORK_STATUS_MESSAGE.UNAUTHORIZED)
@@ -85,7 +83,7 @@ class AuthService {
         { user_id: userRes.id },
         { token: hashText(access_token) },
         { upsert: true, new: true }
-      );
+      )
       return {
         access_token
       }
@@ -114,61 +112,63 @@ class AuthService {
     return { logout: true }
   }
 
-  //   async verifyGoogle(
-  //     google_token_id: string,
-  //     platform: string = 'android'
-  //   ): Promise<OutputSubmitUser> {
-  //     const clientId =
-  //       platform === Constant.PLATFORM.IOS
-  //         ? `${Constant.GOOGLE_CLIENT_ID_IOS}`
-  //         : `${Constant.GOOGLE_CLIENT_ID_ANDROID}`
-  //     const client = new OAuth2Client(clientId)
-  //     const ticket = await client.verifyIdToken({
-  //       idToken: google_token_id,
-  //       audience: clientId
-  //     })
-  //     const payload = ticket.getPayload() as TokenPayload
-  //     const { sub } = payload
-  //     if (!sub) {
-  //       throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
-  //     }
-  //     /**
-  //      * Finds a user in the database with the given username.
-  //      * The object will have all attributes except for those specified in this.excludeAdminUserData.
-  //      */
-  //     const [res] = await UserDB.findOrCreate({
-  //       where: {
-  //         username: sub
-  //       }
-  //     })
-  //     /**
-  //      * Updates the last login time for a user and saves the changes to the database.
-  //      */
-  //     res.last_login_at = new Date()
-  //     await res.save()
-  //     /**
-  //      * If the response object does not contain a mnemonic, generate a verification code
-  //      * using the provided username, hashed password, and last login time.
-  //      */
-  //     /**
-  //      * Generates a JSON Web Token (JWT) with the given user information and secret key.
-  //      */
-  //     const jwtPayload = signJWT({
-  //       email: res.email,
-  //       role: res.role,
-  //       phone: res.phone
-  //     })
-  //     await token.findOrCreate({
-  //       where: {
-  //         user_id: res.id,
-  //         token: hashText(jwtPayload.access_token)
-  //       }
-  //     })
-  //     return {
-  //       detail: res.toJSON(),
-  //       ...jwtPayload,
-  //     }
-  //   }
+  async verifyGoogle(
+    google_token_id: string,
+  ): Promise<OutputSubmitUser> {
+    const client = new OAuth2Client()
+    const ticket = await client.verifyIdToken({
+      idToken: google_token_id,
+    })
+    const payload = ticket.getPayload() as TokenPayload
+    const { sub } = payload
+    if (!sub) {
+      throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
+    }
+    /**
+     * Finds a user in the database with the given username.
+     * The object will have all attributes except for those specified in this.excludeAdminUserData.
+     */
+    const res = await UserDB.findOneAndUpdate(
+      { username: sub },
+      { $setOnInsert: { username: sub } },
+      { upsert: true, new: true }
+    )
+    /**
+     * Updates the last login time for a user and saves the changes to the database.
+     */
+    res.last_login_at = new Date()
+    await res.save()
+    /**
+     * Generates a JSON Web Token (JWT) with the given user information and secret key.
+     */
+    const jwtPayload = signJWT({
+      email: res.email,
+      role: res.role,
+      phone: res.phone
+    })
+    await TokenDB.findOneAndUpdate(
+      {
+        user_id: res.id
+      },
+      { $set: { token: hashText(jwtPayload.access_token) } },
+      { upsert: true }
+    )
+    return {
+      detail: res.toJSON(),
+      ...jwtPayload
+    }
+  }
+
+  async verifysGoogle(): Promise<any> {
+    const client = new OAuth2Client(Constant.GOOGLE_ID);
+    const url = client.generateAuthUrl({
+        access_type: 'offline',
+        scope: 'https://www.googleapis.com/auth/userinfo.email'
+    });
+
+    console.log('Please visit the following URL for Google auth:');
+    console.log(url);
+  }
 }
 
 export { AuthService }

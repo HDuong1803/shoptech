@@ -14,24 +14,24 @@ const userSchema = new Schema<userAttributes>(
   {
     username: {
       type: String,
-      required: true,
+      // required: true,
     },
     email: {
       type: String,
-      required: true,
+      // required: true,
       unique: true,
     },
     password: {
       type: String,
-      required: true,
+      // required: true,
     },
     role: {
       type: Number,
-      required: true,
+      // required: true,
     },
     phone: {
       type: String,
-      required: true,
+      // required: true,
       unique: true
     },
     refresh_token: {
