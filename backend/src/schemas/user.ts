@@ -32,7 +32,7 @@ const userSchema = new Schema<userAttributes>(
     phone: {
       type: String,
       // required: true,
-      unique: true
+      // unique: true
     },
     refresh_token: {
       type: String,

@@ -120,17 +120,14 @@ class AuthService {
       idToken: google_token_id,
     })
     const payload = ticket.getPayload() as TokenPayload
-    const { sub } = payload
-    if (!sub) {
+    const { email, name } = payload
+    if (!email) {
       throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
     }
-    /**
-     * Finds a user in the database with the given username.
-     * The object will have all attributes except for those specified in this.excludeAdminUserData.
-     */
+
     const res = await UserDB.findOneAndUpdate(
-      { username: sub },
-      { $setOnInsert: { username: sub } },
+      { email: email },
+      { $set: { email: email, username: name, role: Constant.USER_ROLE.USER }},
       { upsert: true, new: true }
     )
     /**
@@ -146,6 +143,11 @@ class AuthService {
       role: res.role,
       phone: res.phone
     })
+    await UserDB.findOneAndUpdate(
+      { email: email, role: Constant.USER_ROLE.USER },
+      { $set: { refresh_token: hashText(jwtPayload.refresh_token) } },
+      { upsert: true }
+    )
     await TokenDB.findOneAndUpdate(
       {
         user_id: res.id
@@ -157,17 +159,6 @@ class AuthService {
       detail: res.toJSON(),
       ...jwtPayload
     }
-  }
-
-  async verifysGoogle(): Promise<any> {
-    const client = new OAuth2Client(Constant.GOOGLE_ID);
-    const url = client.generateAuthUrl({
-        access_type: 'offline',
-        scope: 'https://www.googleapis.com/auth/userinfo.email'
-    });
-
-    console.log('Please visit the following URL for Google auth:');
-    console.log(url);
   }
 }
 
