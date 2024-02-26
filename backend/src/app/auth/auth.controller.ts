@@ -11,7 +11,6 @@ import {
 //   type OutputLoginUser,
 } from '@app'
 import {
-  Constant,
 //   Constant,
 //   ErrorHandler,
   logError,
@@ -25,8 +24,6 @@ import { Request as ExpressRequest } from 'express'
 import {
   Body,
   Controller,
-  Example,
-  Response,
 //   Middlewares,
   Post,
   Request,
@@ -34,7 +31,7 @@ import {
 //   Security,
   Tags
 } from 'tsoa'
-const { NETWORK_STATUS_MESSAGE } = Constant
+
 
 
 @Tags('Auth')
@@ -74,30 +71,6 @@ export class AuthController extends Controller {
   //   authorization: []
   // })
   // @Middlewares([AuthMiddleware])
-  @Example<Option<OutputVerifyPassword>>({
-    data: {
-      authorized: true
-    },
-    message: 'Success',
-    count: 1,
-    success: true
-  })
-  @Response<Option<OutputVerifyPassword>>(
-    '401',
-    NETWORK_STATUS_MESSAGE.UNAUTHORIZED,
-    {
-      success: false,
-      message: NETWORK_STATUS_MESSAGE.UNAUTHORIZED
-    }
-  )
-  @Response<Option<OutputVerifyPassword>>(
-    '500',
-    NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR,
-    {
-      success: false,
-      message: NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR
-    }
-  )
   public async verifyPassword(
     @Request() req: ExpressRequest,
     @Body() body: InputVerifyPassword

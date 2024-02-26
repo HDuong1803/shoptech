@@ -27,7 +27,7 @@ import {
   Put,
   BodyProp
 } from 'tsoa'
-// const { NETWORK_STATUS_MESSAGE } = Constant
+// 
 
 @Tags('User')
 @Route('user')

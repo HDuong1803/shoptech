@@ -8,8 +8,76 @@ import {
 } from '@app'
 import { Constant } from '@constants'
 import { ProductDB, UserDB, reviewAttributes } from '@schemas'
-
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import mime from 'mime-types'
 class ProductService {
+  public async addProductItem(body: InputItem): Promise<IProduct> {
+    const newItem = new ProductDB({
+      name: body.name,
+      image: body.image,
+      brand: body.brand,
+      category: body.category,
+      description: body.description,
+      price: body.price,
+      countInStock: body.countInStock
+    })
+    await newItem.save()
+    return newItem.toJSON()
+  }
+
+  public async uploadImages(imageBuffer: Buffer): Promise<any> {
+    const client = new S3Client({
+        region: 'ap-southeast-2',
+        credentials: {
+            accessKeyId: `${process.env.S3_ACCESS_KEY}`,
+            secretAccessKey: `${process.env.S3_SECRET_ACCESS_KEY}`
+        }
+    })
+console.log(imageBuffer)
+    const links: string[] = [];
+    // const ext = imageBuffer.originalname.split('.').pop();
+    const newFilename = Date.now() + '.';
+
+            await client.send(
+                new PutObjectCommand({
+                    Bucket: Constant.BUCKET_NAME,
+                    Key: newFilename,
+                    Body: imageBuffer,
+                    ACL: 'public-read',
+                    ContentType: mime.lookup(newFilename) || undefined
+                })
+            )
+
+            const link = `https://${Constant.BUCKET_NAME}.s3.amazonaws.com/${newFilename}`
+            links.push(link)
+        
+    return links
+}
+
+  public async removeItem(_id?: string): Promise<any> {
+    const item = await ProductDB.findByIdAndDelete({ _id })
+    if (item) {
+      return Constant.NETWORK_STATUS_MESSAGE.SUCCESS
+    }
+    throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
+  }
+
+  public async updateItem(body: InputItem, _id?: string): Promise<IProduct> {
+    const item = await ProductDB.findById({ _id })
+    if (item) {
+      item.name = body.name
+      item.price = body.price
+      item.description = body.description
+      item.image = body.image
+      item.brand = body.brand
+      item.category = body.category
+      item.countInStock = body.countInStock
+      const updateItem = await item.save()
+      return updateItem.toJSON()
+    }
+    throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
+  }
+
   public async getListProduct(
     page: number,
     limit: number
@@ -27,20 +95,6 @@ class ProductService {
       data: items,
       total: totalItem
     }
-  }
-
-  public async addProductItem(body: InputItem): Promise<IProduct> {
-    const newItem = new ProductDB({
-      name: body.name,
-      image: body.image,
-      brand: body.brand,
-      category: body.category,
-      description: body.description,
-      price: body.price,
-      countInStock: body.countInStock
-    })
-    await newItem.save()
-    return newItem.toJSON()
   }
 
   public async getProductById(_id?: string): Promise<IProduct> {
@@ -99,30 +153,6 @@ class ProductService {
     } else {
       throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
     }
-  }
-
-  public async removeItem(_id?: string): Promise<any> {
-    const item = await ProductDB.findByIdAndDelete({ _id })
-    if (item) {
-      return Constant.NETWORK_STATUS_MESSAGE.SUCCESS
-    }
-    throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
-  }
-
-  public async updateItem(body: InputItem, _id?: string): Promise<IProduct> {
-    const item = await ProductDB.findById({ _id })
-    if (item) {
-      item.name = body.name
-      item.price = body.price
-      item.description = body.description
-      item.image = body.image
-      item.brand = body.brand
-      item.category = body.category
-      item.countInStock = body.countInStock
-      const updateItem = await item.save()
-      return updateItem.toJSON()
-    }
-    throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
   }
 }
 

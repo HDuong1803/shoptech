@@ -13,8 +13,6 @@ export default async function handle(req: any, res: any): Promise<void> {
     });
   });
 
-  console.log('length:', files.file.length);
-
   const client = new S3Client({
     region: 'ap-southeast-2',
     credentials: {
@@ -42,7 +40,3 @@ export default async function handle(req: any, res: any): Promise<void> {
 
   return res.json({ links });
 }
-
-export const config = {
-  api: { bodyParser: false },
-};
