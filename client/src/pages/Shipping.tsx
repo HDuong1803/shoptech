@@ -8,6 +8,7 @@ import { actionCreators, State } from ".././state";
 import { useForm } from "@mantine/hooks";
 import { bindActionCreators } from "redux";
 import Head from "../components/Head";
+import React from "react";
 
 const Shipping = () => {
   const dispatch = useDispatch();

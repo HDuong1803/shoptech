@@ -2,6 +2,7 @@ import { Col, Grid, Text } from "@mantine/core";
 import { BiSearch, BiDollarCircle } from "react-icons/bi";
 import { FiBox, FiHeart } from "react-icons/fi";
 import FeatureCard from "./features/FeatureCard";
+import React from "react";
 
 const Features = ({ title, subTitle }: { title: string; subTitle: string }) => {
   const features = [

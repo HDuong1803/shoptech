@@ -1,6 +1,7 @@
 import { Col, Grid, Image, Text } from "@mantine/core";
 import ad from "../images/ad.png";
 import announcement from "../images/announcement.png";
+import React from "react";
 
 const Announcement = ({
   title,

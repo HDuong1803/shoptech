@@ -3,6 +3,7 @@ import { BiShoppingBag } from "react-icons/bi";
 import { BsArrowRight } from "react-icons/bs";
 import { useNavigate } from "react-router";
 import frame1 from "../images/Frame1.png";
+import React from "react";
 
 const Banner = () => {
   const navigate = useNavigate();

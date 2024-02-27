@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Col, Grid, Pagination } from "@mantine/core";
 import ItemCard from "../components/items/ItemCard";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +15,7 @@ const Shop = () => {
   const dispatch = useDispatch();
   const notifications = useNotifications();
 
-  const [activePage, setActivePage] = useState(1);
+  const [activePage, setActivePage] = useState(0);
 
   const { getProducts } = bindActionCreators(actionCreators, dispatch);
 
@@ -29,7 +30,6 @@ const Shop = () => {
 
   useEffect(() => {
     getProducts(1);
-    // eslint-disable-next-line
   }, [dispatch]);
 
   useEffect(() => {
@@ -40,8 +40,7 @@ const Shop = () => {
         color: "red",
       });
     }
-    // eslint-disable-next-line
-  }, [error]);
+  }, [error, notifications, dispatch]);
 
   return (
     <Layout>

@@ -9,6 +9,7 @@ import Loading from "../../components/Loading";
 import moment from "moment";
 import { useNotifications } from "@mantine/notifications";
 import { ActionType } from "../../state/action-types";
+import React from "react";
 
 const OrdersList = () => {
   const dispatch = useDispatch();
@@ -103,7 +104,7 @@ const OrdersList = () => {
         </td>
         <td>
           <Text size="sm" weight={600}>
-            {order.user.name}
+            {order.user.username}
           </Text>
         </td>
         <td>

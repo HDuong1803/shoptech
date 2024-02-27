@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { PropsWithChildren, useEffect, useState } from "react";
 import {
   Container,
@@ -11,18 +12,15 @@ import {
   Col,
   Text,
   Badge,
-  Select,
 } from "@mantine/core";
 import Footer from "../components/Footer";
 import { AiOutlineUsb } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
-import { FiSearch } from "react-icons/fi";
 import { BiShoppingBag, BiUser } from "react-icons/bi";
 import { bindActionCreators } from "redux";
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreators, State } from ".././state";
 import { getProduct } from "../state/action-creators";
-// import { logout } from "../actions/userActions";
 
 interface LayoutProps {
   children: any;

@@ -8,6 +8,7 @@ import { actionCreators, State } from "../state";
 import Head from "../components/Head";
 import { bindActionCreators } from "redux";
 import { useEffect } from "react";
+import React from "react";
 
 const PlaceOrder = () => {
   const dispatch = useDispatch();

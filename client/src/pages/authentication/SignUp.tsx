@@ -17,6 +17,7 @@ import { actionCreators } from "../../state";
 import { useEffect } from "react";
 import { bindActionCreators } from "redux";
 import Head from "../../components/Head";
+import React from "react";
 
 const SignUp = () => {
   const dispatch = useDispatch();
@@ -26,21 +27,24 @@ const SignUp = () => {
 
   const form = useForm({
     initialValues: {
-      name: "",
+      username: "",
       email: "",
+      phone: "",
       password: "",
       confirmPassword: "",
     },
     validationRules: {
-      name: (value) => value.trim().length > 1,
+      username: (value) => value.trim().length > 1,
       email: (value) => /^\S+@\S+$/.test(value),
+      phone: (value) => value.trim().length === 10,
       password: (value) => value.trim().length >= 6,
       confirmPassword: (confirmPassword, values) =>
         confirmPassword === values?.password,
     },
     errorMessages: {
-      name: "Name should be more than 2 characters or longer",
+      username: "Name should be more than 2 characters or longer",
       email: "Email is not valid",
+      phone: "Phone number is not valid",
       password: "Password should be 6 characters or longer",
       confirmPassword: "Passwords does not match",
     },
@@ -51,8 +55,8 @@ const SignUp = () => {
   );
 
   const handlerRegister = (values: any) => {
-    const { name, email, password, phone } = values;
-    dispatch(register(name, email, password, phone));
+    const { username, email, password, phone } = values;
+    dispatch(register(username, email, phone, password));
   };
 
   useEffect(() => {
@@ -92,17 +96,17 @@ const SignUp = () => {
             <Col span={12}>
               <TextInput
                 radius="lg"
-                placeholder="Your Name"
-                label="Name"
-                {...form.getInputProps("name")}
-                error={form.errors.name}
+                placeholder="Your name"
+                label="Username"
+                {...form.getInputProps("username")}
+                error={form.errors.username}
                 required
               />
             </Col>
             <Col span={12}>
               <TextInput
                 radius="lg"
-                placeholder="Your Email"
+                placeholder="Your email"
                 label="Email"
                 {...form.getInputProps("email")}
                 error={form.errors.email}
@@ -110,9 +114,19 @@ const SignUp = () => {
               />
             </Col>
             <Col span={12}>
+              <TextInput
+                radius="lg"
+                placeholder="Your phone number"
+                label="Phone"
+                {...form.getInputProps("phone")}
+                error={form.errors.phone}
+                required
+              />
+            </Col>
+            <Col span={12}>
               <PasswordInput
                 radius="lg"
-                placeholder="Your Password"
+                placeholder="Your password"
                 label="Password"
                 {...form.getInputProps("password")}
                 error={form.errors.password}
@@ -122,7 +136,7 @@ const SignUp = () => {
             <Col span={12}>
               <PasswordInput
                 radius="lg"
-                placeholder="Confirm Password"
+                placeholder="Confirm password"
                 label="Confirmation"
                 {...form.getInputProps("confirmPassword")}
                 error={form.errors.confirmPassword}

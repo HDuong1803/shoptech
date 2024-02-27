@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Card,
   Text,
@@ -27,6 +28,7 @@ import { useEffect, useState } from "react";
 
 import Head from "../components/Head";
 import { ActionType } from "../state/action-types";
+import React from "react";
 
 const Order = () => {
   const params = useParams();
@@ -106,7 +108,7 @@ const Order = () => {
                           weight={500}
                           size="sm"
                         >
-                          {order.user.name}
+                          {order.user.username}
                         </Text>
                       </Col>
                       <Col

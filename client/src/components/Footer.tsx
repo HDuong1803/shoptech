@@ -1,4 +1,5 @@
 import { Container, Group, Text } from "@mantine/core";
+import React from "react";
 import { AiOutlineUsb } from "react-icons/ai";
 
 const Footer = () => {

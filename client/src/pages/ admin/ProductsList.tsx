@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Card,
   Table,
@@ -10,7 +11,6 @@ import {
   Textarea,
   NumberInput,
   Text,
-  Loader,
   Select,
 } from "@mantine/core";
 import Head from "../../components/Head";
@@ -20,9 +20,10 @@ import { bindActionCreators } from "redux";
 import { actionCreators, State } from "../../state";
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
-import { BiDetail, BiTrash, BiTrashAlt } from "react-icons/bi";
+import { BiDetail, BiTrashAlt } from "react-icons/bi";
 import { useForm } from "@mantine/hooks";
 import axios from "axios";
+import React from "react";
 
 const ProductsList = () => {
   const dispatch = useDispatch();
@@ -184,7 +185,7 @@ const ProductsList = () => {
 
   useEffect(() => {
     getProducts(1);
-  }, [dispatch]);
+  }, [dispatch, getProducts]);
 
   return (
     <Layout>

@@ -74,17 +74,17 @@ export const getProducts = (page: number) => {
       });
 
       const { data } = await axios.get(
-        `${SERVER.baseURL}/product/list/item?page=${page}&limit=12`
+        `${SERVER.baseURL}/product/list/item?page=${page}&limit=8`
       );
 
       dispatch({
         type: ActionType.GET_PRODUCTS_SUCCESS,
-        payload: data.data,
+        payload: data,
       });
-    } catch (error: any) {
+    } catch (error:any) {
       dispatch({
         type: ActionType.GET_PRODUCTS_FAIL,
-        payload: error,
+        payload: error.response.data.message,
       });
     }
   };
@@ -176,10 +176,10 @@ export const addReview = (id: string, rating: number, comment: string) => {
 };
 
 export const register = (
-  name: string,
+  username: string,
   email: string,
-  password: string,
-  phone: string
+  phone: string,
+  password: string
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
@@ -194,10 +194,10 @@ export const register = (
       };
 
       const formData = {
-        name,
+        username,
         email,
-        password,
         phone,
+        password,
       };
 
       const { data } = await axios.post(
@@ -245,7 +245,7 @@ export const login = (email: string, password: string) => {
       };
 
       const { data } = await axios.post(
-        `${SERVER.baseURL}/users/login`,
+        `${SERVER.baseURL}/user/login`,
         formData,
         config
       );
@@ -262,6 +262,31 @@ export const login = (email: string, password: string) => {
         payload: error,
       });
     }
+  };
+};
+
+// export const logout = () => {
+//   return async (dispatch: Dispatch<Action>) => {
+//     localStorage.removeItem("userInfo");
+//     dispatch({ type: ActionType.USER_LOGOUT, payload: {} });
+//   };
+// };
+
+
+export const logout = () => {
+  return async (dispatch: Dispatch<Action>) => {
+    const config = {
+      headers: {
+        "accept": "application/json",
+      },
+    };
+
+    const { data } = await axios.post(
+      `${SERVER.baseURL}/auth/logout`,
+      config
+    );
+    localStorage.removeItem("userInfo");
+    dispatch({ type: ActionType.USER_LOGOUT, payload: data });
   };
 };
 
@@ -540,7 +565,7 @@ export const getMyOrders = () => {
 };
 
 export const updateProfile = (
-  name: string,
+  username: string,
   email: string,
   password: string
 ) => {
@@ -560,7 +585,7 @@ export const updateProfile = (
       };
 
       const formData = {
-        name,
+        username,
         email,
         password,
       };
@@ -631,9 +656,3 @@ export const updateUser = (id: string, isAdmin: boolean) => {
   };
 };
 
-export const logout = () => {
-  return async (dispatch: Dispatch<Action>) => {
-    localStorage.removeItem("userInfo");
-    dispatch({ type: ActionType.USER_LOGOUT, payload: {} });
-  };
-};

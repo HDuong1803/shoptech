@@ -32,6 +32,7 @@ import Loading from "../components/Loading";
 import { useForm } from "@mantine/hooks";
 import { useNotifications } from "@mantine/notifications";
 import { ActionType } from "../state/action-types";
+import React from "react";
 
 const Product = () => {
   const params = useParams();
@@ -366,7 +367,7 @@ const Product = () => {
                       comment={review.comment}
                       date={review.createdAt}
                       id={review._id}
-                      name={review.name}
+                      name={review.username}
                       rating={review.rating}
                       key={review._id}
                     />

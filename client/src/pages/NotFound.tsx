@@ -1,4 +1,4 @@
-import { Card, Text } from "@mantine/core";
+import { Text } from "@mantine/core";
 import React from "react";
 import { BsExclamationCircleFill } from "react-icons/bs";
 import Head from "../components/Head";

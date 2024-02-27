@@ -1,4 +1,4 @@
-import { Button, Card, Col, Grid, Group, Image, Text } from "@mantine/core";
+import { Button, Card, Col, Grid, Image, Text } from "@mantine/core";
 import React, { PropsWithChildren } from "react";
 
 import { useNavigate } from "react-router";

@@ -17,6 +17,7 @@ import { bindActionCreators } from "redux";
 import { actionCreators, State } from "../state";
 import { useNavigate } from "react-router";
 import { BiTrashAlt } from "react-icons/bi";
+import React from "react";
 
 const Cart = () => {
   const numRef = useRef(null);

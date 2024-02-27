@@ -1,7 +1,8 @@
-import { Card, Grid, Text, Col, Divider } from "@mantine/core";
-import React, { PropsWithChildren } from "react";
-import { AiFillStar, AiOutlineStar } from "react-icons/ai";
+import { Grid, Text, Col, Divider } from "@mantine/core";
+import { PropsWithChildren } from "react";
 import moment from "moment";
+import React from "react";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 
 interface IReviewCard {
   id: string;

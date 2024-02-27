@@ -2,7 +2,6 @@ import {
   Button,
   Card,
   Group,
-  Pagination,
   Switch,
   Table,
   Text,
@@ -13,10 +12,10 @@ import Layout from "../../layout/Layout";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actionCreators, State } from "../../state";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Loading from "../../components/Loading";
 import moment from "moment";
-import { BiDetail, BiTrashAlt } from "react-icons/bi";
+import { BiTrashAlt } from "react-icons/bi";
 import { useNotifications } from "@mantine/notifications";
 
 const UsersList = () => {
@@ -36,7 +35,7 @@ const UsersList = () => {
 
   useEffect(() => {
     getUsers();
-  }, [dispatch, updateUserRole]);
+  }, [dispatch, getUsers, updateUserRole]);
 
   useEffect(() => {
     if (error || userUpdateError) {
@@ -46,14 +45,14 @@ const UsersList = () => {
         color: "red",
       });
     }
-  }, [error, userUpdateError]);
+  }, [error, notifications, userUpdateError]);
 
   const rows =
     users &&
     Object.keys(users).length >= 3 &&
     users.map((user: any) => (
       <tr key={user._id}>
-        <td>{user.name}</td>
+        <td>{user.username}</td>
         <td>{user.email}</td>
         <td>
           <Switch

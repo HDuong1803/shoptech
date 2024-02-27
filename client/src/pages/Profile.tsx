@@ -6,9 +6,7 @@ import {
   PasswordInput,
   Table,
   Text,
-  TextInput,
-  Badge,
-  List,
+  TextInput
 } from "@mantine/core";
 import Layout from "../layout/Layout";
 import { useNavigate } from "react-router";
@@ -17,10 +15,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useNotifications } from "@mantine/notifications";
 import Head from "../components/Head";
-import moment from "moment";
 import { bindActionCreators } from "redux";
 import { actionCreators, State } from "../state";
 import Loading from "../components/Loading";
+import React from "react";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -45,13 +43,15 @@ const Profile = () => {
   const form = useForm({
     initialValues: {
       email: userInfo && userInfo.email,
-      username: userInfo && userInfo.name,
+      username: userInfo && userInfo.username,
+      phone: "",
       password: "",
       confirmpassword: "",
     },
     validationRules: {
       email: (value) => /^\S+@\S+$/.test(value),
       username: (value) => value.trim().length > 1,
+      phone: (value) => value.trim().length === 10,
       password: (value) => value.trim().length >= 6,
       confirmpassword: (confirmPassword, values) =>
         confirmPassword === values?.password,
@@ -59,6 +59,7 @@ const Profile = () => {
     errorMessages: {
       username: "Name should be more than 2 characters or longer",
       email: "Email is not valid",
+      phone: "Phone number is not valid",
       password: "Password should be 6 characters or longer",
       confirmpassword: "Passwords does not match",
     },

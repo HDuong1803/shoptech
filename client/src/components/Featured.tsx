@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Col, Grid, Text } from "@mantine/core";
 import { bindActionCreators } from "redux";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,6 +7,7 @@ import { useNavigate, useLocation } from "react-router";
 import Loading from "./Loading";
 import ItemCard from "./items/ItemCard";
 import { useEffect } from "react";
+import React from "react";
 
 const Featured = ({ title, subTitle }: { title: string; subTitle: string }) => {
   const navigate = useNavigate();
