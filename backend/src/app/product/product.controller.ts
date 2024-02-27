@@ -4,14 +4,15 @@ import {
   InputItem,
   InputReview,
   OutputListProduct,
-  OutputSearchProduct
+  OutputSearchProduct,
+  OutputUpload
 } from '@app'
 import { type Option } from '@constants'
 import { logError, onError, onSuccess } from '@constants'
-// import {
-//   AdminMiddleware,
-//   AuthMiddleware
-// } from '@middlewares'
+import {
+  AdminMiddleware,
+  AuthMiddleware
+} from '@middlewares'
 import { Singleton } from '@providers'
 import { Request as ExpressRequest } from 'express'
 import {
@@ -20,10 +21,10 @@ import {
   Get,
   Query,
   Post,
-  // Middlewares,
+  Middlewares,
   Request,
   Route,
-  // Security,
+  Security,
   Tags,
   Delete,
   Put,
@@ -32,13 +33,13 @@ import {
 
 @Tags('Product')
 @Route('product')
-// @Security({
-//   authorization: []
-// })
+@Security({
+  authorization: []
+})
 export class ProductController extends Controller {
 
   @Post('/add')
-  // @Middlewares([AdminMiddleware])
+  @Middlewares([AdminMiddleware])
   public async addProductItem(
     @Request() req: ExpressRequest,
     @Body() body: InputItem
@@ -53,12 +54,12 @@ export class ProductController extends Controller {
   }
 
   @Post('/upload')
-  // @Middlewares([AdminMiddleware])
+  @Middlewares([AdminMiddleware])
   public async uploadImages(
     @Request() req: ExpressRequest,
     @UploadedFile()
     image: Express.Multer.File
-  ): Promise<any> {
+  ): Promise<Option<OutputUpload>> {
     try {
       const res = await Singleton.getProductInstance().uploadImages(image.buffer)
       return onSuccess(res)
@@ -69,7 +70,7 @@ export class ProductController extends Controller {
   }
 
   @Put('/update')
-  // @Middlewares([AdminMiddleware])
+  @Middlewares([AdminMiddleware])
   public async updateItem(
     @Request() req: ExpressRequest,
     @Body() body: InputItem,
@@ -85,7 +86,7 @@ export class ProductController extends Controller {
   }
 
   @Delete('/remove')
-  // @Middlewares([AdminMiddleware])
+  @Middlewares([AdminMiddleware])
   public async RemoveItem(
     @Request() req: ExpressRequest,
     @Query() id?: string
@@ -145,7 +146,7 @@ export class ProductController extends Controller {
     }
   }
 
-  // @Middlewares([AuthMiddleware])
+  @Middlewares([AuthMiddleware])
   @Post('/item/review')
   public async addProductReview(
     @Request() req: ExpressRequest,

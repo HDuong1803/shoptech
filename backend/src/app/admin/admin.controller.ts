@@ -14,10 +14,11 @@ import {
 } from 'tsoa'
 @Tags('Admin')
 @Route('admin')
-@Middlewares([AuthMiddleware, AdminMiddleware])
 @Security({
   authorization: []
 })
+@Middlewares([AuthMiddleware, AdminMiddleware])
+
 export class AdminController extends Controller {
   @Get('info')
   public async infoAdmin(

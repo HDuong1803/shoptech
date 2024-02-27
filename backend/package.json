@@ -7,8 +7,8 @@
     "build": "tsoa spec-and-routes && tsc",
     "start": "node build/src/server.js",
     "run": "yarn concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\" && tsc && node build/src/server.js",
-    "format": "yarn prettier --write .",
-    "dev": "docker-compose -f ./docker-compose.local.yml up -d --build && yarn concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\""
+    "dev": "docker-compose -f ./docker-compose.local.yml up -d --build && yarn concurrently \"nodemon\" \"nodemon -x tsoa spec-and-routes\"",
+    "format": "yarn prettier --write ."
   },
   "keywords": [],
   "author": "",

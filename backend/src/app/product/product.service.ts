@@ -4,15 +4,17 @@ import {
   InputItem,
   InputReview,
   OutputListProduct,
-  OutputSearchProduct
+  OutputSearchProduct,
+  OutputUpload
 } from '@app'
 import { Constant } from '@constants'
 import { ProductDB, UserDB, reviewAttributes } from '@schemas'
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import mime from 'mime-types'
+import { keccak256 } from 'ethers'
 class ProductService {
   public async addProductItem(body: InputItem): Promise<IProduct> {
-    const newItem = new ProductDB({
+    const newItem = await ProductDB.create({
       name: body.name,
       image: body.image,
       brand: body.brand,
@@ -21,38 +23,35 @@ class ProductService {
       price: body.price,
       countInStock: body.countInStock
     })
-    await newItem.save()
     return newItem.toJSON()
   }
 
-  public async uploadImages(imageBuffer: Buffer): Promise<any> {
+  public async uploadImages(imageBuffer: Buffer): Promise<OutputUpload> {
     const client = new S3Client({
-        region: 'ap-southeast-2',
-        credentials: {
-            accessKeyId: `${process.env.S3_ACCESS_KEY}`,
-            secretAccessKey: `${process.env.S3_SECRET_ACCESS_KEY}`
-        }
+      region: 'ap-southeast-2',
+      credentials: {
+        accessKeyId: `${process.env.S3_ACCESS_KEY}`,
+        secretAccessKey: `${process.env.S3_SECRET_ACCESS_KEY}`
+      }
     })
-console.log(imageBuffer)
-    const links: string[] = [];
-    // const ext = imageBuffer.originalname.split('.').pop();
-    const newFilename = Date.now() + '.';
+    const links: string[] = []
+    const fileName = keccak256(imageBuffer)
 
-            await client.send(
-                new PutObjectCommand({
-                    Bucket: Constant.BUCKET_NAME,
-                    Key: newFilename,
-                    Body: imageBuffer,
-                    ACL: 'public-read',
-                    ContentType: mime.lookup(newFilename) || undefined
-                })
-            )
+    await client.send(
+      new PutObjectCommand({
+        Bucket: Constant.BUCKET_NAME,
+        Key: fileName,
+        Body: imageBuffer,
+        ACL: 'public-read',
+        ContentType: mime.lookup(fileName) || undefined
+      })
+    )
 
-            const link = `https://${Constant.BUCKET_NAME}.s3.amazonaws.com/${newFilename}`
-            links.push(link)
-        
+    const link = `https://${Constant.BUCKET_NAME}.s3.amazonaws.com/${fileName}`
+    links.push(link)
+
     return links
-}
+  }
 
   public async removeItem(_id?: string): Promise<any> {
     const item = await ProductDB.findByIdAndDelete({ _id })
@@ -87,7 +86,6 @@ console.log(imageBuffer)
     const items = await ProductDB.find()
       .skip(offset)
       .limit(limit)
-      .sort({ rating: -1 })
 
     const totalItem = await ProductDB.countDocuments()
 
@@ -98,7 +96,7 @@ console.log(imageBuffer)
   }
 
   public async getProductById(_id?: string): Promise<IProduct> {
-    const item = await ProductDB.findById({ _id })
+    const item = await ProductDB.findById(_id)
     if (item) {
       return item.toJSON()
     }

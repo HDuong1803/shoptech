@@ -10,7 +10,7 @@ import {
 } from '@app'
 import { ErrorHandler, type Option } from '@constants'
 import { Constant, logError, onError, onSuccess } from '@constants'
-// import { AdminMiddleware, AuthMiddleware } from '@middlewares'
+import { AdminMiddleware, AuthMiddleware } from '@middlewares'
 import { Singleton } from '@providers'
 import { Request as ExpressRequest } from 'express'
 import {
@@ -19,10 +19,10 @@ import {
   Get,
   Query,
   Post,
-  // Middlewares,
+  Middlewares,
   Request,
   Route,
-  // Security,
+  Security,
   Tags,
   Put,
   BodyProp
@@ -31,10 +31,6 @@ import {
 
 @Tags('User')
 @Route('user')
-// @Security({
-//   authorization: []
-// })
-// @Middlewares([AuthMiddleware])
 export class UserController extends Controller {
   @Post('/signup')
   public async userSignUp(
@@ -78,7 +74,10 @@ export class UserController extends Controller {
       return onError(error, this)
     }
   }
-
+  @Security({
+    authorization: []
+  })
+  @Middlewares([AuthMiddleware])
   @Get('/profile')
   public async getUser(@Request() req: ExpressRequest): Promise<Option<IUser>> {
     try {
@@ -92,7 +91,7 @@ export class UserController extends Controller {
   }
 
   @Get('/list/profile')
-  // @Middlewares([AdminMiddleware])
+  @Middlewares([AdminMiddleware])
   public async getListUser(
     @Request() req: ExpressRequest,
     @Query() page: number = 1,
@@ -113,12 +112,14 @@ export class UserController extends Controller {
   @Put('/profile')
   public async updateUser(
     @Request() req: ExpressRequest,
-    @BodyProp() body?: any
+    @BodyProp() name: string,
+    @BodyProp() password: string,
+    @BodyProp() phone: string
   ): Promise<Option<IUser>> {
     try {
-      const email = req.headers.email as string
-      if (body.newName) {
-        const validate = validateUpdateUserName(body.newName)
+      const email = req.body.email as string
+      if (name) {
+        const validate = validateUpdateUserName(name)
         if (validate) {
           throw new ErrorHandler(
             validate,
@@ -128,9 +129,9 @@ export class UserController extends Controller {
       }
       const result = await Singleton.getUserInstance().updateUser(
         email,
-        body.newName,
-        body.newEmail,
-        body.newPassword
+        name,
+        phone,
+        password
       )
       return onSuccess(result)
     } catch (error: any) {

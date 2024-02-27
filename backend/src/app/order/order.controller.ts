@@ -1,8 +1,8 @@
-import { IOrders, InputOrderItem } from '@app'
+import { IOrders, InputOrderItem, OutputCheckout } from '@app'
 import { type Option } from '@constants'
 import { logError, onError, onSuccess } from '@constants'
 import { AdminMiddleware, 
-  // AuthMiddleware 
+  AuthMiddleware 
 } from '@middlewares'
 import { Singleton } from '@providers'
 import { Request as ExpressRequest } from 'express'
@@ -15,7 +15,7 @@ import {
   Middlewares,
   Request,
   Route,
-  // Security,
+  Security,
   Tags,
   Path,
   Put
@@ -23,10 +23,10 @@ import {
 
 @Tags('Order')
 @Route('order')
-// @Security({
-//   authorization: []
-// })
-// @Middlewares([AuthMiddleware])
+@Security({
+  authorization: []
+})
+@Middlewares([AuthMiddleware])
 export class OrdersController extends Controller {
   @Get('/list')
   @Middlewares([AdminMiddleware])
@@ -34,7 +34,7 @@ export class OrdersController extends Controller {
     @Request() req: ExpressRequest,
     @Query() page: number = 1,
     @Query() limit: number = 5
-  ): Promise<Option<any>> {
+  ): Promise<any> {
     try {
       const { data, total } = await Singleton.getOrderInstance().getListOrders(
         page,
@@ -67,7 +67,7 @@ export class OrdersController extends Controller {
   public async updateOrderToPaid(
     @Request() req: ExpressRequest,
     @Path() id: string
-  ): Promise<Option<IOrders>> {
+  ): Promise<any> {
     try {
       const res = await Singleton.getOrderInstance().updateOrderToPaid(id)
       return onSuccess(res)
@@ -82,7 +82,7 @@ export class OrdersController extends Controller {
   public async updateOrderToDelivered(
     @Request() req: ExpressRequest,
     @Path() id: string
-  ): Promise<Option<IOrders>> {
+  ): Promise<any> {
     try {
       const res = await Singleton.getOrderInstance().updateOrderToDelivered(id)
       return onSuccess(res)
@@ -129,7 +129,7 @@ export class OrdersController extends Controller {
     @Request() req: ExpressRequest,
     @Query() user_id: string,
     @Query() order_id: string
-  ): Promise<Option<IOrders>> {
+  ): Promise<Option<OutputCheckout>> {
     try {
       const data = await Singleton.getOrderInstance().getCheckout(
         user_id,

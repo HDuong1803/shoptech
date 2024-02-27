@@ -24,6 +24,8 @@ const Constant = {
   JWT_SECRET_REFRESH: `${process.env.JWT_SECRET_REFRESH}`,
   ADMIN_INITIAL_PASSWORD: `${process.env.ADMIN_INITIAL_PASSWORD}`,
   ADMIN_INITIAL_USERNAME: `${process.env.ADMIN_INITIAL_USERNAME}`,
+  PORT: `${process.env.PORT}`,
+  MONGODB_URL: `${process.env.MONGODB_URL}`,
   SECRET: `${process.env.SECRET}`,
   GOOGLE_ID: `${process.env.GOOGLE_ID}`,
   GOOGLE_SECRET: `${process.env.GOOGLE_SECRET}`,
@@ -36,8 +38,7 @@ const Constant = {
   ENDPOINT_SECRET: `${process.env.ENDPOINT_SECRET}`,
   ADMIN_NAME: 'admin',
   ADMIN_PHONE_NUMBER: '0000000000',
-  PORT: `${process.env.PORT}`,
-  MONGODB_URL: `${process.env.MONGODB_URL}`,
+
   NETWORK_STATUS_CODE: {
     EMPTY: 204,
     SUCCESS: 200,

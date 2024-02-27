@@ -7,32 +7,26 @@ import {
   VerifyGoogleInput,
   type OutputLogout,
   type OutputRefreshToken,
-//   VerifyGoogleInput,
-//   type OutputLoginUser,
 } from '@app'
 import {
-//   Constant,
-//   ErrorHandler,
   logError,
   onError,
   onSuccess,
   type Option
 } from '@constants'
-// import { AuthMiddleware } from '@middlewares'
+import { AuthMiddleware } from '@middlewares'
 import { Singleton } from '@providers'
 import { Request as ExpressRequest } from 'express'
 import {
   Body,
   Controller,
-//   Middlewares,
+  Middlewares,
   Post,
   Request,
   Route,
-//   Security,
+  Security,
   Tags
 } from 'tsoa'
-
-
 
 @Tags('Auth')
 @Route('auth')
@@ -67,10 +61,10 @@ export class AuthController extends Controller {
   }
 
   @Post('verify/password')
-  // @Security({
-  //   authorization: []
-  // })
-  // @Middlewares([AuthMiddleware])
+  @Security({
+    authorization: []
+  })
+  @Middlewares([AuthMiddleware])
   public async verifyPassword(
     @Request() req: ExpressRequest,
     @Body() body: InputVerifyPassword
@@ -89,7 +83,7 @@ export class AuthController extends Controller {
   }
 
   @Post('logout')
-//   @Middlewares([AuthMiddleware])
+  @Middlewares([AuthMiddleware])
   public async logout(
     @Request() req: ExpressRequest
   ): Promise<Option<OutputLogout>> {
@@ -104,9 +98,6 @@ export class AuthController extends Controller {
   }
 
   @Post('user/login/google')
-  // @Security({
-  //   platform: []
-  // })
   public async loginGoogle(
     @Body() payload: VerifyGoogleInput,
     @Request() req: ExpressRequest

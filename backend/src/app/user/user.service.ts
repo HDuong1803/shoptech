@@ -152,28 +152,25 @@ class UserService {
 
   public async updateUser(
     email?: string,
-    newName?: string,
-    newEmail?: string,
-    newPass?: string
+    name?: string,
+    password?: string,
+    phone?: string
   ): Promise<IUser> {
     if (!email) {
       throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
     }
-    const res = await UserDB.findOne(
-      { email },
-      { _id: 1, name: 1, email: 1, phone: 1, role: 1, updatedAt: 1 }
-    )
+    const res = await UserDB.findOne({email: email})
     if (!res) {
       throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
     }
-    if (newName) {
-      res.username = newName
+    if (name) {
+      res.username = name
     }
-    if (newEmail) {
-      res.email = newEmail
+    if (password) {
+      res.password = password
     }
-    if (newPass) {
-      res.password = newPass
+    if (phone) {
+      res.phone = phone
     }
     await res.save()
     return res

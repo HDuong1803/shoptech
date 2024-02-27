@@ -39,3 +39,6 @@ export interface InputReview {
   rating?: number
   comment?: string
 }
+
+export type OutputUpload = string[]
+

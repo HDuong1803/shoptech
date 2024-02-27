@@ -32,3 +32,5 @@ export interface shippingAddress {
     address?: string
     city?: string
 }
+
+export type OutputCheckout = string
