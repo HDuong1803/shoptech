@@ -1,5 +1,3 @@
-// import { addOrderItems, UserService } from '@app'
-
 import {
   InputLogin,
   OutputLogin,
@@ -108,7 +106,7 @@ class UserService {
      * Create a new user in the database with the provided information.
      */
     const newUser = new UserDB({
-      name: body.name,
+      username: body.username,
       email: body.email,
       phone: body.phone,
       password: hashed_password,

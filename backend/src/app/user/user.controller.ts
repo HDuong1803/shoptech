@@ -5,11 +5,9 @@ import {
   OutputListUser,
   OutputLogin,
   OutputSignUp,
-  inputAccountValidate,
-  validateUpdateUserName
 } from '@app'
-import { ErrorHandler, type Option } from '@constants'
-import { Constant, logError, onError, onSuccess } from '@constants'
+import { type Option } from '@constants'
+import { logError, onError, onSuccess } from '@constants'
 import { AdminMiddleware, AuthMiddleware } from '@middlewares'
 import { Singleton } from '@providers'
 import { Request as ExpressRequest } from 'express'
@@ -38,14 +36,6 @@ export class UserController extends Controller {
     @Body() body: InputSignUp
   ): Promise<Option<OutputSignUp>> {
     try {
-
-      const validate = inputAccountValidate(body)
-      if (validate) {
-        throw new ErrorHandler(
-          validate,
-          Constant.NETWORK_STATUS_MESSAGE.VALIDATE_ERROR
-        )
-      }
       const res = await Singleton.getUserInstance().userSignUp(body)
       return onSuccess(res)
     } catch (error: any) {
@@ -60,13 +50,6 @@ export class UserController extends Controller {
     @Body() body: InputLogin
   ): Promise<Option<OutputLogin>> {
     try {
-      const validate = inputAccountValidate(body)
-      if (validate) {
-        throw new ErrorHandler(
-          validate,
-          Constant.NETWORK_STATUS_MESSAGE.VALIDATE_ERROR
-        )
-      }
       const res = await Singleton.getUserInstance().userLogin(body)
       return onSuccess(res)
     } catch (error: any) {
@@ -118,15 +101,6 @@ export class UserController extends Controller {
   ): Promise<Option<IUser>> {
     try {
       const email = req.body.email as string
-      if (name) {
-        const validate = validateUpdateUserName(name)
-        if (validate) {
-          throw new ErrorHandler(
-            validate,
-            Constant.NETWORK_STATUS_MESSAGE.VALIDATE_ERROR
-          )
-        }
-      }
       const result = await Singleton.getUserInstance().updateUser(
         email,
         name,

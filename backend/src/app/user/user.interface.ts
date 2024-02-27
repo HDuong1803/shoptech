@@ -25,10 +25,10 @@ export interface OutputLogin {
 }
 
 export interface InputSignUp {
-    name: string
+    username: string
     email: string
-    password: string
     phone: string
+    password: string
 }
 
 export interface OutputSignUp {
