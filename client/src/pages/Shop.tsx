@@ -18,7 +18,6 @@ const Shop = () => {
   const [activePage, setActivePage] = useState(0);
 
   const { getProducts } = bindActionCreators(actionCreators, dispatch);
-
   const { products, error, loading } = useSelector(
     (state: State) => state.products
   );
@@ -29,6 +28,7 @@ const Shop = () => {
   };
 
   useEffect(() => {
+    setActivePage(1);
     getProducts(1);
   }, [dispatch]);
 
@@ -50,10 +50,17 @@ const Shop = () => {
         <Loading />
       ) : (
         <Grid gutter="xl">
-          {Object.keys(products).includes("products") ? (
-            products.products.map((product: any) => {
-              return (
-                <Col xs={12} sm={6} md={4} lg={4} xl={3} span={3}>
+          {products && products.data
+            ? products.data.map((product: any) => (
+                <Col
+                  key={product._id}
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={4}
+                  xl={3}
+                  span={3}
+                >
                   <ItemCard
                     id={product._id}
                     name={product.name}
@@ -66,16 +73,13 @@ const Shop = () => {
                     price={product.price}
                     countInStock={product.countInStock}
                     reviews={product.reviews}
-                  />{" "}
+                  />
                 </Col>
-              );
-            })
-          ) : (
-            <></>
-          )}
+              ))
+            : null}
           <Col className="flex-container" sx={{ margin: "1rem 0" }} span={12}>
             <Pagination
-              total={products.pages}
+              total={Math.round(products.total / products.count)}
               page={activePage}
               color="dark"
               radius="xl"

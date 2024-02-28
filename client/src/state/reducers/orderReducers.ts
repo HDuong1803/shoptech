@@ -139,7 +139,7 @@ const orderDeliverReducer = (
 
 const getMyOrdersReducer = (
   state = {
-    myOrders: false,
+    myOrders: [],
     error: null,
     loading: false,
   },

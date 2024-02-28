@@ -21,6 +21,8 @@ import { bindActionCreators } from "redux";
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreators, State } from ".././state";
 import { getProduct } from "../state/action-creators";
+import ReactSelect from "react-select";
+import { FiSearch } from "react-icons/fi";
 
 interface LayoutProps {
   children: any;
@@ -190,19 +192,16 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
           </div>
 
           <div className="flex-container-no-horizontal-align">
-            {/* <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-              <Select
+            <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
+              <ReactSelect
                 placeholder="Search for an item..."
-                size="sm"
-                nothingFound="No products"
-                icon={<FiSearch />}
-                onSearchChange={(e) => handlerSearch(e)}
-                onChange={(e) => handlerSearchSelect(e)}
-                radius="lg"
-                data={quickSearch}
-                searchable
+                options={quickSearch}
+                isSearchable
+                onChange={(selectedOption) =>
+                  handlerSearchSelect(selectedOption)
+                }
               />
-            </MediaQuery> */}
+            </MediaQuery>
 
             <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
               <Button

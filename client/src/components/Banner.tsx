@@ -8,6 +8,9 @@ import React from "react";
 const Banner = () => {
   const navigate = useNavigate();
 
+  const handleNavigate = () => {
+    navigate("/shop");
+  };
   return (
     <Grid>
       <Col span={12}>
@@ -15,7 +18,7 @@ const Banner = () => {
       </Col>
       <Col className="flex-container" span={12}>
         <Button
-          onClick={() => navigate("/shop")}
+          onClick={handleNavigate}
           color="dark"
           radius="lg"
           leftIcon={<BiShoppingBag />}

@@ -81,7 +81,7 @@ export const getProducts = (page: number) => {
         type: ActionType.GET_PRODUCTS_SUCCESS,
         payload: data,
       });
-    } catch (error:any) {
+    } catch (error: any) {
       dispatch({
         type: ActionType.GET_PRODUCTS_FAIL,
         payload: error.response.data.message,
@@ -103,7 +103,7 @@ export const quickSearchProducts = (keyword: number) => {
 
       dispatch({
         type: ActionType.QUICK_SEARCH_SUCCESS,
-        payload: data,
+        payload: data.data,
       });
     } catch (error: any) {
       dispatch({
@@ -145,12 +145,12 @@ export const addReview = (id: string, rating: number, comment: string) => {
         type: ActionType.ADD_REVIEW_REQUEST,
       });
 
-      const token = store.getState().userLogin.userInfo.token;
+      const token = `${localStorage.getItem("access_token")}`;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `${token}`,
         },
       };
 
@@ -252,10 +252,10 @@ export const login = (email: string, password: string) => {
 
       dispatch({
         type: ActionType.USER_LOGIN_SUCCESS,
-        payload: data,
+        payload: data.data,
       });
-
       localStorage.setItem("userInfo", JSON.stringify(data));
+      localStorage.setItem("access_token", data.data.access_token);
     } catch (error: any) {
       dispatch({
         type: ActionType.USER_LOGIN_FAIL,
@@ -265,26 +265,16 @@ export const login = (email: string, password: string) => {
   };
 };
 
-// export const logout = () => {
-//   return async (dispatch: Dispatch<Action>) => {
-//     localStorage.removeItem("userInfo");
-//     dispatch({ type: ActionType.USER_LOGOUT, payload: {} });
-//   };
-// };
-
-
 export const logout = () => {
   return async (dispatch: Dispatch<Action>) => {
     const config = {
       headers: {
-        "accept": "application/json",
+        Authorization: `${localStorage.getItem("access_token")}`,
+        accept: "application/json",
       },
     };
 
-    const { data } = await axios.post(
-      `${SERVER.baseURL}/auth/logout`,
-      config
-    );
+    const { data } = await axios.post(`${SERVER.baseURL}/auth/logout`,null , config);
     localStorage.removeItem("userInfo");
     dispatch({ type: ActionType.USER_LOGOUT, payload: data });
   };
@@ -305,12 +295,12 @@ export const createOrder = (
         type: ActionType.CREATE_ORDER_REQUEST,
       });
 
-      const token = store.getState().userLogin.userInfo.token;
+      const token = `${localStorage.getItem("access_token")}`;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `${token}`,
         },
       };
 
@@ -348,12 +338,12 @@ export const getOrder = (id: any) => {
         type: ActionType.GET_ORDER_REQUEST,
       });
 
-      const token = store.getState().userLogin.userInfo.token;
+      const token = `${localStorage.getItem("access_token")}`;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `${token}`,
         },
       };
 
@@ -379,12 +369,12 @@ export const payOrder = (id: any, paymentResult: any) => {
         type: ActionType.ORDER_PAY_REQUEST,
       });
 
-      const token = store.getState().userLogin.userInfo.token;
+      const token = `${localStorage.getItem("access_token")}`;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `${token}`,
         },
       };
 
@@ -414,12 +404,12 @@ export const getUsers = () => {
         type: ActionType.GET_USERS_REQUEST,
       });
 
-      const token = store.getState().userLogin.userInfo.token;
+      const token = `${localStorage.getItem("access_token")}`;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `${token}`,
         },
       };
 
@@ -448,12 +438,12 @@ export const deliverOrder = (id: string) => {
         type: ActionType.ORDER_DELIVER_REQUEST,
       });
 
-      const token = store.getState().userLogin.userInfo.token;
+      const token = `${localStorage.getItem("access_token")}`;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `${token}`,
         },
       };
 
@@ -492,12 +482,12 @@ export const createProduct = (
         type: ActionType.CREATE_PRODUCT_REQUEST,
       });
 
-      const token = store.getState().userLogin.userInfo.token;
+      const token = `${localStorage.getItem("access_token")}`;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `${token}`,
         },
       };
 
@@ -537,17 +527,18 @@ export const getMyOrders = () => {
         type: ActionType.GET_MY_ORDERS_REQUEST,
       });
 
-      const token = store.getState().userLogin.userInfo.token;
+      // const user_id = store.getState().userLogin.userInfo.data.detail._id;
+      const token = `${localStorage.getItem("access_token")}`;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `${token}`,
         },
       };
 
       const { data } = await axios.get(
-        `${SERVER.baseURL}/order/myorders`,
+        `${SERVER.baseURL}/order`,
         config
       );
 
@@ -565,9 +556,9 @@ export const getMyOrders = () => {
 };
 
 export const updateProfile = (
-  username: string,
-  email: string,
-  password: string
+  username?: string,
+  email?: string,
+  password?: string
 ) => {
   return async (dispatch: Dispatch<Action>, getState: any) => {
     try {
@@ -575,12 +566,12 @@ export const updateProfile = (
         type: ActionType.UPDATE_PROFILE_REQUEST,
       });
 
-      const token = store.getState().userLogin.userInfo.token;
+      const token = `${localStorage.getItem("access_token")}`;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `${token}`,
         },
       };
 
@@ -620,12 +611,12 @@ export const updateUser = (id: string, isAdmin: boolean) => {
         type: ActionType.UPDATE_USER_REQUEST,
       });
 
-      const token = store.getState().userLogin.userInfo.token;
+      const token = `${localStorage.getItem("access_token")}`;
 
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `${token}`,
         },
       };
 
@@ -655,4 +646,3 @@ export const updateUser = (id: string, isAdmin: boolean) => {
     }
   };
 };
-

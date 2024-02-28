@@ -1,8 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
+  Badge,
   Button,
   Card,
   Col,
   Grid,
+  List,
   PasswordInput,
   Table,
   Text,
@@ -19,6 +22,7 @@ import { bindActionCreators } from "redux";
 import { actionCreators, State } from "../state";
 import Loading from "../components/Loading";
 import React from "react";
+import moment from "moment";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -67,65 +71,66 @@ const Profile = () => {
 
   const rows =
     myOrders &&
-    Object.keys(myOrders).length 
-    // &&
-    // myOrders.map((order: any) => (
-    //   <tr key={order._id}>
-    //     <td>
-    //       <Text size="sm" weight={600}>
-    //         {order._id}
-    //       </Text>
-    //     </td>
-    //     <td>
-    //       <List size="sm">
-    //         {order.orderItems.map((item: any) => {
-    //           return (
-    //             <List.Item>
-    //               {item.name} x {item.qty}
-    //             </List.Item>
-    //           );
-    //         })}
-    //       </List>
-    //     </td>
-    //     <td>
-    //       <Text size="sm" weight={600}>
-    //         {" "}
-    //         {order.shippingAddress.address}, {order.shippingAddress.city},{" "}
-    //         {order.shippingAddress.country}, {order.shippingAddress.postalCode}
-    //       </Text>
-    //     </td>
-    //     <td>
-    //       <Text size="sm" weight={600}>
-    //         ${order.totalPrice}
-    //       </Text>
-    //     </td>
-    //     <td>
-    //       {order.isPaid ? (
-    //         <Badge radius="lg" variant="filled" color="green">
-    //           {`Paid | ${moment(order.paidAt).format("DD-MMM-YYYY HH:mm")}`}
-    //         </Badge>
-    //       ) : (
-    //         <Badge radius="lg" variant="filled" color="red">
-    //           Not Paid
-    //         </Badge>
-    //       )}
-    //     </td>
-    //     <td>
-    //       {order.isDelivered ? (
-    //         <Badge radius="lg" variant="filled" color="green">
-    //           {`Delivered | ${moment(order.deliveredAt).format(
-    //             "DD-MMM-YYYY hh:mm"
-    //           )}`}
-    //         </Badge>
-    //       ) : (
-    //         <Badge radius="lg" variant="filled" color="red">
-    //           Not Delivered
-    //         </Badge>
-    //       )}
-    //     </td>
-    //   </tr>
-    // ));
-
+    myOrders.data 
+    ?
+    myOrders.data.map((order: any) => (
+      <tr key={order._id}>
+        <td>
+          <List size="sm">
+            {order.orderItems.map((item: any) => {
+              return (
+                <List.Item>
+                  {item.name} x {item.qty}
+                </List.Item>
+              );
+            })}
+          </List>
+        </td>
+        <td>
+          <Text size="sm" weight={600}>
+            {" "}
+            {order.shippingAddress.address}, {order.shippingAddress.city},{" "}
+            {order.shippingAddress.country}, {order.shippingAddress.postalCode}
+          </Text>
+        </td>
+        <td>
+          <Text size="sm" weight={600}>
+            {moment(order.createdAt).format(
+                "DD-MM-YYYY hh:mm"
+              )})
+          </Text>
+        </td>
+        <td>
+          <Text size="sm" weight={600}>
+            ${order.totalPrice}
+          </Text>
+        </td>
+        <td>
+          {order.isPaid ? (
+            <Badge radius="lg" variant="filled" color="green">
+              {`Paid | ${moment(order.paidAt).format("DD-MMM-YYYY HH:mm")}`}
+            </Badge>
+          ) : (
+            <Badge radius="lg" variant="filled" color="red">
+              Not Paid
+            </Badge>
+          )}
+        </td>
+        <td>
+          {order.isDelivered ? (
+            <Badge radius="lg" variant="filled" color="green">
+              {`Delivered | ${moment(order.deliveredAt).format(
+                "DD-MMM-YYYY hh:mm"
+              )}`}
+            </Badge>
+          ) : (
+            <Badge radius="lg" variant="filled" color="red">
+              Not Delivered
+            </Badge>
+          )}
+        </td>
+      </tr>
+    )):null;
   const handlerEditProfile = (values: any) => {
     const { username, email, password } = values;
     updateProfile(username, email, password);
@@ -145,7 +150,6 @@ const Profile = () => {
         color: "green",
       });
     }
-    // eslint-disable-next-line
   }, [profileUpdate]);
 
   useEffect(() => {
@@ -161,7 +165,6 @@ const Profile = () => {
         });
       }
     }
-    // eslint-disable-next-line
   }, [dispatch, userInfo]);
 
   return (
@@ -169,7 +172,7 @@ const Profile = () => {
       <Head title="Profile | Techstop" description="Shop for gadgets" />
       {userInfo && (
         <>
-          <Card withBorder shadow="xs" radius="lg" padding="xl">
+          {!userInfo && ( <Card withBorder shadow="xs" radius="lg" padding="xl">
             <Grid>
               <Col span={1}>
                 <Text weight={700}>Admin</Text>
@@ -208,7 +211,7 @@ const Profile = () => {
                 </Button>
               </Col>
             </Grid>
-          </Card>
+          </Card>)}
           <Card
             sx={{ marginTop: "2rem" }}
             withBorder
@@ -227,8 +230,8 @@ const Profile = () => {
                     label="Your username"
                     placeholder="Username"
                     {...form.getInputProps("username")}
-                    error={form.errors.username}
-                    required
+                    // error={form.errors.username}
+                    
                   />
                 </Col>
                 <Col xs={12} sm={12} md={6} lg={6} xl={6} span={6}>
@@ -238,9 +241,9 @@ const Profile = () => {
                     label="Your email"
                     placeholder="email"
                     {...form.getInputProps("email")}
-                    error={form.errors.email}
-                    required
-                    disabled
+                    // error={form.errors.email}
+                    
+                    // disabled
                   />
                 </Col>
 
@@ -251,9 +254,9 @@ const Profile = () => {
                     label="Your password"
                     placeholder="Password"
                     {...form.getInputProps("password")}
-                    error={form.errors.password}
-                    required
-                    disabled
+                    // error={form.errors.password}
+                    // required
+                    // disabled
                   />
                 </Col>
                 <Col xs={12} sm={12} md={6} lg={6} xl={6} span={6}>
@@ -263,13 +266,14 @@ const Profile = () => {
                     label="Confirm password"
                     placeholder="Confirmation"
                     {...form.getInputProps("confirmpassword")}
-                    error={form.errors.confirmpassword}
-                    required
-                    disabled
+                    // error={form.errors.confirmpassword}
+                    // required
+                    // disabled
                   />
                 </Col>
                 <Col xs={12} sm={12} md={6} lg={6} xl={6} span={6}>
-                  <Button type="submit" radius="lg" color="dark" fullWidth>
+                  <Button type="submit" radius="lg" color="dark" fullWidth
+>
                     Update Profile
                   </Button>
                 </Col>
@@ -304,7 +308,7 @@ const Profile = () => {
                     <Table>
                       <thead>
                         <tr>
-                          <th>ID</th>
+                          <th>Product Name</th>
                           <th>Address</th>
                           <th>Date</th>
                           <th>Total</th>

@@ -34,7 +34,7 @@ const Footer = () => {
         </Group>
         <Group position="center" sx={{ marginTop: "1rem" }}>
           <Text sx={{ color: "gray" }} weight={600} size="xs">
-            &copy; 2022 | Techstop
+            &copy; 2024 | Techstop
           </Text>
         </Group>
       </Container>
