@@ -83,7 +83,6 @@ export class AuthController extends Controller {
   }
 
   @Post('logout')
-  @Middlewares([AuthMiddleware])
   public async logout(
     @Request() req: ExpressRequest
   ): Promise<Option<OutputLogout>> {

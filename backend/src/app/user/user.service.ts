@@ -51,16 +51,18 @@ class UserService {
         email: res.email,
         role: res.role
       })
+
       await TokenDB.findOneAndUpdate(
-        { user_id: res.id, token: hashText(jwtPayload.access_token) },
         {
-          token: hashText(jwtPayload.access_token)
+          user_id: res.id
         },
+        { $set: { token: hashText(jwtPayload.access_token) } },
         { upsert: true }
       )
+
       return {
         detail: res.toJSON(),
-        ...jwtPayload,
+        ...jwtPayload
       }
     }
     throw new ErrorHandler(
@@ -117,7 +119,7 @@ class UserService {
 
     return {
       detail: newUser.toJSON(),
-      ...jwtPayload,
+      ...jwtPayload
     }
   }
 
@@ -157,7 +159,7 @@ class UserService {
     if (!email) {
       throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
     }
-    const res = await UserDB.findOne({email: email})
+    const res = await UserDB.findOne({ email: email })
     if (!res) {
       throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
     }

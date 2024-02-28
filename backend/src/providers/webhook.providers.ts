@@ -39,11 +39,11 @@ export default async function handler(req: Request, res: Response) {
           })
         }
       } else {
-        console.log('Missing data or orderId in event object')
+        console.error('Missing data or orderId in event object')
       }
       break
     default:
-      console.log(`Unhandled event type ${event.type}`)
+      console.error(`Unhandled event type ${event.type}`)
   }
 
   res.status(200).send('Success')
