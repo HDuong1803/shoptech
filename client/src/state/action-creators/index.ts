@@ -32,7 +32,6 @@ export const addToCart = (
       formData,
       config
     );
-    console.log(data);
     console.log(data.data);
 
     dispatch({
