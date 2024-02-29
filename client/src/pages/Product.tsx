@@ -114,8 +114,16 @@ const Product = () => {
     });
   };
 
-  const handlerAddToCart = (quantity: number, id: string) => {
-    addToCart(id, quantity);
+  const handlerAddToCart = (product_id: string,
+    name: string,
+    quantity: number,
+    image: string,
+    price: number) => {
+    addToCart(product_id,
+      name,
+      quantity,
+      image,
+      price);
   };
 
   useEffect(() => {
@@ -319,7 +327,7 @@ const Product = () => {
                           leftIcon={<RiShoppingBagLine />}
                           radius="lg"
                           color="dark"
-                          onClick={() => handlerAddToCart(value, product._id)}
+                          onClick={() => handlerAddToCart(product._id,product.name,product.quantity,product.image,product.price)}
                         >
                           Add to Cart
                         </Button>

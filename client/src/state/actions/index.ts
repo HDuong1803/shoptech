@@ -5,6 +5,11 @@ interface CartAddItemAction {
   payload: any;
 }
 
+interface CartUpdateItemAction {
+  type: ActionType.CART_UPDATE_ITEM;
+  payload: any
+}
+
 interface CartRemoveItemAction {
   type: ActionType.CART_REMOVE_ITEM;
   payload: any;
@@ -307,6 +312,7 @@ interface UpdateUserResetAction {
 
 export type Action =
   | CartAddItemAction
+  | CartUpdateItemAction
   | CartRemoveItemAction
   | CartSaveShippingAction
   | CartSavePaymentAction

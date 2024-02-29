@@ -5,21 +5,44 @@ import { Action } from "../actions/index";
 import { store } from "../store";
 import { SERVER } from "../../constants/constant";
 
-export const addToCart = (id: string, qty: number) => {
+export const addToCart = (
+  product_id: string,
+  name: string,
+  quantity: number,
+  image: string,
+  price: number
+) => {
   return async (dispatch: Dispatch<Action>, getState: any) => {
-    const { data } = await axios.get(
-      `${SERVER.baseURL}/product/detail?id=${id}`
+    const token = `${localStorage.getItem("access_token")}`;
+    const formData = {
+      product_id,
+      name,
+      quantity,
+      image,
+      price,
+    };
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
+    };
+    const { data } = await axios.post(
+      `${SERVER.baseURL}/cart/add?product_id=${product_id}`,
+      formData,
+      config
     );
-    console.log(data.data.name)
+    console.log(data);
+    console.log(data.data);
+
     dispatch({
       type: ActionType.CART_ADD_ITEM,
       payload: {
         product: data.data._id,
         name: data.data.name,
+        quantity: data.data.quantity,
         image: data.data.image,
         price: data.data.price,
-        countInStock: data.data.countInStock,
-        qty,
       },
     });
 
@@ -29,6 +52,36 @@ export const addToCart = (id: string, qty: number) => {
     );
   };
 };
+
+export const updateCart = (product_id: string, action: string) => {
+  return async (dispatch: Dispatch<Action>, getState: any) => {
+    const token = `${localStorage.getItem("access_token")}`;
+    const formData = {
+      product_id,
+      action,
+    };
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
+    };
+    const { data } = await axios.put(
+      `${SERVER.baseURL}/cart/quantity?product_id=${product_id}`,
+      formData,
+      config
+    );
+    dispatch({
+      type: ActionType.CART_UPDATE_ITEM,
+      payload: data.data,
+    });
+
+    localStorage.setItem(
+      "cartItems",
+      JSON.stringify(getState().cart.cartItems)
+    );
+  };
+}
 
 export const removeFromCart = (id: string) => {
   return async (dispatch: Dispatch<Action>, getState: any) => {
@@ -151,7 +204,7 @@ export const addReview = (id: string, rating: number, comment: string) => {
         headers: {
           "Content-Type": "application/json",
           Authorization: `${token}`,
-        }
+        },
       };
 
       const { data } = await axios.post(
@@ -274,7 +327,11 @@ export const logout = () => {
       },
     };
 
-    const { data } = await axios.post(`${SERVER.baseURL}/auth/logout`,null , config);
+    const { data } = await axios.post(
+      `${SERVER.baseURL}/auth/logout`,
+      null,
+      config
+    );
     localStorage.removeItem("userInfo");
     dispatch({ type: ActionType.USER_LOGOUT, payload: data });
   };
@@ -537,10 +594,7 @@ export const getMyOrders = () => {
         },
       };
 
-      const { data } = await axios.get(
-        `${SERVER.baseURL}/order`,
-        config
-      );
+      const { data } = await axios.get(`${SERVER.baseURL}/order`, config);
 
       dispatch({
         type: ActionType.GET_MY_ORDERS_SUCCESS,

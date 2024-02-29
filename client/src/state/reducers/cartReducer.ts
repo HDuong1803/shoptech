@@ -22,7 +22,7 @@ const cartReducer = (
   action: Action
 ) => {
   switch (action.type) {
-    case ActionType.CART_ADD_ITEM:
+    case ActionType.CART_UPDATE_ITEM:
       const item = action.payload;
 
       let existItem = state.cartItems.find(

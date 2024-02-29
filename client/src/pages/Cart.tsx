@@ -28,13 +28,16 @@ const Cart = () => {
   const [selectedItem, setSelectedItem] = useState("");
   const { cartItems } = useSelector((state: State) => state.cart);
 
-  const { addToCart, removeFromCart } = bindActionCreators(
+  const { updateCart, removeFromCart } = bindActionCreators(
     actionCreators,
     dispatch
   );
 
-  const handlerUpdateCartItems = (value: number, id: string) => {
-    dispatch(addToCart(id, value));
+  const handlerUpdateCartItems = (product_id: string, action: string
+    ) => {
+    dispatch(updateCart(product_id,
+      action,
+      ));
   };
 
   const selectItem = (id: string) => {
@@ -142,8 +145,8 @@ const Cart = () => {
                         radius="lg"
                         value={item.qty}
                         ref={numRef}
-                        onChange={(e) =>
-                          handlerUpdateCartItems(e as number, item.product)
+                        onChange={() =>
+                          handlerUpdateCartItems(item.product, 'increment')
                         }
                         min={1}
                         max={item.countInStock}
