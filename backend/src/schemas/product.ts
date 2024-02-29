@@ -1,7 +1,8 @@
 import mongoose, { Schema } from "mongoose" 
 
 export interface reviewAttributes {
-  name?: string
+  user_id?: string
+  username?: string
   rating?: number
   comment?: string
 }
@@ -22,7 +23,11 @@ export interface productAttributes {
 
 const ReviewSchema = new Schema<reviewAttributes>(
   {
-    name: { type: String, required: true },
+    user_id: {
+      type: String,
+      ref: "User",
+    },    
+    username: { type: String },
     rating: { type: Number, required: true },
     comment: { type: String, required: true },
   },

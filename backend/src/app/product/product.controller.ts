@@ -11,7 +11,7 @@ import { type Option } from '@constants'
 import { logError, onError, onSuccess } from '@constants'
 import {
   AdminMiddleware,
-  AuthMiddleware
+  // AuthMiddleware
 } from '@middlewares'
 import { Singleton } from '@providers'
 import { Request as ExpressRequest } from 'express'
@@ -146,7 +146,7 @@ export class ProductController extends Controller {
     }
   }
 
-  @Middlewares([AuthMiddleware])
+  // @Middlewares([AuthMiddleware])
   @Post('/item/review')
   public async addProductReview(
     @Request() req: ExpressRequest,
@@ -154,11 +154,11 @@ export class ProductController extends Controller {
     @Query() product_id: string
   ): Promise<Option<IReview>> {
     try {
-      const { user_id } = req.params
+      const authorization = req.headers.authorization as string;
       const res = await Singleton.getProductInstance().addProductReview(
         body,
         product_id,
-        user_id
+        authorization
       )
       return onSuccess(res)
     } catch (error: any) {

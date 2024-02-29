@@ -7,8 +7,8 @@ import {
   OutputSearchProduct,
   OutputUpload
 } from '@app'
-import { Constant } from '@constants'
-import { ProductDB, UserDB, reviewAttributes } from '@schemas'
+import { Constant, authUser } from '@constants'
+import { ProductDB, reviewAttributes } from '@schemas'
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import mime from 'mime-types'
 import { keccak256 } from 'ethers'
@@ -123,19 +123,19 @@ class ProductService {
   public async addProductReview(
     body: InputReview,
     product_id?: string,
-    user_id?: string
+    authorization?: string
   ): Promise<IReview> {
     const product = await ProductDB.findById(product_id)
-    const user = await UserDB.findById(user_id)
+    const user = await authUser(authorization as string)
     if (product) {
-      const review = {
-        user_id: user?._id,
+      const dataReview = {
+        user_id: user?._id.toString(),
         username: user?.username,
         rating: Number(body.rating),
         comment: body.comment
       }
       product.reviews = product.reviews ?? ([] as unknown as [reviewAttributes])
-      product.reviews.push(review)
+      product.reviews.push(dataReview)
       product.numReviews = product.reviews.length
       if (product.reviews && product.reviews.length > 0) {
         const totalRating = product.reviews.reduce(
@@ -147,7 +147,7 @@ class ProductService {
         product.rating = 0
       }
       await product.save()
-      return review
+      return dataReview
     } else {
       throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
     }

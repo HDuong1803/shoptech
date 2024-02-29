@@ -1,9 +1,9 @@
 import { IOrders, InputOrderItem, OutputCheckout } from '@app'
 import { type Option } from '@constants'
 import { logError, onError, onSuccess } from '@constants'
-import { AdminMiddleware, 
-  AuthMiddleware 
-} from '@middlewares'
+// import { AdminMiddleware, 
+  // AuthMiddleware 
+// } from '@middlewares'
 import { Singleton } from '@providers'
 import { Request as ExpressRequest } from 'express'
 import {
@@ -12,10 +12,10 @@ import {
   Get,
   Query,
   Post,
-  Middlewares,
+  // Middlewares,
   Request,
   Route,
-  Security,
+  // Security,
   Tags,
   Path,
   Put
@@ -23,13 +23,13 @@ import {
 
 @Tags('Order')
 @Route('order')
-@Security({
-  authorization: []
-})
-@Middlewares([AuthMiddleware])
+// @Security({
+//   authorization: []
+// })
+// @Middlewares([AuthMiddleware])
 export class OrdersController extends Controller {
   @Get('/list')
-  @Middlewares([AdminMiddleware])
+  // @Middlewares([AdminMiddleware])
   public async getListOrders(
     @Request() req: ExpressRequest,
     @Query() page: number = 1,
@@ -48,7 +48,7 @@ export class OrdersController extends Controller {
   }
 
   @Get('/{id}')
-  @Middlewares([AdminMiddleware])
+  // @Middlewares([AdminMiddleware])
   public async getOrderById(
     @Request() req: ExpressRequest,
     @Path() id: string
@@ -63,7 +63,7 @@ export class OrdersController extends Controller {
   }
 
   @Put('/{id}/pay')
-  @Middlewares([AdminMiddleware])
+  // @Middlewares([AdminMiddleware])
   public async updateOrderToPaid(
     @Request() req: ExpressRequest,
     @Path() id: string
@@ -78,7 +78,6 @@ export class OrdersController extends Controller {
   }
 
   @Put('/{id}/deliver')
-  @Middlewares([AdminMiddleware])
   public async updateOrderToDelivered(
     @Request() req: ExpressRequest,
     @Path() id: string
@@ -110,17 +109,20 @@ export class OrdersController extends Controller {
     }
   }
 
-  @Get('/myorders')
+  @Get('/')
   public async getOrderOfUser(
-    @Request() req: ExpressRequest
-  ): Promise<Option<IOrders>> {
+    @Request() req: ExpressRequest,
+    // @Query() id: string
+  ): Promise<any> {
     try {
-      const id = req.body as string
-      const res = await Singleton.getOrderInstance().getOrderOfUser(id)
-      return onSuccess(res)
+      const authorization = req.headers.authorization as string;
+
+      console.log(authorization)
+      const res = await Singleton.getOrderInstance().getOrderOfUser(authorization);
+      return onSuccess(res);
     } catch (error: any) {
-      logError(error, req)
-      return onError(error, this)
+      logError(error, req);
+      return onError(error, this);
     }
   }
 

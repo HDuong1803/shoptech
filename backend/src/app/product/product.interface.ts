@@ -1,5 +1,6 @@
 export interface IReview {
-  name?: string
+  user_id?: string
+  username?: string
   rating?: number
   comment?: string
 }

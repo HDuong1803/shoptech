@@ -1,5 +1,5 @@
 import { IOrders, InputOrderItem } from '@app'
-import { Constant } from '@constants'
+import { Constant, authUser } from '@constants'
 import { stripe } from '@providers'
 import { OrderDB, ProductDB, UserDB } from '@schemas'
 
@@ -122,12 +122,13 @@ class OrderService {
     return session.url;
 }
 
-  public async getOrderOfUser(_id?: string): Promise<IOrders> {
-    const order = await OrderDB.findById(_id)
-    if (order) {
-      return order.toJSON()
+  public async getOrderOfUser(authorization: string): Promise<any> {
+    const user = await authUser(authorization);
+    const order = await OrderDB.find({user_id: user?._id})
+    if (!order) {
+      throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
     }
-    throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
+    return order
   }
 }
 
