@@ -90,7 +90,7 @@ export const getProducts = (page: number) => {
   };
 };
 
-export const quickSearchProducts = (keyword: number) => {
+export const quickSearchProducts = (keyword: string) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       dispatch({
@@ -127,7 +127,7 @@ export const getProduct = (id: string) => {
 
       dispatch({
         type: ActionType.GET_PRODUCT_SUCCESS,
-        payload: data,
+        payload: data.data,
       });
     } catch (error: any) {
       dispatch({
@@ -151,7 +151,7 @@ export const addReview = (id: string, rating: number, comment: string) => {
         headers: {
           "Content-Type": "application/json",
           Authorization: `${token}`,
-        },
+        }
       };
 
       const { data } = await axios.post(
@@ -162,7 +162,7 @@ export const addReview = (id: string, rating: number, comment: string) => {
 
       dispatch({
         type: ActionType.ADD_REVIEW_SUCCESS,
-        payload: data,
+        payload: data.data,
       });
     } catch (error: any) {
       dispatch({
@@ -320,7 +320,7 @@ export const createOrder = (
 
       dispatch({
         type: ActionType.CREATE_ORDER_SUCCESS,
-        payload: data,
+        payload: data.data,
       });
     } catch (error: any) {
       dispatch({
@@ -351,7 +351,7 @@ export const getOrder = (id: any) => {
 
       dispatch({
         type: ActionType.GET_ORDER_SUCCESS,
-        payload: data,
+        payload: data.data,
       });
     } catch (error: any) {
       dispatch({
@@ -386,7 +386,7 @@ export const payOrder = (id: any, paymentResult: any) => {
 
       dispatch({
         type: ActionType.ORDER_PAY_SUCCESS,
-        payload: data,
+        payload: data.data,
       });
     } catch (error: any) {
       dispatch({
@@ -455,7 +455,7 @@ export const deliverOrder = (id: string) => {
 
       dispatch({
         type: ActionType.ORDER_DELIVER_SUCCESS,
-        payload: data,
+        payload: data.data,
       });
     } catch (error: any) {
       dispatch({
@@ -509,7 +509,7 @@ export const createProduct = (
 
       dispatch({
         type: ActionType.CREATE_PRODUCT_SUCCESS,
-        payload: data,
+        payload: data.data,
       });
     } catch (error: any) {
       dispatch({

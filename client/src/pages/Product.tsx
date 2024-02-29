@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Button,
   Col,
@@ -22,6 +23,8 @@ import { AiFillStar } from "react-icons/ai";
 import { useParams } from "react-router";
 import { IoIosCloseCircle, IoIosUnlock } from "react-icons/io";
 import Layout from "../layout/Layout";
+import { FaCheck } from "react-icons/fa";
+
 import { RiShoppingBagLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import ReviewCard from "../components/reviews/ReviewCard";
@@ -61,6 +64,7 @@ const Product = () => {
 
   const [value, setValue] = useState<any>(1);
   const [opened, setOpened] = useState(false);
+  const [hasReviewed, setHasReviewed] = useState(false);
 
   const handlers = useRef<NumberInputHandlers>(null);
 
@@ -69,7 +73,6 @@ const Product = () => {
   const { quickSearch } = useSelector((state: State) => state.quickSearch);
 
   const { userInfo } = useSelector((state: State) => state.userLogin);
-
   const {
     review,
     loading: reviewLoading,
@@ -126,7 +129,6 @@ const Product = () => {
     dispatch({
       type: ActionType.ADD_REVIEW_RESET,
     });
-    // eslint-disable-next-line
   }, [reviewError]);
 
   useEffect(() => {
@@ -137,12 +139,25 @@ const Product = () => {
         color: "green",
       });
     }
-    // eslint-disable-next-line
   }, [review]);
 
   useEffect(() => {
+    if(product.reviews) {
+      const list_user_id = product.reviews.map((user: any) => {
+        return user.user_id;
+      });
+
+    if (Object.keys(product).length && product.reviews.length) {
+      const userReviewed = list_user_id.includes(userInfo.data.detail._id);
+      setHasReviewed(userReviewed);
+    }
+    }
+
+    
+}, [product, userInfo, setHasReviewed]);
+
+  useEffect(() => {
     getProduct(params.id as string);
-    // eslint-disable-next-line
   }, [dispatch, review, quickSearch]);
 
   return (
@@ -336,28 +351,41 @@ const Product = () => {
               </Group>
             )}
 
-            {!userInfo ? (
-              <Alert
-                icon={<IoIosUnlock size={16} />}
-                sx={{ marginTop: "1rem" }}
-                color="blue"
+{Object.keys(product).length && (
+        <>
+          {hasReviewed && userInfo ? (
+            <Alert
+              icon={<FaCheck size={16} />}
+              sx={{ marginTop: "1rem" }}
+              color="blue"
+              radius="lg"
+            >
+              You have already reviewed this product
+            </Alert>
+          ) : userInfo ? (
+            <Group sx={{ marginTop: "1rem" }} position="right">
+              <Button
                 radius="lg"
+                sx={{ marginLeft: "10px" }}
+                color="dark"
+                size="xs"
+                onClick={() => setOpened(true)}
               >
-                Log In to add a review
-              </Alert>
-            ) : (
-              <Group sx={{ marginTop: "1rem" }} position="right">
-                <Button
-                  radius="lg"
-                  sx={{ marginLeft: "10px" }}
-                  color="dark"
-                  size="xs"
-                  onClick={() => setOpened(true)}
-                >
-                  Add Review
-                </Button>
-              </Group>
-            )}
+                Add Review
+              </Button>
+            </Group>
+          ) : (
+            <Alert
+              icon={<IoIosUnlock size={16} />}
+              sx={{ marginTop: "1rem" }}
+              color="blue"
+              radius="lg"
+            >
+              Log In to add a review
+            </Alert>
+          )}
+        </>
+      )}
 
             <div style={{ marginTop: "1rem" }}>
               {Object.keys(product).length && product.reviews.length ? (
@@ -367,7 +395,7 @@ const Product = () => {
                       comment={review.comment}
                       date={review.createdAt}
                       id={review._id}
-                      name={review.username}
+                      username={review.username}
                       rating={review.rating}
                       key={review._id}
                     />

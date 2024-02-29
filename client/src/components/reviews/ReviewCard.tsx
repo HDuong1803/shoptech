@@ -6,7 +6,7 @@ import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 
 interface IReviewCard {
   id: string;
-  name: string;
+  username: string;
   date: Date;
   comment: string;
   rating: number;
@@ -30,7 +30,7 @@ const renderRatingsList = (rating: number) => {
 
 const ReviewCard: React.FC<PropsWithChildren<IReviewCard>> = ({
   id,
-  name,
+  username,
   date,
   comment,
   rating,
@@ -49,7 +49,7 @@ const ReviewCard: React.FC<PropsWithChildren<IReviewCard>> = ({
         >
           <Col span={12}>
             <Text sx={{ marginBottom: "5px" }} weight={600}>
-              {name}
+              {username}
             </Text>
             <Text
               color="gray"

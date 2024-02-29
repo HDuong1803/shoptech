@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { PropsWithChildren, useEffect, useState } from "react";
 import {
@@ -12,6 +13,7 @@ import {
   Col,
   Text,
   Badge,
+  Select,
 } from "@mantine/core";
 import Footer from "../components/Footer";
 import { AiOutlineUsb } from "react-icons/ai";
@@ -21,7 +23,6 @@ import { bindActionCreators } from "redux";
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreators, State } from ".././state";
 import { getProduct } from "../state/action-creators";
-import ReactSelect from "react-select";
 import { FiSearch } from "react-icons/fi";
 
 interface LayoutProps {
@@ -45,7 +46,6 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
     navigate(route);
     setOpened(false);
   };
-
   const openMobileNavbar = () => {
     if (opened) {
       return (
@@ -163,7 +163,6 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
     if (value !== "") {
       navigate(`/admin/${value}`);
     }
-    // eslint-disable-next-line
   }, [value]);
 
   return (
@@ -192,16 +191,19 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
           </div>
 
           <div className="flex-container-no-horizontal-align">
-            <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-              <ReactSelect
+            {/* <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
+            <Select
                 placeholder="Search for an item..."
-                options={quickSearch}
-                isSearchable
-                onChange={(selectedOption) =>
-                  handlerSearchSelect(selectedOption)
-                }
+                size="sm"
+                nothingFound="No products"
+                icon={<FiSearch />}
+                onSearchChange={(e:any) => handlerSearch(e)}
+                onChange={(e) => handlerSearchSelect(e)}
+                radius="lg"
+                data={quickSearch}
+                searchable
               />
-            </MediaQuery>
+            </MediaQuery> */}
 
             <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
               <Button
