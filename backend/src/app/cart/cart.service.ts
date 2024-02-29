@@ -5,12 +5,12 @@ import { CartDB } from '@schemas'
 
 class CartService {
   public async getCart(authorization?: string): Promise<any> {
-      const user = await authUser(authorization as string)
-      const dataCart = await CartDB.findOne({ user_id: user?._id })
-      if(!dataCart) {
-        throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
-      }
-      return dataCart.toJSON()
+    const user = await authUser(authorization as string)
+    const dataCart = await CartDB.findOne({ user_id: user?._id })
+    if (!dataCart) {
+      throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
+    }
+    return dataCart.toJSON()
   }
 
   public async addToCart(
@@ -58,47 +58,66 @@ class CartService {
     }
   }
 
-  public async updateItemQuantity(authorization: string, product_id: string, action: string): Promise<any> {
-    // const user = await authUser(authorization as string);
+  public async updateItemQuantity(
+    authorization: string,
+    product_id: string,
+    action: string
+  ): Promise<any> {
+    const user = await authUser(authorization as string)
+    const userCart = await CartDB.findOne({ user_id: user?._id })
 
-    const userCart = await CartDB.findOne({ user_id: authorization });
-
-    if (userCart) {
-        const cartItemIndex = userCart.cart?.findIndex(item => item.product_id?.toString() === product_id) || 0;
-        
-        if (cartItemIndex !== -1) {
-          if(!userCart.cart){ 
-            console.log(userCart.cart)
-            return null}
-            let updatedQuantity = userCart.cart[cartItemIndex].quantity ;
-            if (updatedQuantity && action === 'increment') {
-                updatedQuantity = updatedQuantity + 1;
-            } else if (updatedQuantity && action === 'decrement') {
-                updatedQuantity = updatedQuantity - 1;
-                if (updatedQuantity < 1) {
-                    return 0;
-                }
-            } else {
-                return 0;
-            }
-
-            userCart.cart[cartItemIndex].quantity = updatedQuantity;
-
-            const result = await userCart.save();
-
-            return result;
-        } else {
-          console.log(1)
-            return null;
-        }
-    } else {
-      console.log(2)
-
-        return null;
+    if (!userCart) {
+      throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
     }
-}
+    const cartItemIndex =
+      userCart.cart?.findIndex(
+        item => item.product_id?.toString() === product_id
+      ) || 0
+    if (cartItemIndex !== -1) {
+      if (!userCart.cart) {
+        throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
+      }
+      let updatedQuantity = userCart.cart[cartItemIndex].quantity
+      if (updatedQuantity && action === 'increment') {
+        updatedQuantity = updatedQuantity + 1
+      } else if (updatedQuantity && action === 'decrement') {
+        updatedQuantity = updatedQuantity - 1
+        if (updatedQuantity < 1) {
+          return 0
+        }
+      } else {
+        throw new Error(Constant.NETWORK_STATUS_MESSAGE.VALIDATE_ERROR)
+      }
+      userCart.cart[cartItemIndex].quantity = updatedQuantity
+      const result = await userCart.save()
+      return result
+    } else {
+      throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
+    }
+  }
 
-  public async removeItem(): Promise<any> {}
+  public async removeItem(authorization: string,
+    product_id: string): Promise<any> {
+      const user = await authUser(authorization as string)
+      const userCart = await CartDB.findOne({ user_id: user?._id })
+      if (!userCart) {
+        throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
+      }
+      const cartItemIndex =
+        userCart.cart?.findIndex(
+          item => item.product_id?.toString() === product_id
+        ) || 0
+      if (cartItemIndex !== -1) {
+        if (!userCart.cart) {
+          throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
+        }
+        userCart.cart?.splice(cartItemIndex, 1);
+        const result = await userCart.save()
+        return result
+      } else {
+        throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
+      }
+    }
 }
 
 export { CartService }

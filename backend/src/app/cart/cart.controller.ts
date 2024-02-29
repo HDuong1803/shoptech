@@ -71,8 +71,7 @@ export class CartController extends Controller {
     @BodyProp() action: string
   ): Promise<Option<any>> {
     try {
-      // const authorization = req.headers.authorization as string
-      const authorization = '65defc93ce29856a1d3d3687'
+      const authorization = req.headers.authorization as string
       const res = await Singleton.getCartInstance().updateItemQuantity(
         authorization,
         product_id,
@@ -88,9 +87,14 @@ export class CartController extends Controller {
   @Delete('/item')
   public async removeItem(
     @Request() req: ExpressRequest,
+    @Query() product_id: string
   ): Promise<Option<any>> {
     try {
-      const res = await Singleton.getCartInstance().removeItem()
+      const authorization = req.headers.authorization as string
+      const res = await Singleton.getCartInstance().removeItem(
+        authorization,
+        product_id
+      )
       return onSuccess(res)
     } catch (error: any) {
       logError(error, req)
