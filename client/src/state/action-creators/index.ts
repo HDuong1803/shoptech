@@ -10,15 +10,15 @@ export const addToCart = (id: string, qty: number) => {
     const { data } = await axios.get(
       `${SERVER.baseURL}/product/detail?id=${id}`
     );
-
+    console.log(data.data.name)
     dispatch({
       type: ActionType.CART_ADD_ITEM,
       payload: {
-        product: data._id,
-        name: data.name,
-        image: data.image,
-        price: data.price,
-        countInStock: data.countInStock,
+        product: data.data._id,
+        name: data.data.name,
+        image: data.data.image,
+        price: data.data.price,
+        countInStock: data.data.countInStock,
         qty,
       },
     });
