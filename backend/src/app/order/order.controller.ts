@@ -112,11 +112,9 @@ export class OrdersController extends Controller {
   @Get('/')
   public async getOrderOfUser(
     @Request() req: ExpressRequest,
-    // @Query() id: string
   ): Promise<any> {
     try {
       const authorization = req.headers.authorization as string;
-
       console.log(authorization)
       const res = await Singleton.getOrderInstance().getOrderOfUser(authorization);
       return onSuccess(res);

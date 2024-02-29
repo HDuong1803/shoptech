@@ -4,6 +4,7 @@ import {
   ProductService,
   AdminService,
   AuthService,
+  CartService,
 } from '@app'
 
 class Singleton {
@@ -11,6 +12,7 @@ class Singleton {
   private static authInstance: AuthService
   private static orderInstance: OrderService
   private static productInstance: ProductService
+  private static cartInstance: CartService
   private static userInstance: UserService
 
   public static getAdminInstance(): AdminService {
@@ -27,11 +29,11 @@ class Singleton {
     return Singleton.authInstance
   }
 
-  public static getOrderInstance(): OrderService {
-    if (!Singleton.orderInstance) {
-      Singleton.orderInstance = new OrderService()
+  public static getCartInstance(): CartService {
+    if (!Singleton.cartInstance) {
+      Singleton.cartInstance = new CartService()
     }
-    return Singleton.orderInstance
+    return Singleton.cartInstance
   }
 
   public static getProductInstance(): ProductService {
@@ -39,6 +41,13 @@ class Singleton {
       Singleton.productInstance = new ProductService()
     }
     return Singleton.productInstance
+  }
+
+  public static getOrderInstance(): OrderService {
+    if (!Singleton.orderInstance) {
+      Singleton.orderInstance = new OrderService()
+    }
+    return Singleton.orderInstance
   }
 
   public static getUserInstance(): UserService {
