@@ -7,6 +7,7 @@
     "@mantine/hooks": "3.6.14",
     "@mantine/modals": "3.6.14",
     "@mantine/notifications": "3.6.14",
+    "@reduxjs/toolkit": "^2.2.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
@@ -28,6 +29,7 @@
     "react-select": "^5.8.0",
     "redux": "^4.2.1",
     "redux-devtools-extension": "^2.13.9",
+    "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0"

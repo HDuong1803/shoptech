@@ -4,7 +4,7 @@ import Steps from "../components/Steps";
 import Layout from "../layout/Layout";
 import { BsCreditCard2Front, BsBox } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
-import { actionCreators, State } from "../state";
+import { actionCreators, asyncAction, State } from "../state";
 import Head from "../components/Head";
 import { bindActionCreators } from "redux";
 import { useEffect } from "react";
@@ -17,7 +17,7 @@ const PlaceOrder = () => {
   const { createOrder } = bindActionCreators(actionCreators, dispatch);
 
   const { cartItems, shippingAddress, paymentMethod } = useSelector(
-    (state: State) => state.cart
+    (state: State) => state.carts
   );
 
   const { orderCreate, loading: createOrderLoading } = useSelector(
@@ -43,7 +43,7 @@ const PlaceOrder = () => {
 
   const handlerOrderCreate = () => {
     dispatch(
-      createOrder(
+      asyncAction(createOrder(
         cartItems,
         shippingAddress,
         paymentMethod,
@@ -52,7 +52,7 @@ const PlaceOrder = () => {
         cartItems.shippingPrice,
         cartItems.totalPrice
       )
-    );
+    ));
   };
 
   useEffect(() => {

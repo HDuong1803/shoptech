@@ -11,7 +11,7 @@ import { useNavigate } from "react-router";
 import Steps from "../components/Steps";
 import Layout from "../layout/Layout";
 import { bindActionCreators } from "redux";
-import { actionCreators } from "../state";
+import { actionCreators, asyncAction } from "../state";
 import { useDispatch } from "react-redux";
 import React from "react";
 
@@ -23,7 +23,7 @@ const Payment = () => {
 
   const handlerAddPaymentMethod = (method: string) => {
     navigate("/placeorder");
-    dispatch(savePaymentMethod(method));
+    dispatch(asyncAction(savePaymentMethod(method)));
   };
 
   return (

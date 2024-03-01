@@ -15,7 +15,7 @@ import { useEffect } from "react";
 import { AiOutlineUsb } from "react-icons/ai";
 import { bindActionCreators } from "redux";
 import { useDispatch, useSelector } from "react-redux";
-import { actionCreators, State } from "../../state";
+import { actionCreators, asyncAction, State } from "../../state";
 import { useNavigate, useLocation } from "react-router";
 import Head from "../../components/Head";
 import { BsFillExclamationCircleFill } from "react-icons/bs";
@@ -62,7 +62,7 @@ const Login = () => {
 
   const handlerLogin = (values: any) => {
     const { email, password } = values;
-    dispatch(login(email, password));
+    dispatch(asyncAction(login(email, password)));
   };
 
   useEffect(() => {

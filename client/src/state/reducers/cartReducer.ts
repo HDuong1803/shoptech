@@ -13,6 +13,31 @@ const paymentMethodFromStorage = localStorage.getItem("paymentMethod")
   ? JSON.parse(localStorage.getItem("paymentMethod") || "{}")
   : [];
 
+const getCartReducer = (
+  state = {
+    cartItem: [],
+    error: null,
+    loading: false,
+  },
+  action: Action
+) => {
+  switch (action.type) {
+    case ActionType.GET_CART_REQUEST:
+      return { ...state, loading: true, error: null };
+    case ActionType.GET_CART_SUCCESS:
+      return {
+        ...state,
+        cartItem: action.payload,
+        loading: false,
+        error: null,
+      };
+    case ActionType.GET_PRODUCT_FAIL:
+      return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
 const cartReducer = (
   state = {
     cartItems: cartItemsFromStorage,
@@ -69,4 +94,4 @@ const cartReducer = (
   }
 };
 
-export default cartReducer;
+export { cartReducer, getCartReducer };

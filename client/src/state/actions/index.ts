@@ -5,6 +5,11 @@ interface CartAddItemAction {
   payload: any;
 }
 
+interface CartListItemAction {
+  type: ActionType.CART_LIST_ITEM;
+  payload: any;
+}
+
 interface CartUpdateItemAction {
   type: ActionType.CART_UPDATE_ITEM;
   payload: any
@@ -27,6 +32,21 @@ interface CartSavePaymentAction {
 
 interface CartClearItemsAction {
   type: ActionType.CART_CLEAR_ITEMS;
+  payload: any;
+}
+
+interface GetCartRequestAction {
+  type: ActionType.GET_CART_REQUEST;
+  payload?: any;
+}
+
+interface GetCartSuccessAction {
+  type: ActionType.GET_CART_SUCCESS;
+  payload: any;
+}
+
+interface GetCartFailsAction {
+  type: ActionType.GET_CART_FAIL;
   payload: any;
 }
 
@@ -312,11 +332,15 @@ interface UpdateUserResetAction {
 
 export type Action =
   | CartAddItemAction
+  | CartListItemAction
   | CartUpdateItemAction
   | CartRemoveItemAction
   | CartSaveShippingAction
   | CartSavePaymentAction
   | CartClearItemsAction
+  | GetCartRequestAction
+  | GetCartSuccessAction
+  | GetCartFailsAction
   | GetProductsRequestAction
   | GetProductsSuccessAction
   | GetProductsFailAction

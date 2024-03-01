@@ -33,7 +33,7 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
   const [value] = useState("");
 
   const { userInfo } = useSelector((state: State) => state.userLogin);
-  const { cartItems } = useSelector((state: State) => state.cart);
+  const { cartItem } = useSelector((state: State) => state.cart);
   const { quickSearch } = useSelector((state: State) => state.quickSearch);
   const [opened, setOpened] = useState(false);
   const theme = useMantineTheme();
@@ -87,9 +87,9 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
             >
               <Text color="gray" weight={500} size="xl" align="center">
                 Cart{" "}
-                {cartItems && cartItems.length ? (
+                {cartItem && cartItem.length ? (
                   <Badge variant="filled" color="red">
-                    {cartItems.length}
+                    {cartItem.length}
                   </Badge>
                 ) : (
                   <Badge variant="filled" color="red">
@@ -212,9 +212,9 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
                 leftIcon={<BiShoppingBag />}
                 onClick={() => navigate("/cart")}
               >
-                {cartItems && cartItems.length ? (
+                {cartItem && cartItem.length ? (
                   <Badge variant="filled" color="red">
-                    {cartItems.length}
+                    {cartItem.length}
                   </Badge>
                 ) : (
                   <Badge variant="filled" color="red">

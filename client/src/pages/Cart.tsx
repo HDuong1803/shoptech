@@ -1,43 +1,67 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Alert,
   Button,
   Card,
   Col,
   Grid,
+  Group,
   Image,
   Modal,
   NumberInput,
+  NumberInputHandlers,
   Text,
 } from "@mantine/core";
 import { RiShoppingBagLine } from "react-icons/ri";
 import Layout from "../layout/Layout";
 import { useDispatch, useSelector } from "react-redux";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { bindActionCreators } from "redux";
-import { actionCreators, State } from "../state";
+import { actionCreators, asyncAction, State } from "../state";
 import { useNavigate } from "react-router";
 import { BiTrashAlt } from "react-icons/bi";
 import React from "react";
 
+type Quantities = {
+  [key: string]: number;
+};
+
 const Cart = () => {
-  const numRef = useRef(null);
+  const numRef = useRef<NumberInputHandlers>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [opened, setOpened] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
-  const { cartItems } = useSelector((state: State) => state.cart);
+  const [quantity, setQuantity] = useState<Quantities>({});
+  const { cartItem } = useSelector((state: State) => state.cart);
 
-  const { updateCart, removeFromCart } = bindActionCreators(
+  const { getCart, updateCart, removeFromCart } = bindActionCreators(
     actionCreators,
     dispatch
   );
 
-  const handlerUpdateCartItems = (product_id: string, action: string
-    ) => {
-    dispatch(updateCart(product_id,
-      action,
-      ));
+  const handlerUpdateCartItems = (product_id: string, action: string) => {
+    dispatch(asyncAction(updateCart(product_id, action)));
+  };
+
+  const handlerQuantityChange = (
+    product_id: string,
+    quantity: number,
+    newQuantity: number
+  ) => {
+    let action: string;
+    if (quantity > 0) {
+      action = "increment";
+    } else {
+      action = "decrement";
+    }
+    if(newQuantity < 1) return
+    handlerUpdateCartItems(product_id, action);
+    setQuantity((prevQuantities) => ({
+      ...prevQuantities,
+      [product_id]: newQuantity,
+    }));
   };
 
   const selectItem = (id: string) => {
@@ -47,8 +71,12 @@ const Cart = () => {
 
   const handlerDeleteCartItem = (id: string) => {
     setOpened(false);
-    dispatch(removeFromCart(id));
+    dispatch(asyncAction(removeFromCart(id)));
   };
+
+  useEffect(() => {
+    dispatch(asyncAction(getCart()));
+  }, []);
 
   return (
     <Layout>
@@ -87,8 +115,8 @@ const Cart = () => {
       </Modal>
       <Grid>
         <Col xs={12} sm={12} md={9} lg={9} xl={9} span={9}>
-          {cartItems && cartItems.length ? (
-            cartItems.map((item: any) => {
+          {cartItem && cartItem.cart ? (
+            cartItem.cart.map((item: any) => {
               return (
                 <Card
                   sx={{ marginTop: "1rem" }}
@@ -101,8 +129,8 @@ const Cart = () => {
                       <Image
                         fit="contain"
                         radius="lg"
-                        height={50}
-                        width={50}
+                        height={100}
+                        width={100}
                         src={item.image}
                       />
                     </Col>
@@ -129,7 +157,8 @@ const Cart = () => {
                       span={2}
                     >
                       <Text color="gray" weight={600}>
-                        ${item.price} x {item.qty}
+                        ${item.price} x{" "}
+                        {quantity[item.product_id] || item.quantity}
                       </Text>
                     </Col>
                     <Col
@@ -141,17 +170,46 @@ const Cart = () => {
                       span={2}
                       sx={{ display: "flex", alignItems: "center" }}
                     >
-                      <NumberInput
-                        radius="lg"
-                        value={item.qty}
-                        ref={numRef}
-                        onChange={() =>
-                          handlerUpdateCartItems(item.product, 'increment')
-                        }
-                        min={1}
-                        max={item.countInStock}
-                        required
-                      />
+                      <Group mt="md" mb="md">
+                        <Button
+                          size="sm"
+                          radius="xl"
+                          onClick={() =>
+                            handlerQuantityChange(
+                              item.product_id,
+                              -1,
+                              (quantity[item.product_id] || item.quantity) - 1
+                            )
+                          }
+                        >
+                          -
+                        </Button>
+                        <NumberInput
+                          radius="xl"
+                          size="md"
+                          text-align="center"
+                          value={quantity[item.product_id] || item.quantity}
+                          handlersRef={numRef}
+                          step={1}
+                          min={1}
+                          required
+                          hideControls
+                          style={{ width: "45px" }}
+                        />
+                        <Button
+                          size="sm"
+                          radius="xl"
+                          onClick={() =>
+                            handlerQuantityChange(
+                              item.product_id,
+                              1,
+                              (quantity[item.product_id] || item.quantity) + 1
+                            )
+                          }
+                        >
+                          +
+                        </Button>
+                      </Group>
                     </Col>
                     <Col
                       xs={12}
@@ -167,7 +225,7 @@ const Cart = () => {
                         radius="lg"
                         variant="filled"
                         color="red"
-                        onClick={() => selectItem(item.product)}
+                        onClick={() => selectItem(item.product_id)}
                         fullWidth
                       >
                         <BiTrashAlt />
@@ -197,20 +255,34 @@ const Cart = () => {
           xl={3}
           span={3}
         >
-          <Card sx={{ marginTop: ".5rem" }} radius="lg" shadow="xl" withBorder>
-            <Text color="gray" sx={{ marginBottom: "1rem" }} weight={600}>
-              Subtotal (
-              {cartItems.reduce((acc: any, item: any) => acc + item.qty, 0)})
-              Items
-            </Text>
+          {cartItem.cart && cartItem.cart.length ? (
+            <Card
+              sx={{ marginTop: ".5rem" }}
+              radius="lg"
+              shadow="xl"
+              withBorder
+            >
+              <Text color="gray" sx={{ marginBottom: "1rem" }} weight={600}>
+                Subtotal (
+                {cartItem.cart.reduce(
+                  (acc: number, item: any) =>
+                    acc + (quantity[item.product_id] || item.quantity),
+                  0
+                )}{" "}
+                Items)
+              </Text>
 
-            <Text size="xl" sx={{ marginTop: ".5rem" }} weight={700}>
-              $
-              {cartItems
-                .reduce((acc: any, item: any) => acc + item.qty * item.price, 0)
-                .toFixed(2)}
-            </Text>
-            {cartItems && cartItems.length ? (
+              <Text size="xl" sx={{ marginTop: ".5rem" }} weight={700}>
+                $
+                {cartItem.cart
+                  .reduce(
+                    (acc: number, item: any) =>
+                      acc +
+                      (quantity[item.product_id] || item.quantity) * item.price,
+                    0
+                  )
+                  .toFixed(2)}
+              </Text>
               <Button
                 sx={{ marginTop: ".5rem" }}
                 color="dark"
@@ -220,10 +292,10 @@ const Cart = () => {
               >
                 Proceed to Checkout
               </Button>
-            ) : (
-              <></>
-            )}
-          </Card>
+            </Card>
+          ) : (
+            <></>
+          )}
         </Col>
       </Grid>
     </Layout>

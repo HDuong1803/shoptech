@@ -4,7 +4,7 @@ import Layout from "../layout/Layout";
 import Steps from "../components/Steps";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { actionCreators, State } from ".././state";
+import { actionCreators, asyncAction, State } from ".././state";
 import { useForm } from "@mantine/hooks";
 import { bindActionCreators } from "redux";
 import Head from "../components/Head";
@@ -41,7 +41,7 @@ const Shipping = () => {
 
   const handlerAddShipping = (values: any) => {
     navigate("/payment");
-    dispatch(saveShippingAddress(values));
+    dispatch(asyncAction(saveShippingAddress(values)));
   };
 
   useEffect(() => {

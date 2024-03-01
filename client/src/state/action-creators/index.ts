@@ -32,7 +32,6 @@ export const addToCart = (
       formData,
       config
     );
-    console.log(data.data);
 
     dispatch({
       type: ActionType.CART_ADD_ITEM,
@@ -44,19 +43,41 @@ export const addToCart = (
         price: data.data.price,
       },
     });
+  };
+};
 
-    localStorage.setItem(
-      "cartItems",
-      JSON.stringify(getState().cart.cartItems)
-    );
+export const getCart = () => {
+  return async (dispatch: Dispatch<Action>) => {
+    try {
+      dispatch({
+        type: ActionType.GET_CART_REQUEST,
+      });
+      const token = `${localStorage.getItem("access_token")}`;
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+      };
+      const { data } = await axios.get(`${SERVER.baseURL}/cart`, config);
+      dispatch({
+        type: ActionType.GET_CART_SUCCESS,
+        payload: data.data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: ActionType.GET_CART_FAIL,
+        payload: error.response.data.message,
+      });
+    }
   };
 };
 
 export const updateCart = (product_id: string, action: string) => {
-  return async (dispatch: Dispatch<Action>, getState: any) => {
+  return async (dispatch: Dispatch<Action>) => {
     const token = `${localStorage.getItem("access_token")}`;
     const formData = {
-      product_id,
       action,
     };
     const config = {
@@ -74,25 +95,26 @@ export const updateCart = (product_id: string, action: string) => {
       type: ActionType.CART_UPDATE_ITEM,
       payload: data.data,
     });
-
-    localStorage.setItem(
-      "cartItems",
-      JSON.stringify(getState().cart.cartItems)
-    );
   };
-}
+};
 
-export const removeFromCart = (id: string) => {
-  return async (dispatch: Dispatch<Action>, getState: any) => {
+export const removeFromCart = (product_id: string) => {
+  return async (dispatch: Dispatch<Action>) => {
+    const token = `${localStorage.getItem("access_token")}`;
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
+    };
+    const { data } = await axios.delete(
+      `${SERVER.baseURL}/cart/item?product_id=${product_id}`,
+      config
+    );
     dispatch({
       type: ActionType.CART_REMOVE_ITEM,
-      payload: id,
+      payload: data.data,
     });
-
-    localStorage.setItem(
-      "cartItems",
-      JSON.stringify(getState().cart.cartItems)
-    );
   };
 };
 
