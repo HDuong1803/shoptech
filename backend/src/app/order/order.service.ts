@@ -57,14 +57,15 @@ class OrderService {
 
   public async addOrderItems(
     body?: InputOrderItem,
-    user_id?: string,
+    authorization?: string,
     product_id?: string
   ): Promise<any> {
+    const user = await authUser(authorization as string)
     const item = await ProductDB.findById(product_id)
     const quantity = body?.orderItems?.[0]?.quantity ?? 0
     const itemsPrice = (item?.price ?? 0) * quantity
     const createdOrder = await OrderDB.create({
-      user_id: user_id,
+      user_id: user?._id,
       orderItems: [
         {
           product_id: product_id?.toString(),
@@ -99,7 +100,7 @@ class OrderService {
 
         return {
             price_data: {
-                currency: 'VND',
+                currency: 'usd',
                 product_data: {
                     name: item.name,
                     images: [item.image],

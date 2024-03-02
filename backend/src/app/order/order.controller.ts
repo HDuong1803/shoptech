@@ -93,13 +93,14 @@ export class OrdersController extends Controller {
   @Post('/add')
   public async addOrderItems(
     @Request() req: ExpressRequest,
-    @Body() body: InputOrderItem
+    @Body() body: InputOrderItem,
+    @Query() product_id: string
   ): Promise<Option<IOrders>> {
     try {
-      const { user_id, product_id } = req.body
+      const authorization = req.headers.authorization as string
       const data = await Singleton.getOrderInstance().addOrderItems(
         body,
-        user_id,
+        authorization,
         product_id
       )
       return onSuccess(data)
