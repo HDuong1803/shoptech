@@ -86,16 +86,7 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
               span={12}
             >
               <Text color="gray" weight={500} size="xl" align="center">
-                Cart{" "}
-                {cartItem && cartItem.length ? (
-                  <Badge variant="filled" color="red">
-                    {cartItem.length}
-                  </Badge>
-                ) : (
-                  <Badge variant="filled" color="red">
-                    0
-                  </Badge>
-                )}
+                0
               </Text>
             </Col>
             <Col sx={{ marginTop: "1rem" }} span={12}>
@@ -212,9 +203,9 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
                 leftIcon={<BiShoppingBag />}
                 onClick={() => navigate("/cart")}
               >
-                {cartItem && cartItem.length ? (
+                {userInfo && cartItem && cartItem.cart ? (
                   <Badge variant="filled" color="red">
-                    {cartItem.length}
+                    {cartItem.cart.length}
                   </Badge>
                 ) : (
                   <Badge variant="filled" color="red">

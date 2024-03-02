@@ -21,6 +21,7 @@ import { actionCreators, asyncAction, State } from "../state";
 import { useNavigate } from "react-router";
 import { BiTrashAlt } from "react-icons/bi";
 import React from "react";
+import { ActionType } from "../state/action-types";
 
 type Quantities = {
   [key: string]: number;
@@ -33,6 +34,7 @@ const Cart = () => {
 
   const [opened, setOpened] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
+  const [initialCartItems, setInitialCartItems] = useState([]);
   const [quantity, setQuantity] = useState<Quantities>({});
   const { cartItem } = useSelector((state: State) => state.cart);
 
@@ -69,11 +71,19 @@ const Cart = () => {
     setSelectedItem(id);
   };
 
-  const handlerDeleteCartItem = (id: string) => {
+  const handlerDeleteCartItem = async (id: string) => {
     setOpened(false);
-    dispatch(asyncAction(removeFromCart(id)));
+    dispatch(asyncAction(removeFromCart(id)));  
+    const updated = initialCartItems.filter((item: any) => item.product_id !== id);
+    setInitialCartItems(updated);
   };
 
+  useEffect(() => {
+    if (cartItem.cart) {
+      setInitialCartItems(cartItem.cart);
+    }
+  }, [cartItem.cart]);
+  
   useEffect(() => {
     dispatch(asyncAction(getCart()));
   }, []);
@@ -115,9 +125,8 @@ const Cart = () => {
       </Modal>
       <Grid>
         <Col xs={12} sm={12} md={9} lg={9} xl={9} span={9}>
-          {cartItem && cartItem.cart ? (
-            cartItem.cart.map((item: any) => {
-              return (
+        {initialCartItems && initialCartItems.length ? (
+              initialCartItems.map((item: any) => {return (
                 <Card
                   sx={{ marginTop: "1rem" }}
                   radius="lg"
@@ -235,7 +244,7 @@ const Cart = () => {
                 </Card>
               );
             })
-          ) : (
+          ):(
             <Alert
               icon={<RiShoppingBagLine size={16} />}
               sx={{ marginTop: "1rem" }}
@@ -255,7 +264,7 @@ const Cart = () => {
           xl={3}
           span={3}
         >
-          {cartItem.cart && cartItem.cart.length ? (
+          {initialCartItems && initialCartItems.length ? (
             <Card
               sx={{ marginTop: ".5rem" }}
               radius="lg"
@@ -264,7 +273,7 @@ const Cart = () => {
             >
               <Text color="gray" sx={{ marginBottom: "1rem" }} weight={600}>
                 Subtotal (
-                {cartItem.cart.reduce(
+                {initialCartItems.reduce(
                   (acc: number, item: any) =>
                     acc + (quantity[item.product_id] || item.quantity),
                   0
@@ -274,7 +283,7 @@ const Cart = () => {
 
               <Text size="xl" sx={{ marginTop: ".5rem" }} weight={700}>
                 $
-                {cartItem.cart
+                {initialCartItems
                   .reduce(
                     (acc: number, item: any) =>
                       acc +
