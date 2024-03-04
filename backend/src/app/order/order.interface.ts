@@ -1,36 +1,29 @@
 export interface IOrders {
     user_id?: string
-    orderItems?: orderItems[]
-    shippingAddress?: shippingAddress
-    paymentMethod?: string
-    paymentResult?: string
-    shippingPrice?: number
-    totalPrice?: number
-    isPaid?: boolean
-    paidAt?: Date
-    isDelivered?: boolean
-    deliveredAt?: Date
+    order_items?: any
+    shipping_address?: shippingAddress
+    payment_method?: string
+    payment_result?: string
+    shipping_price?: number
+    total_price?: number
+    is_paid?: boolean
+    paid_at?: Date
+    is_delivered?: boolean
+    delivered_at?: Date
 }
 
 export interface InputOrderItem {
-    orderItems?: orderItems[]
-    shippingAddress?: shippingAddress
-    paymentMethod?: string
-    shippingPrice?: number
-    totalPrice?: number
+    shipping_address?: shippingAddress
+    payment_method?: string
 }
 
-export interface orderItems {
-    product_id?: string;
-    name?: string;
-    quantity?: number;
-    image?: string;
-    price?: number;
-}
+
 
 export interface shippingAddress {
     address?: string
     city?: string
+    postal_code?: string
+    country?: string
 }
 
 export type OutputCheckout = string

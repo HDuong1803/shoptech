@@ -1,7 +1,7 @@
 import { IOrders, InputOrderItem } from '@app'
 import { Constant, authUser } from '@constants'
 import { stripe } from '@providers'
-import { OrderDB, ProductDB, UserDB } from '@schemas'
+import { CartDB, OrderDB } from '@schemas'
 
 class OrderService {
   public async getListOrders(page: number, limit: number): Promise<any> {
@@ -28,12 +28,12 @@ class OrderService {
   public async updateOrderToPaid(_id?: string): Promise<any> {
     const order = await OrderDB.findById(_id)
     if (order) {
-      order.isPaid = true
-      order.paidAt = new Date(Date.now())
-      order.paymentResult = {
-        status: order.paymentResult?.status,
-        update_time: order.paymentResult?.update_time,
-        email_address: order.paymentResult?.email_address
+      order.is_paid = true
+      order.paid_at = new Date(Date.now())
+      order.payment_result = {
+        status: order.payment_result?.status,
+        update_time: order.payment_result?.update_time,
+        email_address: order.payment_result?.email_address
       }
       const updatedOrder = await order.save()
 
@@ -45,8 +45,8 @@ class OrderService {
   public async updateOrderToDelivered(_id?: string): Promise<any> {
     const order = await OrderDB.findById(_id)
     if (order) {
-      order.isDelivered = true
-      order.deliveredAt = new Date(Date.now())
+      order.is_delivered = true
+      order.delivered_at = new Date(Date.now())
 
       const updatedOrder = await order.save()
 
@@ -58,42 +58,41 @@ class OrderService {
   public async addOrderItems(
     body?: InputOrderItem,
     authorization?: string,
-    product_id?: string
   ): Promise<any> {
     const user = await authUser(authorization as string)
-    const item = await ProductDB.findById(product_id)
-    const quantity = body?.orderItems?.[0]?.quantity ?? 0
-    const itemsPrice = (item?.price ?? 0) * quantity
+    const dataCart = await CartDB.findOne({user_id: user?._id})
+    const orderItems = await dataCart?.cart?.map((item: any) => {
+      const orderItems = {
+        product_id: item.product_id,
+        name: item.name,
+        quantity: item.quantity,
+        image: item.image,
+        price: item.price
+      }
+      return orderItems
+    })
+    const totalPrice = orderItems?.reduce((total: any, item) => total + item.price * item.quantity, 0);
+
     const createdOrder = await OrderDB.create({
       user_id: user?._id,
-      orderItems: [
-        {
-          product_id: product_id?.toString(),
-          name: item?.name,
-          quantity: body?.orderItems?.[0]?.quantity,
-          image: item?.image,
-          price: itemsPrice
-        }
-      ],
-      shipping_address: body?.shippingAddress,
-      payment_method: body?.paymentMethod,
+      order_items: orderItems,
+      shipping_address: body?.shipping_address,
+      payment_method: body?.payment_method,
       shipping_price: Constant.SHIPPING_PRICE,
-      total_price: itemsPrice + Constant.SHIPPING_PRICE,
-      isPaid: false
+      total_price: totalPrice + Constant.SHIPPING_PRICE,
+      is_paid: false
     })
     return createdOrder
   }
 
-  public async getCheckout(user_id: string, order_id: string): Promise<any> {
+  public async getCheckout(authorization: string, order_id: string): Promise<any> {
+    const user = await authUser(authorization)
     const order = await OrderDB.findById(order_id)
-
-    const user = await UserDB.findById(user_id)
-
-    if (!user || !user.email || !order || !order.orderItems) {
+    if (!user || !user.email || !order || !order.order_items) {
       throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
     }
 
-    const line_items = order.orderItems.map(item => {
+    const line_items = order.order_items.map(item => {
         if (!item.name || !item.image || !item.price || !item.quantity) {
             throw new Error("Missing required item information");
         }
@@ -105,7 +104,7 @@ class OrderService {
                     name: item.name,
                     images: [item.image],
                 },
-                unit_amount: item.price,
+                unit_amount: item.price * 100,
             },
             quantity: item.quantity,
         };

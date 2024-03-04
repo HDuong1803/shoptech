@@ -6,7 +6,7 @@ import {
   InputSignUp,
   OutputSignUp
 } from '@app'
-import { Constant, ErrorHandler } from '@constants'
+import { Constant, ErrorHandler, authUser } from '@constants'
 import { hashText, signJWT } from '@providers'
 import { TokenDB, UserDB } from '@schemas'
 
@@ -123,13 +123,10 @@ class UserService {
     }
   }
 
-  public async getUser(email: string): Promise<IUser> {
-    const res = await UserDB.findOne(
-      { email },
-      { _id: 1, name: 1, email: 1, phone: 1 }
-    )
-    if (res) {
-      return res.toJSON()
+  public async getUser(authorization: string): Promise<IUser> {
+    const user = await authUser(authorization)
+    if (user) {
+      return user.toJSON()
     }
     throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
   }

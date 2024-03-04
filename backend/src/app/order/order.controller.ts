@@ -94,14 +94,12 @@ export class OrdersController extends Controller {
   public async addOrderItems(
     @Request() req: ExpressRequest,
     @Body() body: InputOrderItem,
-    @Query() product_id: string
   ): Promise<Option<IOrders>> {
     try {
       const authorization = req.headers.authorization as string
       const data = await Singleton.getOrderInstance().addOrderItems(
         body,
         authorization,
-        product_id
       )
       return onSuccess(data)
     } catch (error: any) {
@@ -128,12 +126,12 @@ export class OrdersController extends Controller {
   @Post('/checkout')
   public async getCheckout(
     @Request() req: ExpressRequest,
-    @Query() user_id: string,
     @Query() order_id: string
   ): Promise<Option<OutputCheckout>> {
     try {
+      const authorization = req.headers.authorization as string
       const data = await Singleton.getOrderInstance().getCheckout(
-        user_id,
+        authorization,
         order_id
       )
       return onSuccess(data)

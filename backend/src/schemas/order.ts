@@ -1,17 +1,17 @@
-import mongoose, { Schema } from "mongoose"
+import mongoose, { Schema } from 'mongoose'
 
 export interface orderAttributes {
   user_id?: mongoose.Schema.Types.ObjectId
-  orderItems?: [orderItems]
-  shippingAddress?: shippingAddress
-  paymentMethod?: string
-  paymentResult?: paymentResult
-  shippingPrice?: number
-  totalPrice?: number
-  isPaid?: boolean
-  paidAt?: Date
-  isDelivered?: boolean
-  deliveredAt?: Date
+  order_items?: [orderItems]
+  shipping_address?: shippingAddress
+  payment_method?: string
+  payment_result?: paymentResult
+  shipping_price?: number
+  total_price?: number
+  is_paid?: boolean
+  paid_at?: Date
+  is_delivered?: boolean
+  delivered_at?: Date
 }
 
 export interface orderItems {
@@ -25,89 +25,96 @@ export interface orderItems {
 export interface shippingAddress {
   address?: string
   city?: string
+  postal_code?: string
+  country?: string
 }
 
 export interface paymentResult {
   status?: string
-  update_time?: string
+  update_time?: Date
   email_address?: string
 }
 
-const orderItemsSchema = new Schema<orderItems>(
-  {
-    product_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "Product",
-    },
-    name: { type: String, required: true },
-    quantity: { type: Number, required: true },
-    image: { type: String, required: true },
-    price: { type: Number, required: true }
+const orderItemsSchema = new Schema<orderItems>({
+  product_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Product'
+  },
+  name: { type: String, 
+    required: true
+   },
+  quantity: { type: Number, 
+    required: true 
+  },
+  image: { type: String, 
+    required: true 
+  },
+  price: { type: Number, 
+    required: true 
   }
-)
+})
 
-const paymentResultSchema = new Schema<paymentResult>(
-  {
-    status: { type: String },
-    update_time: { type: String },
-    email_address: { type: String },
-  }
-)
+const paymentResultSchema = new Schema<paymentResult>({
+  status: { type: String },
+  update_time: { type: String },
+  email_address: { type: String }
+})
 
-const shippingAddressSchema = new Schema<shippingAddress>(
-  {
-    address: { type: String, required: true },
-    city: { type: String, required: true }
-  }
-)
+const shippingAddressSchema = new Schema<shippingAddress>({
+  address: { type: String, required: true },
+  city: { type: String, required: true },
+  postal_code: { type: String, required: true },
+  country: { type: String, required: true }
+
+})
 
 const orderSchema = new Schema<orderAttributes>(
   {
     user_id: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "User",
+      ref: 'User'
     },
-    orderItems: [orderItemsSchema],
-    shippingAddress: shippingAddressSchema,
-    paymentMethod: {
+    order_items: [orderItemsSchema],
+    shipping_address: shippingAddressSchema,
+    payment_method: {
       type: String,
-      required: true,
+      required: true
     },
-    paymentResult: paymentResultSchema,
-    shippingPrice: {
+    payment_result: paymentResultSchema,
+    shipping_price: {
       type: Number,
       required: true,
-      default: 0.0,
+      default: 0.0
     },
-    totalPrice: {
+    total_price: {
       type: Number,
       required: true,
-      default: 0.0,
+      default: 0.0
     },
-    isPaid: {
+    is_paid: {
       type: Boolean,
       required: true,
-      default: false,
+      default: false
     },
-    paidAt: {
-      type: Date,
+    paid_at: {
+      type: Date
     },
-    isDelivered: {
+    is_delivered: {
       type: Boolean,
       required: true,
-      default: false,
+      default: false
     },
-    deliveredAt: {
-      type: Date,
-    },
+    delivered_at: {
+      type: Date
+    }
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 )
 
-export const OrderDB = mongoose.model("order", orderSchema, undefined, {
-  overwriteModels: true,
-});
+export const OrderDB = mongoose.model('order', orderSchema, undefined, {
+  overwriteModels: true
+})

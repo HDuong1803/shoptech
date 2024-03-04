@@ -8,7 +8,9 @@ import {
 } from '@app'
 import { type Option } from '@constants'
 import { logError, onError, onSuccess } from '@constants'
-import { AdminMiddleware, AuthMiddleware } from '@middlewares'
+import { AdminMiddleware, 
+  // AuthMiddleware
+ } from '@middlewares'
 import { Singleton } from '@providers'
 import { Request as ExpressRequest } from 'express'
 import {
@@ -20,7 +22,7 @@ import {
   Middlewares,
   Request,
   Route,
-  Security,
+  // Security,
   Tags,
   Put,
   BodyProp
@@ -57,15 +59,15 @@ export class UserController extends Controller {
       return onError(error, this)
     }
   }
-  @Security({
-    authorization: []
-  })
-  @Middlewares([AuthMiddleware])
+  // @Security({
+  //   authorization: []
+  // })
+  // @Middlewares([AuthMiddleware])
   @Get('/profile')
   public async getUser(@Request() req: ExpressRequest): Promise<Option<IUser>> {
     try {
-      const email = req.headers.email as string
-      const result = await Singleton.getUserInstance().getUser(email)
+      const authorization = req.headers.authorization as string
+      const result = await Singleton.getUserInstance().getUser(authorization)
       return onSuccess(result)
     } catch (error: any) {
       logError(error, req)
