@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { getCartReducer, cartReducer } from "./cartReducer"
+import { getCartReducer, paymentReducer } from "./cartReducer"
 import {
   createOrderReducer,
   getOrderReducer,
@@ -19,14 +19,14 @@ import {
 import {
   loginReducer,
   registerReducer,
-  getUsersReducer,
+  getUserReducer,
   updateProfileReducer,
   updateUserReducer,
 } from "./userReducer";
 
 const reducers = combineReducers({
   cart: getCartReducer,
-  carts: cartReducer,
+  payment: paymentReducer,
   products: getProductsReducer,
   product: getProductReducer,
   review: addReviewReducer,
@@ -35,7 +35,7 @@ const reducers = combineReducers({
   order: getOrderReducer,
   orderCreate: createOrderReducer,
   orderPay: orderPayReducer,
-  users: getUsersReducer,
+  user: getUserReducer,
   orders: getOrdersReducer,
   orderDeliver: orderDeliverReducer,
   createProduct: createProductReducer,

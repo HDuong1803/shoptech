@@ -5,12 +5,12 @@ const cartItemsFromStorage = localStorage.getItem("cartItems")
   ? JSON.parse(localStorage.getItem("cartItems") || "{}")
   : [];
 
-const shippingAddressFromStorage = localStorage.getItem("shippingAddress")
-  ? JSON.parse(localStorage.getItem("shippingAddress") || "{}")
+const shippingAddressFromStorage = localStorage.getItem("shipping_address")
+  ? JSON.parse(localStorage.getItem("shipping_address") || "{}")
   : [];
 
-const paymentMethodFromStorage = localStorage.getItem("paymentMethod")
-  ? JSON.parse(localStorage.getItem("paymentMethod") || "{}")
+const payment_methodFromStorage = localStorage.getItem("payment_method")
+  ? JSON.parse(localStorage.getItem("payment_method") || "{}")
   : [];
 
 const getCartReducer = (
@@ -38,60 +38,27 @@ const getCartReducer = (
   }
 };
 
-const cartReducer = (
+const paymentReducer = (
   state = {
-    cartItems: cartItemsFromStorage,
-    shippingAddress: shippingAddressFromStorage,
-    paymentMethod: paymentMethodFromStorage,
+    shipping_address: shippingAddressFromStorage,
+    payment_method: payment_methodFromStorage,
   },
   action: Action
 ) => {
   switch (action.type) {
-    case ActionType.CART_UPDATE_ITEM:
-      const item = action.payload;
-
-      let existItem = state.cartItems.find(
-        (x: any) => x.product === item.product
-      );
-
-      if (existItem) {
-        return {
-          ...state,
-          cartItems: state.cartItems.map((x: any) =>
-            x.product === existItem.product ? item : x
-          ),
-        };
-      } else {
-        return {
-          ...state,
-          cartItems: [...state.cartItems, item],
-        };
-      }
-    case ActionType.CART_REMOVE_ITEM:
-      return {
-        ...state,
-        cartItems: state.cartItems.filter(
-          (x: any) => x.product !== action.payload
-        ),
-      };
     case ActionType.CART_SAVE_SHIPPING_ITEM:
       return {
         ...state,
-        shippingAddress: action.payload,
+        shipping_address: action.payload,
       };
     case ActionType.CART_SAVE_PAYMENT_ITEM:
       return {
         ...state,
-        paymentMethod: action.payload,
-      };
-    case ActionType.CART_CLEAR_ITEMS:
-      return {
-        ...state,
-        cartItems: [],
+        payment_method: action.payload,
       };
     default:
       return state;
   }
 };
 
-export { cartReducer, getCartReducer };
+export { paymentReducer, getCartReducer };

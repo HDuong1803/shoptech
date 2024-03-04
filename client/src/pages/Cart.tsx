@@ -21,7 +21,6 @@ import { actionCreators, asyncAction, State } from "../state";
 import { useNavigate } from "react-router";
 import { BiTrashAlt } from "react-icons/bi";
 import React from "react";
-import { ActionType } from "../state/action-types";
 
 type Quantities = {
   [key: string]: number;

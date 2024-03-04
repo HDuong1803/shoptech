@@ -125,18 +125,18 @@ export const saveShippingAddress = (data: any) => {
       payload: data,
     });
 
-    localStorage.setItem("shippingAddress", JSON.stringify(data));
+    localStorage.setItem("shipping_address", JSON.stringify(data));
   };
 };
 
-export const savePaymentMethod = (data: any) => {
+export const savepayment_method = (data: any) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch({
       type: ActionType.CART_SAVE_PAYMENT_ITEM,
       payload: data,
     });
 
-    localStorage.setItem("paymentMethod", JSON.stringify(data));
+    localStorage.setItem("payment_method", JSON.stringify(data));
   };
 };
 
@@ -359,13 +359,8 @@ export const logout = () => {
 };
 
 export const createOrder = (
-  orderItems: any,
-  shippingAddress: any,
-  paymentMethod: string,
-  itemsPrice: any,
-  taxPrice: any,
-  shippingPrice: any,
-  totalPrice: any
+  shipping_address: any,
+  payment_method: string,
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
@@ -383,11 +378,8 @@ export const createOrder = (
       };
 
       const formData = {
-        orderItems,
-        shippingAddress,
-        paymentMethod,
-        shippingPrice,
-        totalPrice,
+        shipping_address,
+        payment_method,
       };
 
       const { data } = await axios.post(
@@ -426,7 +418,6 @@ export const getOrder = (id: any) => {
       };
 
       const { data } = await axios.get(`${SERVER.baseURL}/order/${id}`, config);
-
       dispatch({
         type: ActionType.GET_ORDER_SUCCESS,
         payload: data.data,
@@ -440,7 +431,7 @@ export const getOrder = (id: any) => {
   };
 };
 
-export const payOrder = (id: any, paymentResult: any) => {
+export const payOrder = (order_id: any) => {
   return async (dispatch: Dispatch<Action>, getState: any) => {
     try {
       dispatch({
@@ -456,9 +447,9 @@ export const payOrder = (id: any, paymentResult: any) => {
         },
       };
 
-      const { data } = await axios.put(
-        `${SERVER.baseURL}/api/v1/orders/${id}/pay`,
-        paymentResult,
+      const { data } = await axios.post(
+        `${SERVER.baseURL}/order/checkout?order_id=${order_id}`,
+        '',
         config
       );
 
@@ -475,11 +466,11 @@ export const payOrder = (id: any, paymentResult: any) => {
   };
 };
 
-export const getUsers = () => {
+export const getUser = () => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       dispatch({
-        type: ActionType.GET_USERS_REQUEST,
+        type: ActionType.GET_USER_REQUEST,
       });
 
       const token = `${localStorage.getItem("access_token")}`;
@@ -497,17 +488,51 @@ export const getUsers = () => {
       );
 
       dispatch({
-        type: ActionType.GET_USERS_SUCCESS,
-        payload: data,
+        type: ActionType.GET_USER_SUCCESS,
+        payload: data.data,
       });
     } catch (error: any) {
       dispatch({
-        type: ActionType.GET_USERS_FAIL,
+        type: ActionType.GET_USER_FAIL,
         payload: error,
       });
     }
   };
 };
+
+// export const getUsers = () => {
+//   return async (dispatch: Dispatch<Action>) => {
+//     try {
+//       dispatch({
+//         type: ActionType.GET_USER_REQUEST,
+//       });
+
+//       const token = `${localStorage.getItem("access_token")}`;
+
+//       const config = {
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: `${token}`,
+//         },
+//       };
+
+//       const { data } = await axios.get(
+//         `${SERVER.baseURL}/user/profile`,
+//         config
+//       );
+
+//       dispatch({
+//         type: ActionType.GET_USER_SUCCESS,
+//         payload: data,
+//       });
+//     } catch (error: any) {
+//       dispatch({
+//         type: ActionType.GET_USER_FAIL,
+//         payload: error,
+//       });
+//     }
+//   };
+// };
 
 export const deliverOrder = (id: string) => {
   return async (dispatch: Dispatch<Action>) => {

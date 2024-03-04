@@ -19,11 +19,11 @@ const Payment = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { savePaymentMethod } = bindActionCreators(actionCreators, dispatch);
+  const { savepayment_method } = bindActionCreators(actionCreators, dispatch);
 
-  const handlerAddPaymentMethod = (method: string) => {
+  const handlerAddpayment_method = (method: string) => {
     navigate("/placeorder");
-    dispatch(asyncAction(savePaymentMethod(method)));
+    dispatch(asyncAction(savepayment_method(method)));
   };
 
   return (
@@ -37,7 +37,7 @@ const Payment = () => {
               <Col span={12}>
                 <RadioGroup value="credit" color="dark" required>
                   <Radio checked size="sm" value="credit">
-                    Credit Card or PayPal
+                    Credit Card
                   </Radio>
                 </RadioGroup>
               </Col>
@@ -45,7 +45,7 @@ const Payment = () => {
           </Col>
           <Col span={12}>
             <Button
-              onClick={() => handlerAddPaymentMethod("PayPal")}
+              onClick={() => handlerAddpayment_method("Credit Card")}
               radius="lg"
               color="dark"
               fullWidth

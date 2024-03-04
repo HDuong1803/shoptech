@@ -80,7 +80,7 @@ const Profile = () => {
             {order.orderItems.map((item: any) => {
               return (
                 <List.Item>
-                  {item.name} x {item.qty}
+                  {item.name} x {item.quantity}
                 </List.Item>
               );
             })}
@@ -89,24 +89,24 @@ const Profile = () => {
         <td>
           <Text size="sm" weight={600}>
             {" "}
-            {order.shippingAddress.address}, {order.shippingAddress.city},{" "}
-            {order.shippingAddress.country}, {order.shippingAddress.postalCode}
+            {order.shipping_address.address}, {order.shipping_address.city},{" "}
+            {order.shipping_address.country}, {order.shipping_address.postalCode}
           </Text>
         </td>
         <td>
           <Text size="sm" weight={600}>
-            {moment(order.createdAt).format(
+            {moment(order.created_at).format(
                 "DD-MM-YYYY hh:mm"
               )})
           </Text>
         </td>
         <td>
           <Text size="sm" weight={600}>
-            ${order.totalPrice}
+            ${order.total_price}
           </Text>
         </td>
         <td>
-          {order.isPaid ? (
+          {order.is_paid ? (
             <Badge radius="lg" variant="filled" color="green">
               {`Paid | ${moment(order.paidAt).format("DD-MMM-YYYY HH:mm")}`}
             </Badge>
@@ -117,7 +117,7 @@ const Profile = () => {
           )}
         </td>
         <td>
-          {order.isDelivered ? (
+          {order.is_delivered ? (
             <Badge radius="lg" variant="filled" color="green">
               {`Delivered | ${moment(order.deliveredAt).format(
                 "DD-MMM-YYYY hh:mm"

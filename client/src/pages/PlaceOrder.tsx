@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Card, Col, Grid, Image, Text } from "@mantine/core";
 import { useNavigate } from "react-router";
 import Steps from "../components/Steps";
@@ -16,41 +17,23 @@ const PlaceOrder = () => {
 
   const { createOrder } = bindActionCreators(actionCreators, dispatch);
 
-  const { cartItems, shippingAddress, paymentMethod } = useSelector(
-    (state: State) => state.carts
+  const { cartItem } = useSelector(
+    (state: State) => state.cart
+  );
+
+  const { shipping_address, payment_method } = useSelector(
+    (state: State) => state.payment
   );
 
   const { orderCreate, loading: createOrderLoading } = useSelector(
     (state: State) => state.orderCreate
   );
 
-  const addDecimals = (num: number) => {
-    return (Math.round(num * 100) / 100).toFixed(2);
-  };
-
-  cartItems.itemsPrice = addDecimals(
-    cartItems.reduce((acc: any, item: any) => acc + item.price * item.qty, 0)
-  );
-  cartItems.shippingPrice = addDecimals(cartItems.itemsPrice > 100 ? 0 : 100);
-  cartItems.taxPrice = addDecimals(
-    Number((0.15 * cartItems.itemsPrice).toFixed(2))
-  );
-  cartItems.totalPrice = (
-    Number(cartItems.itemsPrice) +
-    Number(cartItems.shippingPrice) +
-    Number(cartItems.taxPrice)
-  ).toFixed(2);
-
   const handlerOrderCreate = () => {
     dispatch(
       asyncAction(createOrder(
-        cartItems,
-        shippingAddress,
-        paymentMethod,
-        cartItems.itemsPrice,
-        cartItems.taxPrice,
-        cartItems.shippingPrice,
-        cartItems.totalPrice
+        shipping_address,
+        payment_method,
       )
     ));
   };
@@ -59,7 +42,6 @@ const PlaceOrder = () => {
     if (Object.keys(orderCreate).length) {
       navigate(`/order/${orderCreate._id}`);
     }
-    // eslint-disable-next-line
   }, [createOrder]);
 
   return (
@@ -89,8 +71,7 @@ const PlaceOrder = () => {
                     weight={500}
                     size="sm"
                   >
-                    {shippingAddress.address}, {shippingAddress.city}{" "}
-                    {shippingAddress.postalCode}, {shippingAddress.country}
+                    {shipping_address.postal_code}, {shipping_address.address}, {shipping_address.city}, {shipping_address.country}
                   </Text>
                 </Card>
               </Col>
@@ -117,7 +98,7 @@ const PlaceOrder = () => {
                     weight={500}
                     size="sm"
                   >
-                    {paymentMethod}
+                    {payment_method}
                   </Text>
                 </Card>
               </Col>
@@ -127,8 +108,8 @@ const PlaceOrder = () => {
             <Text>Order Items</Text>
             <Grid>
               <Col span={12}>
-                {cartItems && cartItems.length ? (
-                  cartItems.map((item: any) => {
+                {cartItem.cart ? (
+                  cartItem.cart.map((item: any) => {
                     return (
                       <Card
                         sx={{ margin: "10px 0" }}
@@ -167,7 +148,7 @@ const PlaceOrder = () => {
                             span={4}
                           >
                             <Text align="right" weight={600}>
-                              {item.qty} x ${item.price}
+                              {item.quantity} x ${item.price}
                             </Text>
                           </Col>
                         </Grid>
@@ -187,37 +168,29 @@ const PlaceOrder = () => {
                 sx={{ margin: "10px 0", borderBottom: "1px solid #E0E0E0" }}
               >
                 <Col span={6}>
-                  <Text>Price</Text>
+                  <Text>Fee Shipping</Text>
                 </Col>
                 <Col span={6}>
                   <Text align="right">
-                    ${" "}
-                    {cartItems
-                      .reduce(
-                        (acc: any, item: any) => acc + item.qty * item.price,
-                        0
-                      )
-                      .toFixed(2)}
+                    $0
                   </Text>
                 </Col>
               </Grid>
-              <Grid
-                sx={{ margin: "10px 0", borderBottom: "1px solid #E0E0E0" }}
-              >
-                <Col span={6}>
-                  <Text>Tax (2%)</Text>
-                </Col>
-                <Col span={6}>
-                  <Text align="right">${cartItems.taxPrice}</Text>
-                </Col>
-              </Grid>
-
               <Grid sx={{ margin: "10px 0" }}>
                 <Col span={6}>
-                  <Text>Total</Text>
+                  <Text>Total Price</Text>
                 </Col>
                 <Col span={6}>
-                  <Text align="right">${cartItems.totalPrice}</Text>
+                  {cartItem.cart ? (
+                    <Text align="right">${" "}
+                    {cartItem.cart
+                      .reduce(
+                        (acc: any, item: any) => acc + item.quantity * item.price,
+                        0
+                      )
+                      .toFixed(2)}
+                      </Text>
+                  ): <Text align="right">${"0"}</Text> }
                 </Col>
               </Grid>
             </Card>

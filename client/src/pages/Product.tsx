@@ -401,7 +401,7 @@ const Product = () => {
                   return (
                     <ReviewCard
                       comment={review.comment}
-                      date={review.createdAt}
+                      date={review.created_at}
                       id={review._id}
                       username={review.username}
                       rating={review.rating}

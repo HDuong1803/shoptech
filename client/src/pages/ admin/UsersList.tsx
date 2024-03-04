@@ -22,9 +22,9 @@ const UsersList = () => {
   const dispatch = useDispatch();
   const notifications = useNotifications();
 
-  const { getUsers, updateUser } = bindActionCreators(actionCreators, dispatch);
+  const { getUser, updateUser } = bindActionCreators(actionCreators, dispatch);
 
-  const { users, error, loading } = useSelector((state: State) => state.users);
+  const { user, error, loading } = useSelector((state: State) => state.user);
   const { userUpdate: updateUserRole, error: userUpdateError } = useSelector(
     (state: State) => state.userUpdate
   );
@@ -34,8 +34,8 @@ const UsersList = () => {
   };
 
   useEffect(() => {
-    getUsers();
-  }, [dispatch, getUsers, updateUserRole]);
+    getUser();
+  }, [dispatch, getUser, updateUserRole]);
 
   useEffect(() => {
     if (error || userUpdateError) {
@@ -48,9 +48,9 @@ const UsersList = () => {
   }, [error, notifications, userUpdateError]);
 
   const rows =
-    users &&
-    Object.keys(users).length >= 3 &&
-    users.map((user: any) => (
+    user &&
+    Object.keys(user).length >= 3 &&
+    user.map((user: any) => (
       <tr key={user._id}>
         <td>{user.username}</td>
         <td>{user.email}</td>
@@ -63,7 +63,7 @@ const UsersList = () => {
             disabled
           />
         </td>
-        <td>{moment(user.createdAt).format("DD-MMM-YYYY hh:mm")}</td>
+        <td>{moment(user.created_at).format("DD-MMM-YYYY hh:mm")}</td>
         <td>
           <Button color="red" radius="lg" disabled>
             <BiTrashAlt />

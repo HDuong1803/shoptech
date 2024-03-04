@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Card,
@@ -25,26 +26,25 @@ import { useSelector, useDispatch } from "react-redux";
 import { actionCreators, State } from "../state";
 import { bindActionCreators } from "redux";
 import { useEffect, useState } from "react";
-
 import Head from "../components/Head";
 import { ActionType } from "../state/action-types";
 import React from "react";
 
 const Order = () => {
-  const params = useParams();
-
   const dispatch = useDispatch();
 
   const [sdkReady, setSdkReady] = useState(false);
 
-  const { getOrder, payOrder } = bindActionCreators(actionCreators, dispatch);
+  const { getOrder, payOrder, getUser } = bindActionCreators(actionCreators, dispatch);
+
+  const { user } = useSelector((state: State) => state.user);
 
   const { order } = useSelector((state: State) => state.order);
 
   const { success } = useSelector((state: State) => state.orderPay);
 
-  const successPaymentHanlder = (paymentResult: any) => {
-    payOrder(params.order, paymentResult);
+  const successPaymentHanlder = () => {
+    payOrder(order._id);
   };
 
   // useEffect(() => {
@@ -62,7 +62,7 @@ const Order = () => {
 
   //   if (!order || success) {
   //     dispatch({ type: ActionType.ORDER_PAY_RESET });
-  //   } else if (!order.isPaid) {
+  //   } else if (!order.is_paid) {
   //     if (!(window as any).paypal) {
   //       addPayPalScript();
   //     } else {
@@ -73,27 +73,27 @@ const Order = () => {
   // }, [dispatch]);
 
   useEffect(() => {
-    getOrder(params.order);
+    getUser()
+    getOrder(order._id);
     if (success) {
       dispatch({ type: ActionType.CART_CLEAR_ITEMS });
     }
-    // eslint-disable-next-line
   }, [dispatch, success]);
 
   return (
     <Layout>
-      <Head title={`Order ${params.order}`} />
+      <Head title={`Order`} />
       {order && Object.keys(order).length ? (
         <Card withBorder shadow="sm" radius="lg" padding="xl">
           <Grid>
             <Col span={12}>
               <Text size="xl" weight={600}>
-                {`Order ${params.order}`}
+                {`Order Detail`}
               </Text>
             </Col>
             <Col span={12}>
               <Text>Shipping Address</Text>
-              {Object.keys(order).includes("user") ? (
+              {user ? (
                 <Grid sx={{ marginTop: "10px" }}>
                   <Col span={12}>
                     <Card padding="xs" withBorder shadow="sm" radius="lg">
@@ -108,7 +108,7 @@ const Order = () => {
                           weight={500}
                           size="sm"
                         >
-                          {order.user.username}
+                          {user.username}
                         </Text>
                       </Col>
                       <Col
@@ -122,7 +122,7 @@ const Order = () => {
                           weight={500}
                           size="sm"
                         >
-                          {order.user.email}
+                          {user.email}
                         </Text>
                       </Col>
                       <Col
@@ -136,14 +136,14 @@ const Order = () => {
                           weight={500}
                           size="sm"
                         >
-                          {order.shippingAddress.address},{" "}
-                          {order.shippingAddress.city}{" "}
-                          {order.shippingAddress.postalCode},{" "}
-                          {order.shippingAddress.country}
+                          {order.shipping_address.address},{" "}
+                          {order.shipping_address.city}{" "}
+                          {order.shipping_address.postalCode},{" "}
+                          {order.shipping_address.country}
                         </Text>
                       </Col>
                       <Col span={12}>
-                        {order.isDelivered ? (
+                        {order.is_delivered ? (
                           <Alert
                             icon={<BsCheckCircleFill />}
                             radius="lg"
@@ -186,11 +186,11 @@ const Order = () => {
                         weight={500}
                         size="sm"
                       >
-                        {order.paymentMethod}
+                        {order.payment_method}
                       </Text>
                     </Col>
                     <Col span={12}>
-                      {order.isPaid ? (
+                      {order.is_paid ? (
                         <Alert
                           icon={<BsCheckCircleFill />}
                           radius="lg"
@@ -218,8 +218,8 @@ const Order = () => {
               <Text>Order Items</Text>
               <Grid sx={{ marginTop: "10px" }}>
                 <Col span={12}>
-                  {order.orderItems && order.orderItems.length ? (
-                    order.orderItems.map((item: any) => {
+                  {order.order_items && order.order_items.length ? (
+                    order.order_items.map((item: any) => {
                       return (
                         <Card
                           sx={{ margin: "10px 0" }}
@@ -258,7 +258,7 @@ const Order = () => {
                               span={4}
                             >
                               <Text align="right" weight={600}>
-                                {item.qty} x ${item.price}
+                                ${item.price} x {item.quantity}
                               </Text>
                             </Col>
                           </Grid>
@@ -281,17 +281,17 @@ const Order = () => {
                     <Text>Price</Text>
                   </Col>
                   <Col span={6}>
-                    <Text align="right">$1399.99</Text>
+                    <Text align="right">${order.total_price}</Text>
                   </Col>
                 </Grid>
                 <Grid
                   sx={{ margin: "10px 0", borderBottom: "1px solid #E0E0E0" }}
                 >
                   <Col span={6}>
-                    <Text>Tax (2%)</Text>
+                    <Text>Fee Shipping</Text>
                   </Col>
                   <Col span={6}>
-                    <Text align="right">$13.00</Text>
+                    <Text align="right">$0</Text>
                   </Col>
                 </Grid>
                 <Grid
@@ -301,7 +301,7 @@ const Order = () => {
                     <Text>Discount (5%)</Text>
                   </Col>
                   <Col span={6}>
-                    <Text align="right">$299.00</Text>
+                    <Text align="right">${order.total_price * 5 / 100}</Text>
                   </Col>
                 </Grid>
                 <Grid sx={{ margin: "10px 0" }}>
@@ -309,7 +309,7 @@ const Order = () => {
                     <Text>Total</Text>
                   </Col>
                   <Col span={6}>
-                    <Text align="right">$1099.99</Text>
+                    <Text align="right">${order.total_price - order.total_price * 5 / 100}</Text>
                   </Col>
                 </Grid>
               </Card>
@@ -317,13 +317,13 @@ const Order = () => {
           </Grid>
 
           <Group sx={{ marginTop: "1rem" }} position="right">
-            {!order.isPaid && (
+            {!order.is_paid && (
               <Col span={6}>
                 {!sdkReady ? (
                   <Loader />
                 ) : (
                   <PayPalButton
-                    amount={order.totalPrice}
+                    amount={order.total_price}
                     onSuccess={successPaymentHanlder}
                   />
                 )}

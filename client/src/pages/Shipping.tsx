@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Card, Grid, TextInput, Col, Button } from "@mantine/core";
 import { useNavigate } from "react-router";
 import Layout from "../layout/Layout";
@@ -22,33 +23,32 @@ const Shipping = () => {
     initialValues: {
       address: "",
       city: "",
-      postalCode: "",
+      postal_code: "",
       country: "",
     },
     validationRules: {
       address: (value) => value.trim().length >= 2,
       city: (value) => value.trim().length >= 2,
-      postalCode: (value) => value.trim().length >= 2,
+      postal_code: (value) => value.trim().length >= 2,
       country: (value) => value.trim().length >= 2,
     },
     errorMessages: {
       address: "Address is not valid",
       city: "City is not valid",
-      postalCode: "Postal Code is not valid",
+      postal_code: "Postal Code is not valid",
       country: "Country is not valid",
     },
   });
 
   const handlerAddShipping = (values: any) => {
-    navigate("/payment");
     dispatch(asyncAction(saveShippingAddress(values)));
+    navigate("/payment");
   };
 
   useEffect(() => {
     if (!userInfo) {
-      navigate("/login?redirect=shipping");
+      navigate("/login");
     }
-    // eslint-disable-next-line
   }, []);
 
   return (
@@ -65,6 +65,7 @@ const Shipping = () => {
                 {...form.getInputProps("address")}
                 error={form.errors.address}
                 label="Address"
+                required
               />
             </Col>
             <Col span={12}>
@@ -74,15 +75,17 @@ const Shipping = () => {
                 {...form.getInputProps("city")}
                 error={form.errors.city}
                 label="City"
+                required
               />
             </Col>
             <Col span={12}>
               <TextInput
                 radius="lg"
                 placeholder="Your Postal Code"
-                {...form.getInputProps("postalCode")}
-                error={form.errors.postalCode}
+                {...form.getInputProps("postal_code")}
+                error={form.errors.postal_code}
                 label="Postal Code"
+                required
               />
             </Col>
             <Col span={12}>
@@ -92,12 +95,12 @@ const Shipping = () => {
                 {...form.getInputProps("country")}
                 error={form.errors.country}
                 label="Country"
+                required
               />
             </Col>
             <Col span={12}>
               <Button
                 type="submit"
-                // onClick={() => navigate("/payment")}
                 radius="lg"
                 color="dark"
                 fullWidth
