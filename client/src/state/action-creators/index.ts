@@ -21,10 +21,12 @@ export const addToCart = (
       image,
       price,
     };
+    const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
     const config = {
       headers: {
         "Content-Type": "application/json",
         Authorization: `${token}`,
+        id: user_id
       },
     };
     const { data } = await axios.post(
@@ -53,11 +55,12 @@ export const getCart = () => {
         type: ActionType.GET_CART_REQUEST,
       });
       const token = `${localStorage.getItem("access_token")}`;
-
+      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
       const config = {
         headers: {
           "Content-Type": "application/json",
           Authorization: `${token}`,
+          id: user_id,
         },
       };
       const { data } = await axios.get(`${SERVER.baseURL}/cart`, config);
@@ -80,12 +83,15 @@ export const updateCart = (product_id: string, action: string) => {
     const formData = {
       action,
     };
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${token}`,
-      },
-    };
+    
+    const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+          id: user_id,
+        },
+      };
     const { data } = await axios.put(
       `${SERVER.baseURL}/cart/quantity?product_id=${product_id}`,
       formData,
@@ -101,12 +107,14 @@ export const updateCart = (product_id: string, action: string) => {
 export const removeFromCart = (product_id: string) => {
   return async (dispatch: Dispatch<Action>) => {
     const token = `${localStorage.getItem("access_token")}`;
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${token}`,
-      },
-    };
+    const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+          id: user_id,
+        },
+      };
     const { data } = await axios.delete(
       `${SERVER.baseURL}/cart/item?product_id=${product_id}`,
       config
@@ -129,7 +137,7 @@ export const saveShippingAddress = (data: any) => {
   };
 };
 
-export const savepayment_method = (data: any) => {
+export const savePaymentMethod = (data: any) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch({
       type: ActionType.CART_SAVE_PAYMENT_ITEM,
@@ -164,7 +172,7 @@ export const getProducts = (page: number) => {
   };
 };
 
-export const quickSearchProducts = (keyword: string) => {
+export const quickSearchProducts = (keyword?: string) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       dispatch({
@@ -174,7 +182,6 @@ export const quickSearchProducts = (keyword: string) => {
       const { data } = await axios.get(
         `${SERVER.baseURL}/product/search?keyword=${keyword}`
       );
-
       dispatch({
         type: ActionType.QUICK_SEARCH_SUCCESS,
         payload: data.data,
@@ -221,10 +228,12 @@ export const addReview = (id: string, rating: number, comment: string) => {
 
       const token = `${localStorage.getItem("access_token")}`;
 
+      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
       const config = {
         headers: {
           "Content-Type": "application/json",
           Authorization: `${token}`,
+          id: user_id,
         },
       };
 
@@ -358,10 +367,7 @@ export const logout = () => {
   };
 };
 
-export const createOrder = (
-  shipping_address: any,
-  payment_method: string,
-) => {
+export const createOrder = (shipping_address: any, payment_method: string) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       dispatch({
@@ -369,11 +375,12 @@ export const createOrder = (
       });
 
       const token = `${localStorage.getItem("access_token")}`;
-
+      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
       const config = {
         headers: {
           "Content-Type": "application/json",
           Authorization: `${token}`,
+          id: user_id,
         },
       };
 
@@ -409,11 +416,12 @@ export const getOrder = (id: any) => {
       });
 
       const token = `${localStorage.getItem("access_token")}`;
-
+      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
       const config = {
         headers: {
           "Content-Type": "application/json",
           Authorization: `${token}`,
+          id: user_id,
         },
       };
 
@@ -440,19 +448,19 @@ export const payOrder = (order_id: any) => {
 
       const token = `${localStorage.getItem("access_token")}`;
 
+      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
       const config = {
         headers: {
           "Content-Type": "application/json",
           Authorization: `${token}`,
+          id: user_id,
         },
       };
-
       const { data } = await axios.post(
         `${SERVER.baseURL}/order/checkout?order_id=${order_id}`,
-        '',
+        "",
         config
       );
-
       dispatch({
         type: ActionType.ORDER_PAY_SUCCESS,
         payload: data.data,
@@ -475,10 +483,12 @@ export const getUser = () => {
 
       const token = `${localStorage.getItem("access_token")}`;
 
+      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
       const config = {
         headers: {
           "Content-Type": "application/json",
           Authorization: `${token}`,
+          id: user_id,
         },
       };
 
@@ -543,10 +553,12 @@ export const deliverOrder = (id: string) => {
 
       const token = `${localStorage.getItem("access_token")}`;
 
+      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
       const config = {
         headers: {
           "Content-Type": "application/json",
           Authorization: `${token}`,
+          id: user_id,
         },
       };
 
@@ -587,10 +599,12 @@ export const createProduct = (
 
       const token = `${localStorage.getItem("access_token")}`;
 
+      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
       const config = {
         headers: {
           "Content-Type": "application/json",
           Authorization: `${token}`,
+          id: user_id,
         },
       };
 
@@ -630,21 +644,21 @@ export const getMyOrders = () => {
         type: ActionType.GET_MY_ORDERS_REQUEST,
       });
 
-      // const user_id = store.getState().userLogin.userInfo.data.detail._id;
       const token = `${localStorage.getItem("access_token")}`;
 
+      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
       const config = {
         headers: {
           "Content-Type": "application/json",
           Authorization: `${token}`,
+          id: user_id,
         },
       };
 
       const { data } = await axios.get(`${SERVER.baseURL}/order`, config);
-
       dispatch({
         type: ActionType.GET_MY_ORDERS_SUCCESS,
-        payload: data,
+        payload: data.data,
       });
     } catch (error: any) {
       dispatch({
@@ -668,10 +682,12 @@ export const updateProfile = (
 
       const token = `${localStorage.getItem("access_token")}`;
 
+      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
       const config = {
         headers: {
           "Content-Type": "application/json",
           Authorization: `${token}`,
+          id: user_id,
         },
       };
 
@@ -713,10 +729,12 @@ export const updateUser = (id: string, isAdmin: boolean) => {
 
       const token = `${localStorage.getItem("access_token")}`;
 
+      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
       const config = {
         headers: {
           "Content-Type": "application/json",
           Authorization: `${token}`,
+          id: user_id,
         },
       };
 

@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { actionCreators, asyncAction, State } from "../state";
 import Head from "../components/Head";
 import { bindActionCreators } from "redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 
 const PlaceOrder = () => {
@@ -29,6 +29,9 @@ const PlaceOrder = () => {
     (state: State) => state.orderCreate
   );
 
+  const [initialCartItems, setInitialCartItems] = useState([]);
+
+
   const handlerOrderCreate = () => {
     dispatch(
       asyncAction(createOrder(
@@ -42,8 +45,9 @@ const PlaceOrder = () => {
     if (Object.keys(orderCreate).length) {
       navigate(`/order/${orderCreate._id}`);
     }
-  }, [createOrder]);
-
+    if (cartItem.cart) {
+      setInitialCartItems(cartItem.cart);
+    }  }, [createOrder, cartItem.cart]);
   return (
     <Layout>
       <Head title="Place Order" />
@@ -108,8 +112,8 @@ const PlaceOrder = () => {
             <Text>Order Items</Text>
             <Grid>
               <Col span={12}>
-                {cartItem.cart ? (
-                  cartItem.cart.map((item: any) => {
+                {initialCartItems && initialCartItems.length ? (
+                  initialCartItems.map((item: any) => {
                     return (
                       <Card
                         sx={{ margin: "10px 0" }}
@@ -181,9 +185,9 @@ const PlaceOrder = () => {
                   <Text>Total Price</Text>
                 </Col>
                 <Col span={6}>
-                  {cartItem.cart ? (
+                  {initialCartItems ? (
                     <Text align="right">${" "}
-                    {cartItem.cart
+                    {initialCartItems
                       .reduce(
                         (acc: any, item: any) => acc + item.quantity * item.price,
                         0

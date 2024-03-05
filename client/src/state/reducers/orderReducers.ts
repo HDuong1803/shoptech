@@ -55,7 +55,7 @@ const getOrderReducer = (
 
 const orderPayReducer = (
   state = {
-    success: false,
+    url: {},
     error: null,
     loading: false,
   },
@@ -67,7 +67,7 @@ const orderPayReducer = (
     case ActionType.ORDER_PAY_SUCCESS:
       return {
         ...state,
-        success: true,
+        url: action.payload,
         loading: false,
         error: null,
       };

@@ -21,7 +21,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { BiShoppingBag, BiUser } from "react-icons/bi";
 import { bindActionCreators } from "redux";
 import { useDispatch, useSelector } from "react-redux";
-import { actionCreators, State } from ".././state";
+import { actionCreators, asyncAction, State } from ".././state";
 import { getProduct } from "../state/action-creators";
 import { FiSearch } from "react-icons/fi";
 
@@ -30,8 +30,8 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
-  const [value] = useState("");
-
+  const [value, setValue] = useState("");
+  const [searchData, setSearchData] = useState([])
   const { userInfo } = useSelector((state: State) => state.userLogin);
   const { cartItem } = useSelector((state: State) => state.cart);
   const { quickSearch } = useSelector((state: State) => state.quickSearch);
@@ -41,6 +41,8 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
   const dispatch = useDispatch();
 
   const { quickSearchProducts } = bindActionCreators(actionCreators, dispatch);
+  const [initialCartItems, setInitialCartItems] = useState(cartItem.cart || []);
+
 
   const handlerNavigate = (route: string) => {
     navigate(route);
@@ -142,7 +144,11 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
   };
 
   const handlerSearch = (value: any) => {
-    quickSearchProducts(value);
+    if (!value) {
+      setValue("");
+    } else {
+      // quickSearchProducts(value.toLowerCase());
+    }
   };
 
   const handlerSearchSelect = (id: any) => {
@@ -151,10 +157,15 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
   };
 
   useEffect(() => {
-    if (value !== "") {
-      navigate(`/admin/${value}`);
+    dispatch(asyncAction(actionCreators.getCart()));
+    if(quickSearch){
+      setSearchData(quickSearch.map((item:any, index: any) => ({ ...item, key: index.toString() })))
     }
-  }, [value]);
+    if (cartItem.cart) {
+      setInitialCartItems(cartItem.cart);
+    }
+
+  }, [cartItem.cart, quickSearch]);
 
   return (
     <>
@@ -182,19 +193,19 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
           </div>
 
           <div className="flex-container-no-horizontal-align">
-            {/* <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
+            <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
             <Select
                 placeholder="Search for an item..."
                 size="sm"
                 nothingFound="No products"
                 icon={<FiSearch />}
-                onSearchChange={(e:any) => handlerSearch(e)}
+                onSearchChange={(e) => handlerSearch(e)}
                 onChange={(e) => handlerSearchSelect(e)}
                 radius="lg"
-                data={quickSearch}
+                data={searchData || []}
                 searchable
               />
-            </MediaQuery> */}
+            </MediaQuery>
 
             <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
               <Button
@@ -203,9 +214,9 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
                 leftIcon={<BiShoppingBag />}
                 onClick={() => navigate("/cart")}
               >
-                {userInfo && cartItem && cartItem.cart ? (
+                {userInfo && initialCartItems ? (
                   <Badge variant="filled" color="red">
-                    {cartItem.cart.length}
+      {initialCartItems.reduce((acc: any, item: any) => acc + item.quantity, 0)}
                   </Badge>
                 ) : (
                   <Badge variant="filled" color="red">

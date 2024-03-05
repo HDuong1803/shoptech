@@ -110,7 +110,7 @@ const OrdersList = () => {
         <td>
           {order.is_paid ? (
             <Badge radius="lg" variant="filled" color="green">
-              {`Paid | ${moment(order.paidAt).format("DD-MMM-YYYY HH:mm")}`}
+              {`Paid | ${moment(order.paid_at).format("DD-MMM-YYYY HH:mm")}`}
             </Badge>
           ) : (
             <Badge radius="lg" variant="filled" color="red">
@@ -121,7 +121,7 @@ const OrdersList = () => {
         <td>
           {order.is_delivered ? (
             <Badge radius="lg" variant="filled" color="green">
-              {`Delivered | ${moment(order.deliveredAt).format(
+              {`Delivered | ${moment(order.delivered_at).format(
                 "DD-MMM-YYYY hh:mm"
               )}`}
             </Badge>

@@ -19,11 +19,11 @@ const Payment = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { savepayment_method } = bindActionCreators(actionCreators, dispatch);
+  const { savePaymentMethod } = bindActionCreators(actionCreators, dispatch);
 
   const handlerAddpayment_method = (method: string) => {
     navigate("/placeorder");
-    dispatch(asyncAction(savepayment_method(method)));
+    dispatch(asyncAction(savePaymentMethod(method)));
   };
 
   return (

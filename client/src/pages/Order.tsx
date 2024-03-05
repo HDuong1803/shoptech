@@ -9,11 +9,11 @@ import {
   Image,
   Loader,
   Group,
+  Button,
 } from "@mantine/core";
 import Layout from "../layout/Layout";
 import { BiUser } from "react-icons/bi";
 import { HiOutlineMail } from "react-icons/hi";
-import { PayPalButton } from "react-paypal-button-v2";
 import axios from "axios";
 import {
   BsBox,
@@ -23,7 +23,7 @@ import {
 } from "react-icons/bs";
 import { useParams } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-import { actionCreators, State } from "../state";
+import { actionCreators, asyncAction, State } from "../state";
 import { bindActionCreators } from "redux";
 import { useEffect, useState } from "react";
 import Head from "../components/Head";
@@ -31,54 +31,38 @@ import { ActionType } from "../state/action-types";
 import React from "react";
 
 const Order = () => {
+  const params = useParams()
   const dispatch = useDispatch();
-
-  const [sdkReady, setSdkReady] = useState(false);
-
   const { getOrder, payOrder, getUser } = bindActionCreators(actionCreators, dispatch);
-
   const { user } = useSelector((state: State) => state.user);
-
   const { order } = useSelector((state: State) => state.order);
+  const { url } = useSelector((state: State) => state.orderPay);
 
-  const { success } = useSelector((state: State) => state.orderPay);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const successPaymentHanlder = () => {
-    payOrder(order._id);
+  const successPaymentHandler = async () => {
+    setIsLoading(true);
+    await payOrder(params.order);
   };
 
-  // useEffect(() => {
-  //   const addPayPalScript = async () => {
-  //     const { data: clientId } = await axios.get("/api/v1/config/paypal");
-  //     const script = document.createElement("script");
-  //     script.type = "text/javascript";
-  //     script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
-  //     script.async = true;
-  //     script.onload = () => {
-  //       setSdkReady(true);
-  //     };
-  //     document.body.appendChild(script);
-  //   };
-
-  //   if (!order || success) {
-  //     dispatch({ type: ActionType.ORDER_PAY_RESET });
-  //   } else if (!order.is_paid) {
-  //     if (!(window as any).paypal) {
-  //       addPayPalScript();
-  //     } else {
-  //       setSdkReady(true);
-  //     }
-  //   }
-  //   // eslint-disable-next-line
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(asyncAction(getUser()))
+    dispatch(asyncAction(getOrder(params.order)))
+  }, [dispatch]);
 
   useEffect(() => {
-    getUser()
-    getOrder(order._id);
-    if (success) {
-      dispatch({ type: ActionType.CART_CLEAR_ITEMS });
+    const isValidUrl = (url: any) => {
+        const pattern = new RegExp(
+            "^(https?|ftp):\\/\\/[\\w\\d\\-_]+(\\.[\\w\\d\\-_]+)+([\\w\\d-._~:/?#[\\]@!$&'()*+,;=:]*)?$"
+        );
+        return pattern.test(url);
+    };
+
+    if (url && isValidUrl(url)) {
+        setIsLoading(false);
+        window.location.href = url;
     }
-  }, [dispatch, success]);
+}, [url]);
 
   return (
     <Layout>
@@ -281,7 +265,7 @@ const Order = () => {
                     <Text>Price</Text>
                   </Col>
                   <Col span={6}>
-                    <Text align="right">${order.total_price}</Text>
+                    <Text align="right">${order.total_price.toFixed(2)}</Text>
                   </Col>
                 </Grid>
                 <Grid
@@ -294,22 +278,12 @@ const Order = () => {
                     <Text align="right">$0</Text>
                   </Col>
                 </Grid>
-                <Grid
-                  sx={{ margin: "10px 0", borderBottom: "1px solid #E0E0E0" }}
-                >
-                  <Col span={6}>
-                    <Text>Discount (5%)</Text>
-                  </Col>
-                  <Col span={6}>
-                    <Text align="right">${order.total_price * 5 / 100}</Text>
-                  </Col>
-                </Grid>
                 <Grid sx={{ margin: "10px 0" }}>
                   <Col span={6}>
                     <Text>Total</Text>
                   </Col>
                   <Col span={6}>
-                    <Text align="right">${order.total_price - order.total_price * 5 / 100}</Text>
+                    <Text align="right">${order.total_price.toFixed(2)}</Text>
                   </Col>
                 </Grid>
               </Card>
@@ -317,19 +291,16 @@ const Order = () => {
           </Grid>
 
           <Group sx={{ marginTop: "1rem" }} position="right">
-            {!order.is_paid && (
-              <Col span={6}>
-                {!sdkReady ? (
-                  <Loader />
-                ) : (
-                  <PayPalButton
-                    amount={order.total_price}
-                    onSuccess={successPaymentHanlder}
-                  />
-                )}
-              </Col>
-            )}
-          </Group>
+        {!order.is_paid ? (
+          <>
+            <Col span={6}>
+              <Button disabled={isLoading} onClick={() => successPaymentHandler()}>
+                {isLoading ? "Processing Payment..." : "Pay now"}
+              </Button>
+            </Col>
+          </>
+        ) : null}
+      </Group>
         </Card>
       ) : (
         <Loader />
