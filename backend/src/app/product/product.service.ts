@@ -7,8 +7,8 @@ import {
   OutputSearchProduct,
   OutputUpload
 } from '@app'
-import { Constant, authUser } from '@constants'
-import { ProductDB, reviewAttributes } from '@schemas'
+import { Constant } from '@constants'
+import { ProductDB, UserDB, reviewAttributes } from '@schemas'
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import mime from 'mime-types'
 import { keccak256 } from 'ethers'
@@ -123,10 +123,11 @@ class ProductService {
   public async addProductReview(
     body: InputReview,
     product_id?: string,
-    authorization?: string
+    user_id?: string
   ): Promise<IReview> {
     const product = await ProductDB.findById(product_id)
-    const user = await authUser(authorization as string)
+        const user = await UserDB.findById(user_id)
+
     if (product) {
       const dataReview = {
         user_id: user?._id.toString(),

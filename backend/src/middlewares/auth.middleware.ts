@@ -1,7 +1,7 @@
-import { UserDB } from "@schemas";
+import { TokenDB, UserDB } from '@schemas'
 import { type NextFunction, type Request, type Response } from 'express'
-import { Constant, logError, onError } from "@constants";
-import { verifyJWT } from "@providers";
+import { Constant, logError, onError } from '@constants'
+import { hashText } from '@providers'
 
 const { NETWORK_STATUS_CODE, NETWORK_STATUS_MESSAGE } = Constant
 
@@ -24,16 +24,17 @@ const AuthMiddleware = async (
         .status(NETWORK_STATUS_CODE.UNAUTHORIZED)
         .json(onError(NETWORK_STATUS_MESSAGE.UNAUTHORIZED))
     }
-    /**
-     * Verifies the authorization token using the JWT_SECRET environment variable and extracts the address from the token.
-     */
-    const payload = verifyJWT(authorization)
 
-    if (!payload.email) {
+    const tokenInDB = await TokenDB.findOne({
+      token: hashText(authorization)
+    })
+
+    if (!tokenInDB) {
       return res
         .status(NETWORK_STATUS_CODE.UNAUTHORIZED)
         .json(onError(NETWORK_STATUS_MESSAGE.UNAUTHORIZED))
     }
+
     next()
   } catch (error: any) {
     return res
@@ -54,9 +55,9 @@ const AdminMiddleware = async (
   next: NextFunction
 ): Promise<any> => {
   try {
-    const { email }  = req.headers
+    const { authorization } = req.headers
 
-    if (!email) {
+    if (!authorization) {
       return res
         .status(NETWORK_STATUS_CODE.UNAUTHORIZED)
         .json(onError(NETWORK_STATUS_MESSAGE.UNAUTHORIZED))
@@ -65,7 +66,7 @@ const AdminMiddleware = async (
      * Finds a user in the database with the given address and role of "admin".
      */
     const userRes = await UserDB.findOne({
-        role: Constant.USER_ROLE.ADMIN
+      role: Constant.USER_ROLE.ADMIN
     })
     /**
      * Checks if the user response exists. If it does not exist, returns an error response
@@ -85,4 +86,4 @@ const AdminMiddleware = async (
   }
 }
 
-export { AuthMiddleware, AdminMiddleware };
+export { AuthMiddleware, AdminMiddleware }

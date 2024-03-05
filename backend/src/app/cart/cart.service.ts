@@ -1,11 +1,11 @@
 // import { authUser } from '@constants'
 import { InputCartItem } from '@app'
-import { Constant, authUser } from '@constants'
-import { CartDB } from '@schemas'
+import { Constant } from '@constants'
+import { CartDB, UserDB } from '@schemas'
 
 class CartService {
-  public async getCart(authorization?: string): Promise<any> {
-    const user = await authUser(authorization as string)
+  public async getCart(user_id?: string): Promise<any> {
+    const user = await UserDB.findById(user_id)
     const dataCart = await CartDB.findOne({ user_id: user?._id })
     if (!dataCart) {
       throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
@@ -14,11 +14,12 @@ class CartService {
   }
 
   public async addToCart(
-    authorization?: string,
+    user_id?: string,
     body?: InputCartItem,
     product_id?: string
   ): Promise<any> {
-    const user = await authUser(authorization as string)
+    const user = await UserDB.findById(user_id)
+
     const existingProduct = await CartDB.findOne({
       user_id: user?._id,
       'cart.product_id': product_id
@@ -59,11 +60,12 @@ class CartService {
   }
 
   public async updateItemQuantity(
-    authorization: string,
+    user_id: string,
     product_id: string,
     action: string
   ): Promise<any> {
-    const user = await authUser(authorization as string)
+    const user = await UserDB.findById(user_id)
+
     const userCart = await CartDB.findOne({ user_id: user?._id })
 
     if (!userCart) {
@@ -96,28 +98,28 @@ class CartService {
     }
   }
 
-  public async removeItem(authorization: string,
-    product_id: string): Promise<any> {
-      const user = await authUser(authorization as string)
-      const userCart = await CartDB.findOne({ user_id: user?._id })
-      if (!userCart) {
-        throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
-      }
-      const cartItemIndex =
-        userCart.cart?.findIndex(
-          item => item.product_id?.toString() === product_id
-        ) || 0
-      if (cartItemIndex !== -1) {
-        if (!userCart.cart) {
-          throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
-        }
-        userCart.cart?.splice(cartItemIndex, 1);
-        const result = await userCart.save()
-        return result
-      } else {
-        throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
-      }
+  public async removeItem(user_id: string, product_id: string): Promise<any> {
+    const user = await UserDB.findById(user_id)
+
+    const userCart = await CartDB.findOne({ user_id: user?._id })
+    if (!userCart) {
+      throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
     }
+    const cartItemIndex =
+      userCart.cart?.findIndex(
+        item => item.product_id?.toString() === product_id
+      ) || 0
+    if (cartItemIndex !== -1) {
+      if (!userCart.cart) {
+        throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
+      }
+      userCart.cart?.splice(cartItemIndex, 1)
+      const result = await userCart.save()
+      return result
+    } else {
+      throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
+    }
+  }
 }
 
 export { CartService }

@@ -6,7 +6,7 @@ import {
   InputSignUp,
   OutputSignUp
 } from '@app'
-import { Constant, ErrorHandler, authUser } from '@constants'
+import { Constant, ErrorHandler } from '@constants'
 import { hashText, signJWT } from '@providers'
 import { TokenDB, UserDB } from '@schemas'
 
@@ -107,7 +107,7 @@ class UserService {
     /**
      * Create a new user in the database with the provided information.
      */
-    const newUser = new UserDB({
+    const newUser = await UserDB.create({
       username: body.username,
       email: body.email,
       phone: body.phone,
@@ -115,7 +115,6 @@ class UserService {
       role: Constant.USER_ROLE.USER,
       refresh_token: jwtPayload.refresh_token
     })
-    await newUser.save()
 
     return {
       detail: newUser.toJSON(),
@@ -123,8 +122,8 @@ class UserService {
     }
   }
 
-  public async getUser(authorization: string): Promise<IUser> {
-    const user = await authUser(authorization)
+  public async getUser(user_id: string): Promise<IUser> {
+    const user = await UserDB.findById(user_id)
     if (user) {
       return user.toJSON()
     }
@@ -148,15 +147,15 @@ class UserService {
   }
 
   public async updateUser(
-    email?: string,
+    user_id?: string,
     name?: string,
     password?: string,
     phone?: string
   ): Promise<IUser> {
-    if (!email) {
+    if (!user_id) {
       throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
     }
-    const res = await UserDB.findOne({ email: email })
+    const res = await UserDB.findById(user_id)
     if (!res) {
       throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
     }

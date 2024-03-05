@@ -1,20 +1,20 @@
 import { InputCartItem } from '@app'
 import { type Option } from '@constants'
 import { logError, onError, onSuccess } from '@constants'
-// import {
+import {
   // AdminMiddleware,
-  // AuthMiddleware
-// } from '@middlewares'
+  AuthMiddleware
+} from '@middlewares'
 import { Singleton } from '@providers'
 import { Request as ExpressRequest } from 'express'
 import {
   Controller,
   Get,
   Post,
-  // Middlewares,
+  Middlewares,
   Request,
   Route,
-  // Security,
+  Security,
   Tags,
   Delete,
   Put,
@@ -25,10 +25,10 @@ import {
 
 @Tags('Cart')
 @Route('cart')
-// @Security({
-//   authorization: []
-// })
-  // @Middlewares([AuthMiddleware])
+@Security({
+  authorization: []
+})
+  @Middlewares([AuthMiddleware])
 
 export class CartController extends Controller {
   @Get('/')
@@ -36,8 +36,8 @@ export class CartController extends Controller {
     @Request() req: ExpressRequest,
   ): Promise<Option<any>> {
     try {
-      const authorization = req.headers.authorization as string
-      const data = await Singleton.getCartInstance().getCart(authorization)
+      const user_id = req.headers.id as string
+      const data = await Singleton.getCartInstance().getCart(user_id)
       return onSuccess(data)
     } catch (error: any) {
       logError(error, req)
@@ -52,9 +52,9 @@ export class CartController extends Controller {
     @Query() product_id: string
   ): Promise<Option<any>> {
     try {
-      const authorization = req.headers.authorization as string
+      const user_id = req.headers.id as string
       const res = await Singleton.getCartInstance().addToCart(
-        authorization,
+        user_id,
         body,
         product_id
       )
@@ -71,9 +71,9 @@ export class CartController extends Controller {
     @BodyProp() action: string
   ): Promise<Option<any>> {
     try {
-      const authorization = req.headers.authorization as string
+      const user_id = req.headers.id as string
       const res = await Singleton.getCartInstance().updateItemQuantity(
-        authorization,
+        user_id,
         product_id,
         action
       )
@@ -90,9 +90,9 @@ export class CartController extends Controller {
     @Query() product_id: string
   ): Promise<Option<any>> {
     try {
-      const authorization = req.headers.authorization as string
+      const user_id = req.headers.id as string
       const res = await Singleton.getCartInstance().removeItem(
-        authorization,
+        user_id,
         product_id
       )
       return onSuccess(res)

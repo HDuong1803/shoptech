@@ -1,7 +1,7 @@
-import { IOrders, InputOrderItem } from '@app'
-import { Constant, authUser } from '@constants'
+import { InputOrderItem } from '@app'
+import { Constant } from '@constants'
 import { stripe } from '@providers'
-import { CartDB, OrderDB } from '@schemas'
+import { CartDB, OrderDB, UserDB } from '@schemas'
 
 class OrderService {
   public async getListOrders(page: number, limit: number): Promise<any> {
@@ -17,7 +17,7 @@ class OrderService {
     }
   }
 
-  public async getOrderById(_id?: string): Promise<IOrders> {
+  public async getOrder(_id: string): Promise<any> {
     const order = await OrderDB.findById(_id)
     if (order) {
       return order.toJSON()
@@ -57,9 +57,9 @@ class OrderService {
 
   public async addOrderItems(
     body?: InputOrderItem,
-    authorization?: string,
+    user_id?: string,
   ): Promise<any> {
-    const user = await authUser(authorization as string)
+    const user = await UserDB.findById(user_id);
     const dataCart = await CartDB.findOne({user_id: user?._id})
     const orderItems = await dataCart?.cart?.map((item: any) => {
       const orderItems = {
@@ -79,15 +79,16 @@ class OrderService {
       shipping_address: body?.shipping_address,
       payment_method: body?.payment_method,
       shipping_price: Constant.SHIPPING_PRICE,
-      total_price: totalPrice + Constant.SHIPPING_PRICE,
+      total_price: (totalPrice + Constant.SHIPPING_PRICE).toFixed(2),
       is_paid: false
     })
     return createdOrder
   }
 
-  public async getCheckout(authorization: string, order_id: string): Promise<any> {
-    const user = await authUser(authorization)
+  public async getCheckout(user_id: string, order_id: string): Promise<any> {
+    const user = await UserDB.findById(user_id);
     const order = await OrderDB.findById(order_id)
+
     if (!user || !user.email || !order || !order.order_items) {
       throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
     }
@@ -114,17 +115,16 @@ class OrderService {
         line_items,
         mode: 'payment',
         customer_email: user.email,
-        success_url: Constant.PUBLIC_URL + '/cart?success=1',
+        success_url: 'http://localhost:3000/',
         cancel_url: Constant.PUBLIC_URL + '/cart?canceled=1',
         metadata: { orderId: order_id.toString(), test: 'ok' }
     });
-
     return session.url;
 }
 
-  public async getOrderOfUser(authorization: string): Promise<any> {
-    const user = await authUser(authorization);
-    const order = await OrderDB.find({user_id: user?._id})
+  public async getOrderOfUser(user_id: string): Promise<any> {
+    const user = await UserDB.findById(user_id);
+    const order = await OrderDB.find({user_id: user?._id.toString()})
     if (!order) {
       throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
     }

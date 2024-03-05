@@ -1,9 +1,9 @@
 import { IOrders, InputOrderItem, OutputCheckout } from '@app'
 import { type Option } from '@constants'
 import { logError, onError, onSuccess } from '@constants'
-// import { AdminMiddleware, 
-  // AuthMiddleware 
-// } from '@middlewares'
+import { AdminMiddleware, 
+  AuthMiddleware 
+} from '@middlewares'
 import { Singleton } from '@providers'
 import { Request as ExpressRequest } from 'express'
 import {
@@ -12,10 +12,10 @@ import {
   Get,
   Query,
   Post,
-  // Middlewares,
+  Middlewares,
   Request,
   Route,
-  // Security,
+  Security,
   Tags,
   Path,
   Put
@@ -23,13 +23,13 @@ import {
 
 @Tags('Order')
 @Route('order')
-// @Security({
-//   authorization: []
-// })
-// @Middlewares([AuthMiddleware])
+@Security({
+  authorization: []
+})
+@Middlewares([AuthMiddleware])
 export class OrdersController extends Controller {
   @Get('/list')
-  // @Middlewares([AdminMiddleware])
+  @Middlewares([AdminMiddleware])
   public async getListOrders(
     @Request() req: ExpressRequest,
     @Query() page: number = 1,
@@ -48,13 +48,12 @@ export class OrdersController extends Controller {
   }
 
   @Get('/{id}')
-  // @Middlewares([AdminMiddleware])
   public async getOrderById(
     @Request() req: ExpressRequest,
     @Path() id: string
   ): Promise<Option<IOrders>> {
     try {
-      const res = await Singleton.getOrderInstance().getOrderById(id)
+      const res = await Singleton.getOrderInstance().getOrder(id)
       return onSuccess(res)
     } catch (error: any) {
       logError(error, req)
@@ -63,7 +62,7 @@ export class OrdersController extends Controller {
   }
 
   @Put('/{id}/pay')
-  // @Middlewares([AdminMiddleware])
+  @Middlewares([AdminMiddleware])
   public async updateOrderToPaid(
     @Request() req: ExpressRequest,
     @Path() id: string
@@ -78,6 +77,7 @@ export class OrdersController extends Controller {
   }
 
   @Put('/{id}/deliver')
+  @Middlewares([AdminMiddleware])
   public async updateOrderToDelivered(
     @Request() req: ExpressRequest,
     @Path() id: string
@@ -96,10 +96,10 @@ export class OrdersController extends Controller {
     @Body() body: InputOrderItem,
   ): Promise<Option<IOrders>> {
     try {
-      const authorization = req.headers.authorization as string
+      const user_id = req.headers.id as string
       const data = await Singleton.getOrderInstance().addOrderItems(
         body,
-        authorization,
+        user_id,
       )
       return onSuccess(data)
     } catch (error: any) {
@@ -113,9 +113,8 @@ export class OrdersController extends Controller {
     @Request() req: ExpressRequest,
   ): Promise<any> {
     try {
-      const authorization = req.headers.authorization as string;
-      console.log(authorization)
-      const res = await Singleton.getOrderInstance().getOrderOfUser(authorization);
+      const user_id = req.headers.id as string;
+      const res = await Singleton.getOrderInstance().getOrderOfUser(user_id);
       return onSuccess(res);
     } catch (error: any) {
       logError(error, req);
@@ -129,9 +128,9 @@ export class OrdersController extends Controller {
     @Query() order_id: string
   ): Promise<Option<OutputCheckout>> {
     try {
-      const authorization = req.headers.authorization as string
+      const user_id = req.headers.id as string
       const data = await Singleton.getOrderInstance().getCheckout(
-        authorization,
+        user_id,
         order_id
       )
       return onSuccess(data)
