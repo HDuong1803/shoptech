@@ -27,7 +27,6 @@ import {
   Put,
   BodyProp
 } from 'tsoa'
-// 
 
 @Tags('User')
 @Route('user')

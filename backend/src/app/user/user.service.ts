@@ -8,7 +8,7 @@ import {
 } from '@app'
 import { Constant, ErrorHandler } from '@constants'
 import { hashText, signJWT } from '@providers'
-import { TokenDB, UserDB } from '@schemas'
+import { CartDB, TokenDB, UserDB } from '@schemas'
 
 class UserService {
   public async userLogin(body: InputLogin): Promise<OutputLogin> {
@@ -101,19 +101,36 @@ class UserService {
     const jwtPayload = signJWT({
       email: body.email,
       role: Constant.USER_ROLE.USER,
-      phone: body.phone
     })
 
     /**
      * Create a new user in the database with the provided information.
      */
-    const newUser = await UserDB.create({
-      username: body.username,
-      email: body.email,
-      phone: body.phone,
-      password: hashed_password,
-      role: Constant.USER_ROLE.USER,
-      refresh_token: jwtPayload.refresh_token
+    let newUser;
+    try {
+        newUser = await UserDB.create({
+          username: body.username,
+          email: body.email,
+          phone: body.phone,
+          password: hashed_password,
+          role: Constant.USER_ROLE.USER,
+          refresh_token: jwtPayload.refresh_token
+        })
+    } catch (error) {
+        throw new Error('Failed to signup');
+    }
+
+    await TokenDB.findOneAndUpdate(
+      {
+        user_id: newUser._id
+      },
+      { $set: { token: hashText(jwtPayload.access_token) } },
+      { upsert: true }
+    )
+
+    await CartDB.create({
+      user_id: newUser._id,
+      cart: []
     })
 
     return {

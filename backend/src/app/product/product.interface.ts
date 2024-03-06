@@ -14,6 +14,7 @@ export interface IProduct {
   numReviews?: number
   price?: number
   countInStock?: number
+  purchases?: number
   reviews?: IReview[]
 }
 

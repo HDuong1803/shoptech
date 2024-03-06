@@ -84,6 +84,7 @@ class ProductService {
     const offset = (page - 1) * limit
 
     const items = await ProductDB.find()
+      .sort({ rating: -1, numReviews: -1 ,reviews: -1 })
       .skip(offset)
       .limit(limit)
 
@@ -126,7 +127,7 @@ class ProductService {
     user_id?: string
   ): Promise<IReview> {
     const product = await ProductDB.findById(product_id)
-        const user = await UserDB.findById(user_id)
+    const user = await UserDB.findById(user_id)
 
     if (product) {
       const dataReview = {

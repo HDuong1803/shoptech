@@ -1,4 +1,3 @@
-// import { authUser } from '@constants'
 import { InputCartItem } from '@app'
 import { Constant } from '@constants'
 import { CartDB, UserDB } from '@schemas'

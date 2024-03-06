@@ -37,69 +37,6 @@ import {
   authorization: []
 })
 export class ProductController extends Controller {
-
-  @Post('/add')
-  @Middlewares([AdminMiddleware])
-  public async addProductItem(
-    @Request() req: ExpressRequest,
-    @Body() body: InputItem
-  ): Promise<Option<IProduct>> {
-    try {
-      const res = await Singleton.getProductInstance().addProductItem(body)
-      return onSuccess(res)
-    } catch (error: any) {
-      logError(error, req)
-      return onError(error, this)
-    }
-  }
-
-  @Post('/upload')
-  @Middlewares([AdminMiddleware])
-  public async uploadImages(
-    @Request() req: ExpressRequest,
-    @UploadedFile()
-    image: Express.Multer.File
-  ): Promise<Option<OutputUpload>> {
-    try {
-      const res = await Singleton.getProductInstance().uploadImages(image.buffer)
-      return onSuccess(res)
-    } catch (error: any) {
-      logError(error, req)
-      return onError(error, this)
-    }
-  }
-
-  @Put('/update')
-  @Middlewares([AdminMiddleware])
-  public async updateItem(
-    @Request() req: ExpressRequest,
-    @Body() body: InputItem,
-    @Query() id?: string
-  ): Promise<Option<IProduct>> {
-    try {
-      const res = await Singleton.getProductInstance().updateItem(body, id)
-      return onSuccess(res)
-    } catch (error: any) {
-      logError(error, req)
-      return onError(error, this)
-    }
-  }
-
-  @Delete('/remove')
-  @Middlewares([AdminMiddleware])
-  public async RemoveItem(
-    @Request() req: ExpressRequest,
-    @Query() id?: string
-  ): Promise<Option<any>> {
-    try {
-      const res = await Singleton.getProductInstance().removeItem(id)
-      return onSuccess(res)
-    } catch (error: any) {
-      logError(error, req)
-      return onError(error, this)
-    }
-  }
-
   @Get('/list/item')
   public async getListProduct(
     @Request() req: ExpressRequest,
@@ -145,7 +82,20 @@ export class ProductController extends Controller {
       return onError(error, this)
     }
   }
-
+  @Post('/upload')
+  public async uploadImages(
+    @Request() req: ExpressRequest,
+    @UploadedFile()
+    image: Express.Multer.File
+  ): Promise<Option<OutputUpload>> {
+    try {
+      const res = await Singleton.getProductInstance().uploadImages(image.buffer)
+      return onSuccess(res)
+    } catch (error: any) {
+      logError(error, req)
+      return onError(error, this)
+    }
+  }
   @Post('/item/review')
   @Middlewares([AuthMiddleware])
   public async addProductReview(
@@ -160,6 +110,52 @@ export class ProductController extends Controller {
         product_id,
         user_id
       )
+      return onSuccess(res)
+    } catch (error: any) {
+      logError(error, req)
+      return onError(error, this)
+    }
+  }
+
+  @Middlewares([AdminMiddleware])
+  @Post('/add')
+  public async addProductItem(
+    @Request() req: ExpressRequest,
+    @Body() body: InputItem
+  ): Promise<Option<IProduct>> {
+    try {
+      const res = await Singleton.getProductInstance().addProductItem(body)
+      return onSuccess(res)
+    } catch (error: any) {
+      logError(error, req)
+      return onError(error, this)
+    }
+  }
+
+ 
+
+  @Put('/update')
+  public async updateItem(
+    @Request() req: ExpressRequest,
+    @Body() body: InputItem,
+    @Query() id?: string
+  ): Promise<Option<IProduct>> {
+    try {
+      const res = await Singleton.getProductInstance().updateItem(body, id)
+      return onSuccess(res)
+    } catch (error: any) {
+      logError(error, req)
+      return onError(error, this)
+    }
+  }
+
+  @Delete('/remove')
+  public async RemoveItem(
+    @Request() req: ExpressRequest,
+    @Query() id?: string
+  ): Promise<Option<any>> {
+    try {
+      const res = await Singleton.getProductInstance().removeItem(id)
       return onSuccess(res)
     } catch (error: any) {
       logError(error, req)
