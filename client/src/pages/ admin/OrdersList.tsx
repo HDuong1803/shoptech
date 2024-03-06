@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Badge, Card, Group, List, Switch, Table, Text } from "@mantine/core";
 import Head from "../../components/Head";
 import Layout from "../../layout/Layout";
@@ -40,7 +41,7 @@ const OrdersList = () => {
       actionCreators,
       dispatch
     );;
-    // eslint-disable-next-line
+   
   }, [dispatch, success]);
 
   useEffect(() => {
@@ -51,7 +52,7 @@ const OrdersList = () => {
         color: "red",
       });
     }
-    // eslint-disable-next-line
+   
   }, [error, orderDeliverError]);
 
   useEffect(() => {
@@ -66,7 +67,6 @@ const OrdersList = () => {
     dispatch({
       type: ActionType.ORDER_DELIVER_RESET,
     });
-    // eslint-disable-next-line
   }, [success]);
 
   const rows =

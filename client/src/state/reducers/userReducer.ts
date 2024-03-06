@@ -5,6 +5,10 @@ const userInfoFromStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo") || "{}")
   : null;
 
+const userDetailFromStorage = localStorage.getItem("userDetail")
+  ? JSON.parse(localStorage.getItem("userDetail") || "{}")
+  : null;
+
 const registerReducer = (
   state = {
     userInfo: userInfoFromStorage,
@@ -60,7 +64,7 @@ const loginReducer = (
 
 const getUserReducer = (
   state = {
-    user: {},
+    user: userDetailFromStorage,
     error: null,
     loading: false,
   },

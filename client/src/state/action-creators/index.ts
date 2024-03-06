@@ -501,6 +501,9 @@ export const getUser = () => {
         type: ActionType.GET_USER_SUCCESS,
         payload: data.data,
       });
+      console.log('data: ', data.data)
+      localStorage.setItem("userDetail", JSON.stringify(data.data));
+
     } catch (error: any) {
       dispatch({
         type: ActionType.GET_USER_FAIL,

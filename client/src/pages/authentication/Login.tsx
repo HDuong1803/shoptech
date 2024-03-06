@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Container,
   Card,
@@ -57,7 +58,6 @@ const Login = () => {
         navigate("/");
       }
     }
-    // eslint-disable-next-line
   }, [userInfo]);
 
   const handlerLogin = (values: any) => {
@@ -69,11 +69,10 @@ const Login = () => {
     if (error) {
       notifications.showNotification({
         title: "Oh no!",
-        message: error && error.message,
+        message: 'Email or password is incorrect',
         color: "red",
       });
     }
-    // eslint-disable-next-line
   }, [error]);
 
   return (

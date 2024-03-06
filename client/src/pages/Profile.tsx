@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   Badge,
+  Box,
   Button,
   Card,
   Col,
@@ -23,12 +24,13 @@ import { actionCreators, asyncAction, State } from "../state";
 import React from "react";
 import moment from "moment";
 import { NavLink } from "react-router-dom";
+import { BiUser } from "react-icons/bi";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const notifications = useNotifications();
-  const { logout, getMyOrders, updateProfile } = bindActionCreators(
+  const { logout, getMyOrders, updateProfile, getUser } = bindActionCreators(
     actionCreators,
     dispatch
   );
@@ -36,17 +38,15 @@ const Profile = () => {
   const { userInfo, error } = useSelector((state: State) => state.userLogin);
   const { profileUpdate } = useSelector((state: State) => state.profileUpdate);
   const [myOrder, setMyOrder] = useState([]);
-
   const {
     myOrders,
     loading: myOrdersLoading,
     error: myOrdersError,
   } = useSelector((state: State) => state.myOrders);
-
   const form = useForm({
     initialValues: {
-      email: userInfo && user.email,
-      username: userInfo && user.username,
+      email: userInfo && user?.email,
+      username: userInfo && user?.username,
       phone: "",
       password: "",
       confirmpassword: "",
@@ -82,7 +82,6 @@ const Profile = () => {
   const handlerGetMyOrder = () => {
     setMyOrder(myOrders);
   };
-
   useEffect(() => {
     if (Object.keys(profileUpdate).length !== 0) {
       notifications.showNotification({
@@ -97,6 +96,7 @@ const Profile = () => {
     if (!userInfo) {
       navigate("/login");
     } else if (userInfo) {
+      dispatch(asyncAction(getUser()));
       dispatch(asyncAction(getMyOrders()));
       if (error || myOrdersError) {
         notifications.showNotification({
@@ -156,13 +156,29 @@ const Profile = () => {
             </Card>
           )}
           <Card
+            sx={{ marginTop: "2rem", width:500 }}
+            withBorder
+            shadow="xs"
+            radius="lg"
+            padding="xl"
+          >
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <BiUser size={100}/>
+              <Box sx={{ marginLeft: "4rem" }}>
+                <Text weight={700}>Name: {user?.username}</Text>
+                <Text weight={700}>Email: {user?.email}</Text>
+                <Text weight={700}>Phone: {user?.phone}</Text>
+              </Box>
+            </Box>
+          </Card>
+          <Card
             sx={{ marginTop: "2rem" }}
             withBorder
             shadow="xs"
             radius="lg"
             padding="xl"
           >
-            <Text weight={700}>User Profile</Text>
+            <Text weight={700}>Update Profile</Text>
             <form
               onSubmit={form.onSubmit((values) => handlerEditProfile(values))}
             >
@@ -172,7 +188,7 @@ const Profile = () => {
                     radius="lg"
                     label="Your username"
                     placeholder="Username"
-                    value={user.username}
+                    value={user?.username}
                     {...form.getInputProps("username")}
                     error={form.errors.username}
                   />
@@ -183,7 +199,7 @@ const Profile = () => {
                     radius="lg"
                     label="Your email"
                     placeholder="email"
-                    value={user.email}
+                    value={user?.email}
                     {...form.getInputProps("email")}
                     error={form.errors.email}
                     disabled

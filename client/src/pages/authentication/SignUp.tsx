@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Container,
   Card,
@@ -63,16 +64,16 @@ const SignUp = () => {
     if (error) {
       notifications.showNotification({
         title: "Oh no!",
-        message: error && error.message,
+        message: 'Email is already exist',
         color: "red",
       });
-    } // eslint-disable-next-line
+    }
   }, [error]);
 
   useEffect(() => {
     if (userInfo) {
       navigate("/");
-    } // eslint-disable-next-line
+    }
   }, [userInfo]);
 
   return (
