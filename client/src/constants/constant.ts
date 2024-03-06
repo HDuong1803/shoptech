@@ -1,3 +1,3 @@
 export const SERVER = {
-  baseURL: `${process.env.BASE_URL}`
+  baseURL: 'http://3.26.244.99:3001/'
 };
