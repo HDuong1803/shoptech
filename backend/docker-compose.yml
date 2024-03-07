@@ -1,0 +1,35 @@
+version: '3.7'
+
+services:
+  shop_backend:
+    container_name: shop_backend
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    # command: npm run start:dev
+    env_file:
+      - .env
+    ports:
+      - 3001:3001
+    depends_on:
+      - mongodb
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - ${NETWORK}
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    volumes:
+      - dbdata:/data/db
+    networks:
+      - ${NETWORK}
+
+networks:
+  shop_network:
+    driver: bridge
+    name: ${NETWORK}
+
+volumes:
+  dbdata:

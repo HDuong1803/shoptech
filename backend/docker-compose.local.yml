@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  mongodb:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    volumes:
+      - dbdata:/data/db
+
+networks:
+  shop_network:
+    driver: bridge
+    name: ${NETWORK}
+
+volumes:
+  dbdata:
