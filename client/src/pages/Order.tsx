@@ -181,7 +181,7 @@ const Order = () => {
                           title="Paid"
                           color="green"
                         >
-                          Paid on 23-02-2022.
+                          Paid on 23-02-2024.
                         </Alert>
                       ) : (
                         <Alert
