@@ -94,13 +94,11 @@ class AuthService {
 
   async verifyPassword(
     body: InputVerifyPassword,
-    email: string
+    id: string
   ): Promise<OutputVerifyPassword> {
     const userRes = await UserDB.findOne({
-      where: {
-        email,
+        _id: id,
         password: hashText(body.password)
-      }
     })
     return {
       authorized: !!userRes
