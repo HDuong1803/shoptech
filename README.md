@@ -1,6 +1,6 @@
-<h1 align="center">
+<h1 align="center"><
   <br>
-  Shop Tech (Ecommerce)
+  [Shop Tech (Ecommerce)](http://52.62.231.243:3001/docs/)
   <br>
 </h1>
 
