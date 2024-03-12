@@ -79,7 +79,14 @@ interface GetProductFailAction {
   type: ActionType.GET_PRODUCT_FAIL;
   payload: any;
 }
-
+interface ProductUpdateItemAction {
+  type: ActionType.PRODUCT_UPDATE_ITEM;
+  payload: any;
+}
+interface ProductRemoveItemAction {
+  type: ActionType.PRODUCT_REMOVE_ITEM;
+  payload: any;
+}
 interface AddReviewRequestAction {
   type: ActionType.ADD_REVIEW_REQUEST;
   payload?: any;
@@ -347,6 +354,8 @@ export type Action =
   | GetProductRequestAction
   | GetProductSuccessAction
   | GetProductFailAction
+  | ProductUpdateItemAction
+  | ProductRemoveItemAction
   | AddReviewRequestAction
   | AddReviewSuccessAction
   | AddReviewFailAction

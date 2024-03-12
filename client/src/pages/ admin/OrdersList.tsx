@@ -4,7 +4,7 @@ import Head from "../../components/Head";
 import Layout from "../../layout/Layout";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actionCreators, State } from "../../state";
+import { actionCreators, asyncAction, State } from "../../state";
 import { useEffect } from "react";
 import Loading from "../../components/Loading";
 import moment from "moment";
@@ -16,10 +16,11 @@ const OrdersList = () => {
   const dispatch = useDispatch();
   const notifications = useNotifications();
 
-  // const { getOrders, deliverOrder } = bindActionCreators(
-  //   actionCreators,
-  //   dispatch
-  // );
+  const { getOrders, deliverOrder } = bindActionCreators(
+    actionCreators,
+    dispatch
+  );
+  const { user } = useSelector((state: State) => state.user);
 
   const { orders, error, loading } = useSelector(
     (state: State) => state.orders
@@ -30,19 +31,12 @@ const OrdersList = () => {
   );
 
   const handlerDeliverOrder = (orderId: string) => {
-    bindActionCreators(
-      actionCreators,
-      dispatch
-    );;
+    dispatch(asyncAction(deliverOrder(orderId)))
   };
 
   useEffect(() => {
-    bindActionCreators(
-      actionCreators,
-      dispatch
-    );;
-   
-  }, [dispatch, success]);
+    dispatch(asyncAction(getOrders(1)));
+  }, [dispatch]);
 
   useEffect(() => {
     if (orderDeliverError || error) {
@@ -52,7 +46,6 @@ const OrdersList = () => {
         color: "red",
       });
     }
-   
   }, [error, orderDeliverError]);
 
   useEffect(() => {
@@ -69,82 +62,6 @@ const OrdersList = () => {
     });
   }, [success]);
 
-  const rows =
-    orders &&
-    Object.keys(orders).length &&
-    orders.map((order: any) => (
-      <tr key={order._id}>
-        <td>
-          <Text size="sm" weight={600}>
-            {order._id}
-          </Text>
-        </td>
-        <td>
-          <List size="sm">
-            {order.orderItems.map((item: any) => {
-              return (
-                <List.Item>
-                  {item.name} x {item.quantity}
-                </List.Item>
-              );
-            })}
-          </List>
-        </td>
-        <td>
-          <Text size="sm" weight={600}>
-            {" "}
-            {order.shipping_address.address}, {order.shipping_address.city},{" "}
-            {order.shipping_address.country}, {order.shipping_address.postalCode}
-          </Text>
-        </td>
-        <td>
-          <Text size="sm" weight={600}>
-            ${order.total_price}
-          </Text>
-        </td>
-        <td>
-          <Text size="sm" weight={600}>
-            {order.user.username}
-          </Text>
-        </td>
-        <td>
-          {order.is_paid ? (
-            <Badge radius="lg" variant="filled" color="green">
-              {`Paid | ${moment(order.paid_at).format("DD-MMM-YYYY HH:mm")}`}
-            </Badge>
-          ) : (
-            <Badge radius="lg" variant="filled" color="red">
-              Not Paid
-            </Badge>
-          )}
-        </td>
-        <td>
-          {order.is_delivered ? (
-            <Badge radius="lg" variant="filled" color="green">
-              {`Delivered | ${moment(order.delivered_at).format(
-                "DD-MMM-YYYY hh:mm"
-              )}`}
-            </Badge>
-          ) : (
-            <Badge radius="lg" variant="filled" color="red">
-              Not Delivered
-            </Badge>
-          )}
-        </td>
-        <td>
-          {order.is_delivered ? (
-            "-"
-          ) : (
-            <Switch
-              checked={order.is_delivered}
-              onChange={() => handlerDeliverOrder(order._id)}
-              color="dark"
-            />
-          )}
-        </td>
-      </tr>
-    ));
-
   return (
     <Layout>
       <Head title="Orders List | Admin" />
@@ -160,17 +77,90 @@ const OrdersList = () => {
             <Table horizontalSpacing="xl" verticalSpacing="xs" highlightOnHover>
               <thead>
                 <tr>
-                  <th>#</th>
+                  <th>User</th>
                   <th>Order Items</th>
                   <th>Shipping Address</th>
                   <th>Total Price</th>
-                  <th>User</th>
                   <th>Paid</th>
                   <th>Delivered</th>
                   <th>Mark as Delivered</th>
                 </tr>
               </thead>
-              <tbody>{rows}</tbody>
+              <tbody>
+                {orders && orders.length
+                  ? orders.map((order: any) => (
+                      <tr key={order._id}>
+                        <td>
+                          <Text size="sm" weight={600}>
+                            {user.username}
+                          </Text>
+                        </td>
+                        <td>
+                          <List size="sm">
+                            {order.order_items.map((item: any) => {
+                              return (
+                                <List.Item>
+                                  {item.name} x {item.quantity}
+                                </List.Item>
+                              );
+                            })}
+                          </List>
+                        </td>
+                        <td>
+                          <Text size="sm" weight={600}>
+                            {" "}
+                            {order.shipping_address.address},{" "}
+                            {order.shipping_address.city},{" "}
+                            {order.shipping_address.country},{" "}
+                            {order.shipping_address.postalCode}
+                          </Text>
+                        </td>
+                        <td>
+                          <Text size="sm" weight={600}>
+                            ${order.total_price}
+                          </Text>
+                        </td>
+                        <td>
+                          {order.is_paid ? (
+                            <Badge radius="lg" variant="filled" color="green">
+                              {`Paid | ${moment(order.paid_at).format(
+                                "DD-MMM-YYYY HH:mm"
+                              )}`}
+                            </Badge>
+                          ) : (
+                            <Badge radius="lg" variant="filled" color="red">
+                              Not Paid
+                            </Badge>
+                          )}
+                        </td>
+                        <td>
+                          {order.is_delivered ? (
+                            <Badge radius="lg" variant="filled" color="green">
+                              {`Delivered | ${moment(order.delivered_at).format(
+                                "DD-MMM-YYYY hh:mm"
+                              )}`}
+                            </Badge>
+                          ) : (
+                            <Badge radius="lg" variant="filled" color="red">
+                              Not Delivered
+                            </Badge>
+                          )}
+                        </td>
+                        <td>
+                          {order.is_delivered ? (
+                            "-"
+                          ) : (
+                            <Switch
+                              checked={order.is_delivered}
+                              onChange={() => handlerDeliverOrder(order._id)}
+                              color="dark"
+                            />
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  : null}
+              </tbody>
             </Table>
           </Group>
         )}

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Card,
@@ -12,29 +13,34 @@ import {
   NumberInput,
   Text,
   Select,
+  Grid,
+  Col,
 } from "@mantine/core";
 import Head from "../../components/Head";
 import Layout from "../../layout/Layout";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actionCreators, State } from "../../state";
+import { actionCreators, asyncAction, State } from "../../state";
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { BiDetail, BiTrashAlt } from "react-icons/bi";
 import { useForm } from "@mantine/hooks";
 import axios from "axios";
 import React from "react";
+import { SERVER } from "../../constants/constant";
 
 const ProductsList = () => {
   const dispatch = useDispatch();
 
   const [activePage, setActivePage] = useState(1);
   const [opened, setOpened] = useState(false);
+  const [openRemove, setOpenRemove] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
   const [image, setImage] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [initialProductsItems, setInitialProductsItems] = useState([]);
 
-  const { getProducts, createProduct } = bindActionCreators(
+  const { getProducts, createProduct, removeProduct } = bindActionCreators(
     actionCreators,
     dispatch
   );
@@ -89,44 +95,17 @@ const ProductsList = () => {
     setOpened(true);
   };
 
-  const rows =
-    products &&
-    Object.keys(products).length >= 3 &&
-    products.products.map((product: any) => (
-      <tr key={product._id}>
-        <td>{product.brand}</td>
-        <td>{product.name}</td>
-        <td>{product.description.substring(0, 50) + "..."}</td>
-        <td>
-          <Image
-            fit="contain"
-            height={50}
-            width={60}
-            src={product.image}
-            alt={`Image of ${product.name}`}
-          />
-        </td>
-        <td>{product.category}</td>
-        <td>{product.countInStock}</td>
-        <td>${product.price}</td>
-        <td>
-          <Button
-            color="dark"
-            radius="xl"
-            onClick={() => handlerSetDetails(product)}
-            disabled
-          >
-            <BiDetail />
-          </Button>
-        </td>
-        <td>
-          <Button color="red" radius="xl" disabled>
-            <BiTrashAlt />
-          </Button>
-        </td>
-      </tr>
-    ));
-
+  const selectItem = (id: string) => {
+    setOpenRemove(true);
+    setSelectedItem(id);
+  };
+  
+  const handlerDeleteItem = (product_id: any) => {
+    setOpenRemove(false)
+    dispatch(asyncAction(removeProduct(product_id)))
+    const updated = initialProductsItems.filter((item: any) => item.product_id !== product_id);
+    setInitialProductsItems(updated);
+  }
   const uploadFileHandler = async (e: any) => {
     const file = e.target.files[0];
     const formData = new FormData();
@@ -136,13 +115,12 @@ const ProductsList = () => {
     try {
       const config = {
         headers: {
+          "accept": "application/json",
           "Content-Type": "multipart/form-data",
         },
       };
-
-      const { data } = await axios.post("/api/upload", formData, config);
-
-      setImage(data);
+      const { data } = await axios.post(`${SERVER.baseURL}/product/upload`, formData, config);
+      setImage(data.data);
       setUploading(false);
     } catch (error) {
       console.error(error);
@@ -160,43 +138,75 @@ const ProductsList = () => {
     form.reset();
   };
 
-  const handlerEditProduct = (values: any) => {
+  const handlerAddProduct = (values: any) => {
     const {
       name,
-      price,
       brand,
-      category,
-      countInStock,
-      numReviews,
       description,
+      category,
+      price,
+      countInStock,
     } = values;
 
     createProduct(
       name,
-      price,
       image,
       brand,
       category,
+      description,
+      price,
       countInStock,
-      numReviews,
-      description
     );
   };
 
   useEffect(() => {
-    getProducts(1);
-  }, [dispatch, getProducts]);
+    setActivePage(1);
+    dispatch(asyncAction(getProducts(1)));
+  }, [dispatch]);
 
   return (
     <Layout>
       <Head title="Products List | Admin" />
+      <Modal
+        title="Delete Item?"
+        radius="lg"
+        onClose={() => setOpenRemove(false)}
+        opened={openRemove}
+      >
+        <Text weight={600} size="sm">
+          Are you sure that you want to remove this item?
+        </Text>
+        <Grid sx={{ marginTop: "1rem" }}>
+          <Col span={6}>
+            {" "}
+            <Button
+              onClick={() => setOpenRemove(false)}
+              color="gray"
+              radius="lg"
+              fullWidth
+            >
+              Cancel
+            </Button>
+          </Col>
+          <Col span={6}>
+            <Button
+              onClick={() => handlerDeleteItem(selectedItem)}
+              color="red"
+              radius="lg"
+              fullWidth
+            >
+              Yes
+            </Button>
+          </Col>
+        </Grid>
+      </Modal>
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
         title="Product Details"
         radius="lg"
       >
-        <form onSubmit={form.onSubmit((values) => handlerEditProduct(values))}>
+        <form onSubmit={form.onSubmit((values) => handlerAddProduct(values))}>
           <Group direction="column" grow>
             <TextInput
               label="Product Name"
@@ -268,12 +278,7 @@ const ProductsList = () => {
       <Card shadow="md" radius="lg">
         <Group sx={{ marginBottom: "1rem" }} direction="row" position="apart">
           <Text weight={700}>Products</Text>
-          <Button
-            radius="lg"
-            color="dark"
-            onClick={() => handlerOpenForm()}
-            disabled
-          >
+          <Button radius="lg" color="dark" onClick={() => handlerOpenForm()}>
             Add new Product
           </Button>
         </Group>
@@ -295,13 +300,53 @@ const ProductsList = () => {
                   <th></th>
                 </tr>
               </thead>
-              <tbody>{rows}</tbody>
+              <tbody>
+                {products && products.data
+                  ? products.data.map((product: any) => (
+                      <tr key={product._id}>
+                        <td>{product.brand}</td>
+                        <td>{product.name}</td>
+                        <td>{product.description.substring(0, 50) + "..."}</td>
+                        <td>
+                          <Image
+                            fit="contain"
+                            height={50}
+                            width={60}
+                            src={product.image}
+                            alt={`Image of ${product.name}`}
+                          />
+                        </td>
+                        <td>{product.category}</td>
+                        <td>{product.countInStock}</td>
+                        <td>${product.price}</td>
+                        <td>
+                          <Button
+                            color="dark"
+                            radius="xl"
+                            onClick={() => handlerSetDetails(product)}
+                          >
+                            <BiDetail />
+                          </Button>
+                        </td>
+                        <td>
+                          <Button
+                            color="red"
+                            radius="xl"
+                            onClick={() => selectItem(product._id)}
+                            >
+                            <BiTrashAlt />
+                          </Button>
+                        </td>
+                      </tr>
+                    ))
+                  : null}
+              </tbody>
             </Table>
             <Pagination
-              total={products.pages}
+              total={Math.round(products.total / products.count)}
+              page={activePage}
               color="dark"
               radius="xl"
-              page={activePage}
               onChange={(e) => handlerPageChange(e)}
             />
           </Group>

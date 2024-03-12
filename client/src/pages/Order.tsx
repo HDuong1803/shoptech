@@ -37,12 +37,11 @@ const Order = () => {
   const { user } = useSelector((state: State) => state.user);
   const { order } = useSelector((state: State) => state.order);
   const { url } = useSelector((state: State) => state.orderPay);
-
   const [isLoading, setIsLoading] = useState(false);
 
   const successPaymentHandler = async () => {
     setIsLoading(true);
-    await payOrder(params.order);
+    payOrder(params.order);
   };
 
   useEffect(() => {

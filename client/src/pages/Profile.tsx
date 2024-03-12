@@ -114,7 +114,7 @@ const Profile = () => {
       <Head title="Profile | Techstop" description="Shop for gadgets" />
       {userInfo && (
         <>
-          {!userInfo && (
+          {userInfo && (
             <Card withBorder shadow="xs" radius="lg" padding="xl">
               <Grid>
                 <Col span={1}>
