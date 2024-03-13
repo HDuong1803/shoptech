@@ -9,6 +9,9 @@ const userDetailFromStorage = localStorage.getItem("userDetail")
   ? JSON.parse(localStorage.getItem("userDetail") || "{}")
   : null;
 
+const listUserFromStorage = localStorage.getItem("listUser")
+  ? JSON.parse(localStorage.getItem("listUser") || "[]")
+  : null;
 const registerReducer = (
   state = {
     userInfo: userInfoFromStorage,
@@ -87,6 +90,31 @@ const getUserReducer = (
   }
 };
 
+const getUsersReducer = (
+  state = {
+    users: listUserFromStorage,
+    error: null,
+    loading: false,
+  },
+  action: Action
+) => {
+  switch (action.type) {
+    case ActionType.GET_USERS_REQUEST:
+      return { ...state, loading: true, error: null };
+    case ActionType.GET_USERS_SUCCESS:
+      return {
+        ...state,
+        user: action.payload,
+        loading: false,
+        error: null,
+      };
+    case ActionType.GET_USERS_FAIL:
+      return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
 const updateProfileReducer = (
   state = {
     profileUpdate: {},
@@ -157,4 +185,5 @@ export {
   getUserReducer,
   updateProfileReducer,
   updateUserReducer,
+  getUsersReducer
 };

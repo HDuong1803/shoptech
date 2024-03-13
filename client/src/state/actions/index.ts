@@ -12,7 +12,7 @@ interface CartListItemAction {
 
 interface CartUpdateItemAction {
   type: ActionType.CART_UPDATE_ITEM;
-  payload: any
+  payload: any;
 }
 
 interface CartRemoveItemAction {
@@ -212,6 +212,21 @@ interface GetUserRequestAction {
   payload: any;
 }
 
+interface GetUsersSuccessAction {
+  type: ActionType.GET_USERS_REQUEST;
+  payload?: any;
+}
+
+interface GetUsersFailAction {
+  type: ActionType.GET_USERS_SUCCESS;
+  payload: any;
+}
+
+interface GetUsersRequestAction {
+  type: ActionType.GET_USERS_FAIL;
+  payload: any;
+}
+
 interface GetOrdersSuccessAction {
   type: ActionType.GET_ORDERS_REQUEST;
   payload?: any;
@@ -258,6 +273,21 @@ interface CreateProductSuccessAction {
 
 interface CreateProductFailAction {
   type: ActionType.CREATE_PRODUCT_FAIL;
+  payload: any;
+}
+
+interface UpdateProductRequestAction {
+  type: ActionType.UPDATE_PRODUCT_REQUEST;
+  payload?: any;
+}
+
+interface UpdateProductSuccessAction {
+  type: ActionType.UPDATE_PRODUCT_SUCCESS;
+  payload?: any;
+}
+
+interface UpdateProductFailAction {
+  type: ActionType.UPDATE_PRODUCT_FAIL;
   payload: any;
 }
 
@@ -381,6 +411,9 @@ export type Action =
   | GetUserSuccessAction
   | GetUserFailAction
   | GetUserRequestAction
+  | GetUsersSuccessAction
+  | GetUsersFailAction
+  | GetUsersRequestAction
   | GetOrdersRequestAction
   | GetOrdersSuccessAction
   | GetOrdersFailAction
@@ -391,6 +424,9 @@ export type Action =
   | CreateProductRequestAction
   | CreateProductSuccessAction
   | CreateProductFailAction
+  | UpdateProductRequestAction
+  | UpdateProductSuccessAction
+  | UpdateProductFailAction
   | GetTopProductsSuccessAction
   | GetTopProductsFailAction
   | QuickSearchRequestAction

@@ -20,7 +20,6 @@ const OrdersList = () => {
     actionCreators,
     dispatch
   );
-  const { user } = useSelector((state: State) => state.user);
 
   const { orders, error, loading } = useSelector(
     (state: State) => state.orders
@@ -78,6 +77,7 @@ const OrdersList = () => {
               <thead>
                 <tr>
                   <th>User</th>
+                  <th>Email</th>
                   <th>Order Items</th>
                   <th>Shipping Address</th>
                   <th>Total Price</th>
@@ -92,7 +92,12 @@ const OrdersList = () => {
                       <tr key={order._id}>
                         <td>
                           <Text size="sm" weight={600}>
-                            {user.username}
+                            {order.username}
+                          </Text>
+                        </td>
+                        <td>
+                          <Text size="sm" weight={600}>
+                            {order.email}
                           </Text>
                         </td>
                         <td>

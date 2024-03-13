@@ -22,12 +22,13 @@ export const addToCart = (
       image,
       price,
     };
-    const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
+    const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data
+      .detail._id;
     const config = {
       headers: {
         "Content-Type": "application/json",
         Authorization: `${token}`,
-        id: user_id
+        id: user_id,
       },
     };
     const { data } = await axios.post(
@@ -56,7 +57,8 @@ export const getCart = () => {
         type: ActionType.GET_CART_REQUEST,
       });
       const token = `${localStorage.getItem("access_token")}`;
-      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
+      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data
+        .detail._id;
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -84,15 +86,16 @@ export const updateCart = (product_id: string, action: string) => {
     const formData = {
       action,
     };
-    
-    const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${token}`,
-          id: user_id,
-        },
-      };
+
+    const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data
+      .detail._id;
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+        id: user_id,
+      },
+    };
     const { data } = await axios.put(
       `${SERVER.baseURL}/cart/quantity?product_id=${product_id}`,
       formData,
@@ -108,14 +111,15 @@ export const updateCart = (product_id: string, action: string) => {
 export const removeFromCart = (product_id: string) => {
   return async (dispatch: Dispatch<Action>) => {
     const token = `${localStorage.getItem("access_token")}`;
-    const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${token}`,
-          id: user_id,
-        },
-      };
+    const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data
+      .detail._id;
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+        id: user_id,
+      },
+    };
     const { data } = await axios.delete(
       `${SERVER.baseURL}/cart/item?product_id=${product_id}`,
       config
@@ -179,7 +183,7 @@ export const createProduct = (
   category: string,
   description: string,
   price: number,
-  countInStock: number,
+  countInStock: number
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
@@ -193,7 +197,7 @@ export const createProduct = (
           Authorization: `${token}`,
         },
       };
-      const image: string = images[0]
+      const image: string = images[0];
       const formData = {
         name,
         image,
@@ -223,13 +227,65 @@ export const createProduct = (
   };
 };
 
+export const updateProduct = (
+  product_id: string,
+  name?: string,
+  image?: string,
+  brand?: string,
+  category?: string,
+  description?: string,
+  price?: number,
+  countInStock?: number
+) => {
+  return async (dispatch: Dispatch<Action>) => {
+    try {
+      dispatch({
+        type: ActionType.UPDATE_PRODUCT_REQUEST,
+      });
+      const token = `${localStorage.getItem("access_token")}`;
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+      };
+      // const image: string = images[0];
+      const formData = {
+        name,
+        image,
+        brand,
+        category,
+        description,
+        price,
+        countInStock,
+      };
+
+      const { data } = await axios.put(
+        `${SERVER.baseURL}/product/update?id=${product_id}`,
+        formData,
+        config
+      );
+
+      dispatch({
+        type: ActionType.UPDATE_PRODUCT_SUCCESS,
+        payload: data.data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: ActionType.UPDATE_PRODUCT_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
+
 // export const updateProduct = (product_id: string, data: any) => {
 //   return async (dispatch: Dispatch<Action>) => {
 //     const token = `${localStorage.getItem("access_token")}`;
 //     const formData = {
 //       action,
 //     };
-    
+
 //     const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
 //       const config = {
 //         headers: {
@@ -253,12 +309,12 @@ export const createProduct = (
 export const removeProduct = (product_id: string) => {
   return async (dispatch: Dispatch<Action>) => {
     const token = `${localStorage.getItem("access_token")}`;
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${token}`,
-        },
-      };
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
+    };
     const { data } = await axios.delete(
       `${SERVER.baseURL}/product/remove?id=${product_id}`,
       config
@@ -326,7 +382,8 @@ export const addReview = (id: string, rating: number, comment: string) => {
 
       const token = `${localStorage.getItem("access_token")}`;
 
-      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
+      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data
+        .detail._id;
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -473,7 +530,8 @@ export const createOrder = (shipping_address: any, payment_method: string) => {
       });
 
       const token = `${localStorage.getItem("access_token")}`;
-      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
+      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data
+        .detail._id;
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -514,7 +572,8 @@ export const getOrder = (id: any) => {
       });
 
       const token = `${localStorage.getItem("access_token")}`;
-      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
+      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data
+        .detail._id;
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -538,7 +597,7 @@ export const getOrder = (id: any) => {
 };
 
 export const getOrders = (page: any) => {
-  return async (dispatch: Dispatch<Action>, getState: any) => {
+  return async (dispatch: Dispatch<Action>) => {
     try {
       dispatch({
         type: ActionType.GET_ORDERS_REQUEST,
@@ -552,7 +611,10 @@ export const getOrders = (page: any) => {
         },
       };
 
-      const { data } = await axios.get(`${SERVER.baseURL}/order/list?page=${page}&limit=15`, config);
+      const { data } = await axios.get(
+        `${SERVER.baseURL}/order/list?page=${page}&limit=8`,
+        config
+      );
       dispatch({
         type: ActionType.GET_ORDERS_SUCCESS,
         payload: data.data,
@@ -575,17 +637,18 @@ export const payOrder = (order_id: any) => {
 
       const token = `${localStorage.getItem("access_token")}`;
 
-      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
+      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data
+        .detail._id;
       const config = {
         headers: {
-          "Content-Type": "application/json",
+          accept: "application/json",
           Authorization: `${token}`,
           id: user_id,
         },
       };
       const { data } = await axios.post(
         `${SERVER.baseURL}/order/checkout?order_id=${order_id}`,
-        "",
+        {},
         config
       );
       dispatch({
@@ -610,7 +673,8 @@ export const getUser = () => {
 
       const token = `${localStorage.getItem("access_token")}`;
 
-      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
+      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data
+        .detail._id;
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -629,7 +693,6 @@ export const getUser = () => {
         payload: data.data,
       });
       localStorage.setItem("userDetail", JSON.stringify(data.data));
-
     } catch (error: any) {
       dispatch({
         type: ActionType.GET_USER_FAIL,
@@ -639,39 +702,40 @@ export const getUser = () => {
   };
 };
 
-// export const getUsers = () => {
-//   return async (dispatch: Dispatch<Action>) => {
-//     try {
-//       dispatch({
-//         type: ActionType.GET_USER_REQUEST,
-//       });
+export const getUsers = (page: any) => {
+  return async (dispatch: Dispatch<Action>) => {
+    try {
+      dispatch({
+        type: ActionType.GET_USERS_REQUEST,
+      });
 
-//       const token = `${localStorage.getItem("access_token")}`;
+      const token = `${localStorage.getItem("access_token")}`;
 
-//       const config = {
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `${token}`,
-//         },
-//       };
+      const config = {
+        headers: {
+          accept: "application/json",
+          Authorization: `${token}`,
+        },
+      };
 
-//       const { data } = await axios.get(
-//         `${SERVER.baseURL}/user/profile`,
-//         config
-//       );
+      const { data } = await axios.get(
+        `${SERVER.baseURL}/user/list/profile?page=${page}&limit=8`,
+        config
+      );
 
-//       dispatch({
-//         type: ActionType.GET_USER_SUCCESS,
-//         payload: data,
-//       });
-//     } catch (error: any) {
-//       dispatch({
-//         type: ActionType.GET_USER_FAIL,
-//         payload: error,
-//       });
-//     }
-//   };
-// };
+      dispatch({
+        type: ActionType.GET_USERS_SUCCESS,
+        payload: data.data,
+      });
+      localStorage.setItem("listUser", JSON.stringify(data.data));
+    } catch (error: any) {
+      dispatch({
+        type: ActionType.GET_USERS_FAIL,
+        payload: error,
+      });
+    }
+  };
+};
 
 export const deliverOrder = (id: string) => {
   return async (dispatch: Dispatch<Action>) => {
@@ -698,8 +762,6 @@ export const deliverOrder = (id: string) => {
         type: ActionType.ORDER_DELIVER_SUCCESS,
         payload: data.data,
       });
-
-      console.log(data)
     } catch (error: any) {
       dispatch({
         type: ActionType.ORDER_DELIVER_FAIL,
@@ -718,7 +780,8 @@ export const getMyOrders = () => {
 
       const token = `${localStorage.getItem("access_token")}`;
 
-      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
+      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data
+        .detail._id;
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -754,7 +817,8 @@ export const updateProfile = (
 
       const token = `${localStorage.getItem("access_token")}`;
 
-      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
+      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data
+        .detail._id;
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -801,7 +865,8 @@ export const updateUser = (id: string, isAdmin: boolean) => {
 
       const token = `${localStorage.getItem("access_token")}`;
 
-      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
+      const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data
+        .detail._id;
       const config = {
         headers: {
           "Content-Type": "application/json",

@@ -31,6 +31,9 @@ const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const notifications = useNotifications();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isUser, setIsUser] = useState(false);
+
   const { logout, getMyOrders, updateProfile, getUser } = bindActionCreators(
     actionCreators,
     dispatch
@@ -98,7 +101,12 @@ const Profile = () => {
       navigate("/login");
     } else if (userInfo) {
       dispatch(asyncAction(getUser()));
-      dispatch(asyncAction(getMyOrders()));
+      if (user.role === 1) {
+        setIsAdmin(true);
+      } else {
+        setIsUser(true);
+        dispatch(asyncAction(getMyOrders()));
+      }
       if (error || myOrdersError) {
         notifications.showNotification({
           title: "Error!",
@@ -114,57 +122,15 @@ const Profile = () => {
       <Head title="Profile | Techstop" description="Shop for gadgets" />
       {userInfo && (
         <>
-          {userInfo && (
-            <Card withBorder shadow="xs" radius="lg" padding="xl">
-              <Grid>
-                <Col span={1}>
-                  <Text weight={700}>Admin</Text>
-                </Col>
-                <Col xs={12} sm={3} md={3} lg={3} xl={4} span={4}>
-                  <Button
-                    variant="gradient"
-                    gradient={{ from: "indigo", to: "cyan" }}
-                    radius="lg"
-                    onClick={() => navigate("/admin/orders")}
-                    fullWidth
-                  >
-                    Manage Orders
-                  </Button>
-                </Col>
-                <Col xs={12} sm={3} md={3} lg={3} xl={3} span={3}>
-                  <Button
-                    variant="gradient"
-                    gradient={{ from: "teal", to: "lime", deg: 105 }}
-                    radius="lg"
-                    onClick={() => navigate("/admin/products")}
-                    fullWidth
-                  >
-                    Manage Products
-                  </Button>
-                </Col>
-                <Col xs={12} sm={3} md={3} lg={3} xl={4} span={4}>
-                  <Button
-                    variant="gradient"
-                    gradient={{ from: "orange", to: "red" }}
-                    radius="lg"
-                    onClick={() => navigate("/admin/users")}
-                    fullWidth
-                  >
-                    Manage Users
-                  </Button>
-                </Col>
-              </Grid>
-            </Card>
-          )}
           <Card
-            sx={{ marginTop: "2rem", width:500 }}
+            sx={{ marginTop: "2rem", width: 500 }}
             withBorder
             shadow="xs"
             radius="lg"
             padding="xl"
           >
             <Box sx={{ display: "flex", alignItems: "center" }}>
-            <BiUser size={100}/>
+              <BiUser size={100} />
               <Box sx={{ marginLeft: "4rem" }}>
                 <Text weight={700}>Name: {user?.username}</Text>
                 <Text weight={700}>Email: {user?.email}</Text>
@@ -172,6 +138,7 @@ const Profile = () => {
               </Box>
             </Box>
           </Card>
+
           <Card
             sx={{ marginTop: "2rem" }}
             withBorder
@@ -248,153 +215,211 @@ const Profile = () => {
             </form>
           </Card>
 
-          <Card
-            sx={{ marginTop: "2rem" }}
+          {isAdmin && (
+            <Card sx={{ marginTop: "2rem" }}
             withBorder
             shadow="xs"
             radius="lg"
-            padding="xl"
-          >
-            <Grid
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
+            padding="xl" 
             >
-              <Col span={6}>
-                <Text weight={700} style={{ lineHeight: "36px" }}>
-                  My Orders
-                </Text>
-              </Col>
-              <Col span={6} style={{ display: "flex", justifyContent: "end" }}>
-                <Button
-                  onClick={() => handlerGetMyOrder()}
-                  color="dark"
-                  variant="filled"
-                  sx={{ margin: "10px" }}
-                  radius="lg"
-                  size="sm"
-                >
-                  {" "}
-                  View All
-                </Button>
-              </Col>
-            </Grid>
-            <Table>
-              <thead>
-                <tr>
-                  <th>Product Name</th>
-                  <th>Address</th>
-                  <th>Date</th>
-                  <th>Total</th>
-                  <th>Paid</th>
-                  <th>Delivered</th>
-                </tr>
-              </thead>
-              <tbody>
-                {myOrder && myOrder.length
-                  ? myOrder.map((order: any) => (
-                      <tr key={order._id}>
-                        <td>
-                          <NavLink
-                            to={`/order/${order._id}`}
-                            style={{ textDecoration: "none", color: "#000" }}
-                          >
-                            <List size="sm">
-                              {order.order_items ? (
-                                order.order_items.map((item: any) => {
-                                  return (
-                                    <List.Item>
-                                      {item.name} x {item.quantity}
-                                    </List.Item>
-                                  );
-                                })
-                              ) : (
-                                <></>
-                              )}
-                            </List>
-                          </NavLink>
-                        </td>
-                        <td>
-                          <NavLink
-                            to={`/order/${order._id}`}
-                            style={{ textDecoration: "none", color: "#000" }}
-                          >
-                            <Text size="sm" weight={600}>
-                              {" "}
-                              {order.shipping_address.address},{" "}
-                              {order.shipping_address.city},{" "}
-                              {order.shipping_address.country},{" "}
-                              {order.shipping_address.postal_code}
-                            </Text>
-                          </NavLink>
-                        </td>
+              <Grid style={{ display: "flex", justifyContent: "space-around" }}>
+                <Col xs={12} sm={3} md={3} lg={3} xl={4} span={4}>
+                  <Button
+                    variant="gradient"
+                    gradient={{ from: "indigo", to: "cyan" }}
+                    radius="lg"
+                    onClick={() => navigate("/admin/orders")}
+                    fullWidth
+                  >
+                    Manage Orders
+                  </Button>
+                </Col>
+                <Col xs={12} sm={3} md={3} lg={3} xl={3} span={3}>
+                  <Button
+                    variant="gradient"
+                    gradient={{ from: "teal", to: "lime", deg: 105 }}
+                    radius="lg"
+                    onClick={() => navigate("/admin/products")}
+                    fullWidth
+                  >
+                    Manage Products
+                  </Button>
+                </Col>
+                <Col xs={12} sm={3} md={3} lg={3} xl={4} span={4}>
+                  <Button
+                    variant="gradient"
+                    gradient={{ from: "orange", to: "red" }}
+                    radius="lg"
+                    onClick={() => navigate("/admin/users")}
+                    fullWidth
+                  >
+                    Manage Users
+                  </Button>
+                </Col>
+              </Grid>
+            </Card>
+          )}
 
-                        <td>
-                          <NavLink
-                            to={`/order/${order._id}`}
-                            style={{ textDecoration: "none", color: "#000" }}
-                          >
-                            <Text size="sm" weight={600}>
-                              {moment(order.created_at).format(
-                                "DD-MM-YYYY hh:mm"
+          {isUser && (
+            <Card
+              sx={{ marginTop: "2rem" }}
+              withBorder
+              shadow="xs"
+              radius="lg"
+              padding="xl"
+            >
+              <Grid
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Col span={6}>
+                  <Text weight={700} style={{ lineHeight: "36px" }}>
+                    My Orders
+                  </Text>
+                </Col>
+                <Col
+                  span={6}
+                  style={{ display: "flex", justifyContent: "end" }}
+                >
+                  <Button
+                    onClick={() => handlerGetMyOrder()}
+                    color="dark"
+                    variant="filled"
+                    sx={{ margin: "10px" }}
+                    radius="lg"
+                    size="sm"
+                  >
+                    {" "}
+                    View All
+                  </Button>
+                </Col>
+              </Grid>
+              <Table>
+                <thead>
+                  <tr>
+                    <th>Product Name</th>
+                    <th>Address</th>
+                    <th>Date</th>
+                    <th>Total</th>
+                    <th>Paid</th>
+                    <th>Delivered</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {myOrder && myOrder.length
+                    ? myOrder.map((order: any) => (
+                        <tr key={order._id}>
+                          <td>
+                            <NavLink
+                              to={`/order/${order._id}`}
+                              style={{ textDecoration: "none", color: "#000" }}
+                            >
+                              <List size="sm">
+                                {order.order_items ? (
+                                  order.order_items.map((item: any) => {
+                                    return (
+                                      <List.Item>
+                                        {item.name} x {item.quantity}
+                                      </List.Item>
+                                    );
+                                  })
+                                ) : (
+                                  <></>
+                                )}
+                              </List>
+                            </NavLink>
+                          </td>
+                          <td>
+                            <NavLink
+                              to={`/order/${order._id}`}
+                              style={{ textDecoration: "none", color: "#000" }}
+                            >
+                              <Text size="sm" weight={600}>
+                                {" "}
+                                {order.shipping_address.address},{" "}
+                                {order.shipping_address.city},{" "}
+                                {order.shipping_address.country},{" "}
+                                {order.shipping_address.postal_code}
+                              </Text>
+                            </NavLink>
+                          </td>
+
+                          <td>
+                            <NavLink
+                              to={`/order/${order._id}`}
+                              style={{ textDecoration: "none", color: "#000" }}
+                            >
+                              <Text size="sm" weight={600}>
+                                {moment(order.created_at).format(
+                                  "DD-MM-YYYY hh:mm"
+                                )}
+                              </Text>
+                            </NavLink>
+                          </td>
+                          <td>
+                            <NavLink
+                              to={`/order/${order._id}`}
+                              style={{ textDecoration: "none", color: "#000" }}
+                            >
+                              <Text size="sm" weight={600}>
+                                ${order.total_price}
+                              </Text>
+                            </NavLink>
+                          </td>
+                          <td>
+                            <NavLink
+                              to={`/order/${order._id}`}
+                              style={{ textDecoration: "none", color: "#000" }}
+                            >
+                              {order.is_paid ? (
+                                <Badge
+                                  radius="lg"
+                                  variant="filled"
+                                  color="green"
+                                >
+                                  {`Paid | ${moment(order.paid_at).format(
+                                    "DD-MMM-YYYY HH:mm"
+                                  )}`}
+                                </Badge>
+                              ) : (
+                                <Badge radius="lg" variant="filled" color="red">
+                                  Not Paid
+                                </Badge>
                               )}
-                            </Text>
-                          </NavLink>
-                        </td>
-                        <td>
-                          <NavLink
-                            to={`/order/${order._id}`}
-                            style={{ textDecoration: "none", color: "#000" }}
-                          >
-                            <Text size="sm" weight={600}>
-                              ${order.total_price}
-                            </Text>
-                          </NavLink>
-                        </td>
-                        <td>
-                          <NavLink
-                            to={`/order/${order._id}`}
-                            style={{ textDecoration: "none", color: "#000" }}
-                          >
-                            {order.is_paid ? (
-                              <Badge radius="lg" variant="filled" color="green">
-                                {`Paid | ${moment(order.paid_at).format(
-                                  "DD-MMM-YYYY HH:mm"
-                                )}`}
-                              </Badge>
-                            ) : (
-                              <Badge radius="lg" variant="filled" color="red">
-                                Not Paid
-                              </Badge>
-                            )}
-                          </NavLink>
-                        </td>
-                        <td>
-                          <NavLink
-                            to={`/order/${order._id}`}
-                            style={{ textDecoration: "none", color: "#000" }}
-                          >
-                            {order.is_delivered ? (
-                              <Badge radius="lg" variant="filled" color="green">
-                                {`Delivered | ${moment(
-                                  order.delivered_at
-                                ).format("DD-MMM-YYYY hh:mm")}`}
-                              </Badge>
-                            ) : (
-                              <Badge radius="lg" variant="filled" color="red">
-                                Not Delivered
-                              </Badge>
-                            )}
-                          </NavLink>
-                        </td>
-                      </tr>
-                    ))
-                  : null}
-              </tbody>
-            </Table>
-          </Card>
+                            </NavLink>
+                          </td>
+                          <td>
+                            <NavLink
+                              to={`/order/${order._id}`}
+                              style={{ textDecoration: "none", color: "#000" }}
+                            >
+                              {order.is_delivered ? (
+                                <Badge
+                                  radius="lg"
+                                  variant="filled"
+                                  color="green"
+                                >
+                                  {`Delivered | ${moment(
+                                    order.delivered_at
+                                  ).format("DD-MMM-YYYY hh:mm")}`}
+                                </Badge>
+                              ) : (
+                                <Badge radius="lg" variant="filled" color="red">
+                                  Not Delivered
+                                </Badge>
+                              )}
+                            </NavLink>
+                          </td>
+                        </tr>
+                      ))
+                    : null}
+                </tbody>
+              </Table>
+            </Card>
+          )}
         </>
       )}
     </Layout>
