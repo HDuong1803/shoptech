@@ -7,7 +7,7 @@ class OrderService {
   public async getListOrders(page: number, limit: number): Promise<any> {
     const offset = (page - 1) * limit
 
-    const listOrders = await OrderDB.find().skip(offset).limit(limit).exec()
+    const listOrders = await OrderDB.find().sort({created_at: -1}).skip(offset).limit(limit).exec()
 
     const totalOrder = await OrderDB.countDocuments()
 
@@ -74,7 +74,8 @@ class OrderService {
     const totalPrice = orderItems?.reduce((total: any, item) => total + item.price * item.quantity, 0);
 
     const createdOrder = await OrderDB.create({
-      user_id: user?._id,
+      username: user?.username,
+      email: user?.email,
       order_items: orderItems,
       shipping_address: body?.shipping_address,
       payment_method: body?.payment_method,

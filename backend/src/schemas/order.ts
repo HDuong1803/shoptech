@@ -1,7 +1,8 @@
 import mongoose, { Schema } from 'mongoose'
 
 export interface orderAttributes {
-  user_id?: mongoose.Schema.Types.ObjectId
+  username?: string
+  email?: string
   order_items?: [orderItems]
   shipping_address?: shippingAddress
   payment_method?: string
@@ -71,10 +72,13 @@ const shippingAddressSchema = new Schema<shippingAddress>({
 
 const orderSchema = new Schema<orderAttributes>(
   {
-    user_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: 'User'
+    username: {
+      type: String,
+      required: true
+    },
+    email: {
+      type: String,
+      required: true
     },
     order_items: [orderItemsSchema],
     shipping_address: shippingAddressSchema,
