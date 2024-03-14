@@ -43,7 +43,7 @@ const ProductsList = () => {
   const [uploading, setUploading] = useState(false);
   const [initialProductsItems, setInitialProductsItems] = useState([]);
   const [selectedImage, setSelectedImage] = useState("");
-  const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [Success, setSuccess] = useState(false);
 
   const { getProducts, createProduct, updateProduct, removeProduct } =
     bindActionCreators(actionCreators, dispatch);
@@ -70,7 +70,7 @@ const ProductsList = () => {
     },
     validationRules: {
       name: (value) => value.trim().length > 2,
-      image: (value) => value.trim().length > 2,
+      // image: (value) => value.trim().length > 2,
       brand: (value) => value.trim().length > 2,
       description: (value) => value.trim().length > 2,
       category: (value) => value.trim().length > 2,
@@ -115,6 +115,7 @@ const ProductsList = () => {
       (item: any) => item.product_id !== product_id
     );
     setInitialProductsItems(updated);
+    setSuccess(true)
   };
   const uploadFileHandler = async (e: any) => {
     const file = e.target.files[0];
@@ -136,6 +137,11 @@ const ProductsList = () => {
       );
       setImage(data.data);
       setUploading(false);
+
+      form.setValues((currentValues) => ({
+        ...currentValues,
+        image: data.data,
+      }));
     } catch (error) {
       console.error(error);
       setUploading(false);
@@ -152,9 +158,8 @@ const ProductsList = () => {
   };    
 
   const handlerAddProduct = (values: any) => {
-    console.log(1)
 
-    const { name, brand, description, category, price, countInStock } = values;
+    const { name, image, brand, description, category, price, countInStock } = values;
 
     dispatch(asyncAction(createProduct(
       name,
@@ -165,6 +170,8 @@ const ProductsList = () => {
       price,
       countInStock
     )))
+    setOpened(false)
+    setSuccess(true)
   };
 
   const handlerUpdateProduct = (values: any) => {
@@ -182,18 +189,19 @@ const ProductsList = () => {
       count
     );
     setOpenUpdate(false);
-    setUpdateSuccess(true)
+    setSuccess(true)
   }
 
   useEffect(() => {
-    if (updateSuccess) {
+    if (Success) {
       notifications.showNotification({
         title: "Success!",
-        message: "Updated product with success",
+        message: "Success",
         color: "green",
       });
     }
-  }, [updateSuccess]);
+  }, [Success]);
+
   useEffect(() => {
     setActivePage(1);
     dispatch(asyncAction(getProducts(1)));

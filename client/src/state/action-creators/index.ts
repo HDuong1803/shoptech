@@ -249,7 +249,6 @@ export const updateProduct = (
           Authorization: `${token}`,
         },
       };
-      // const image: string = images[0];
       const formData = {
         name,
         image,
