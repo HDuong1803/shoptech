@@ -74,6 +74,7 @@ class OrderService {
     const totalPrice = orderItems?.reduce((total: any, item) => total + item.price * item.quantity, 0);
 
     const createdOrder = await OrderDB.create({
+      user_id: user_id,
       username: user?.username,
       email: user?.email,
       order_items: orderItems,
@@ -116,7 +117,7 @@ class OrderService {
         line_items,
         mode: 'payment',
         customer_email: user.email,
-        success_url: 'http://localhost:3000/',
+        success_url: Constant.PUBLIC_URL + `/order/${order_id}`,
         cancel_url: Constant.PUBLIC_URL + '/cart?canceled=1',
         metadata: { orderId: order_id.toString(), test: 'ok' }
     });

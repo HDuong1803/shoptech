@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
 
 export interface orderAttributes {
+  user_id?: string
   username?: string
   email?: string
   order_items?: [orderItems]
@@ -42,18 +43,10 @@ const orderItemsSchema = new Schema<orderItems>({
     required: true,
     ref: 'Product'
   },
-  name: { type: String, 
-    required: true
-   },
-  quantity: { type: Number, 
-    required: true 
-  },
-  image: { type: String, 
-    required: true 
-  },
-  price: { type: Number, 
-    required: true 
-  }
+  name: { type: String, required: true },
+  quantity: { type: Number, required: true },
+  image: { type: String, required: true },
+  price: { type: Number, required: true }
 })
 
 const paymentResultSchema = new Schema<paymentResult>({
@@ -67,11 +60,15 @@ const shippingAddressSchema = new Schema<shippingAddress>({
   city: { type: String, required: true },
   postal_code: { type: String, required: true },
   country: { type: String, required: true }
-
 })
 
 const orderSchema = new Schema<orderAttributes>(
   {
+    user_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User'
+    },
     username: {
       type: String,
       required: true

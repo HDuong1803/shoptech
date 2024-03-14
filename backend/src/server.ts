@@ -13,6 +13,7 @@ import { Constant, logRequest, logger, onError } from '@constants'
 import { initialAdmin, initialDatabase } from '@providers'
 import { type FieldErrors, ValidateError } from 'tsoa'
 import JSONBigint from 'json-bigint'
+import handler from './providers/webhook.providers'
 
 initialDatabase()
   .then(() => {
@@ -33,6 +34,7 @@ initialDatabase()
  * enabling CORS, and setting headers for allowing various HTTP methods and headers.
  */
 const app = express()
+app.post('/webhook', handler);
 app.use(
   express.json({
     verify: (req: any, _res, buf) => {
