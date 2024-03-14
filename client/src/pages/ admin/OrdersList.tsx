@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Badge, Card, Group, List, Switch, Table, Text } from "@mantine/core";
+import { Badge, Card, Group, List, Pagination, Switch, Table, Text } from "@mantine/core";
 import Head from "../../components/Head";
 import Layout from "../../layout/Layout";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actionCreators, asyncAction, State } from "../../state";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import moment from "moment";
 import { useNotifications } from "@mantine/notifications";
@@ -15,6 +15,8 @@ import React from "react";
 const OrdersList = () => {
   const dispatch = useDispatch();
   const notifications = useNotifications();
+
+  const [activePage, setActivePage] = useState(1);
 
   const { getOrders, deliverOrder } = bindActionCreators(
     actionCreators,
@@ -33,7 +35,13 @@ const OrdersList = () => {
     dispatch(asyncAction(deliverOrder(orderId)))
   };
 
+  const handlerPageChange = (page: number) => {
+    setActivePage(page);
+    getOrders(page);
+  };
+
   useEffect(() => {
+    setActivePage(1);
     dispatch(asyncAction(getOrders(1)));
   }, [dispatch]);
 
@@ -167,6 +175,13 @@ const OrdersList = () => {
                   : null}
               </tbody>
             </Table>
+            <Pagination
+              total={Math.round(orders.total / orders.count)}
+              page={activePage}
+              color="dark"
+              radius="xl"
+              onChange={(e) => handlerPageChange(e)}
+            />
           </Group>
         )}
       </Card>

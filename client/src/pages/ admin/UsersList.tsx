@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Group, Table, Text } from "@mantine/core";
-import React from "react";
+import { Card, Group, Pagination, Table, Text } from "@mantine/core";
+import React, { useState } from "react";
 import Head from "../../components/Head";
 import Layout from "../../layout/Layout";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,11 +15,19 @@ const UsersList = () => {
   const dispatch = useDispatch();
   const notifications = useNotifications();
 
+  const [activePage, setActivePage] = useState(1);
+
   const { getUsers, } = bindActionCreators(actionCreators, dispatch);
 
   const { users, error, loading } = useSelector((state: State) => state.users);
 
+  const handlerPageChange = (page: number) => {
+    setActivePage(page);
+    getUsers(page);
+  };
+
   useEffect(() => {
+    setActivePage(1);
     dispatch(asyncAction(getUsers(1)));
   }, [dispatch]);
   useEffect(() => {
@@ -76,6 +84,13 @@ const UsersList = () => {
                   : null}
               </tbody>
             </Table>
+            <Pagination
+              total={Math.round(users.total / users.count)}
+              page={activePage}
+              color="dark"
+              radius="xl"
+              onChange={(e) => handlerPageChange(e)}
+            />
           </Group>
         )}
       </Card>
