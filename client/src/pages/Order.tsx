@@ -29,6 +29,7 @@ import { useEffect, useState } from "react";
 import Head from "../components/Head";
 import { ActionType } from "../state/action-types";
 import React from "react";
+import moment from "moment";
 
 const Order = () => {
   const params = useParams()
@@ -133,7 +134,7 @@ const Order = () => {
                             title="Delivered"
                             color="green"
                           >
-                            Your order has been delivered.
+                            Your order has been delivered at {moment(order.delivered_at).format("HH:mm DD-MMM-YYYY")}.
                           </Alert>
                         ) : (
                           <Alert
@@ -180,7 +181,7 @@ const Order = () => {
                           title="Paid"
                           color="green"
                         >
-                          Paid on 23-02-2024.
+                          Your order has been paid at {moment(order.paid_at).format("HH:mm DD-MMM-YYYY")}
                         </Alert>
                       ) : (
                         <Alert
