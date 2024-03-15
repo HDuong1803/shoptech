@@ -1,80 +1,87 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Badge, Card, Group, List, Pagination, Switch, Table, Text } from "@mantine/core";
-import Head from "../../components/Head";
-import Layout from "../../layout/Layout";
-import { useDispatch, useSelector } from "react-redux";
-import { bindActionCreators } from "redux";
-import { actionCreators, asyncAction, State } from "../../state";
-import { useEffect, useState } from "react";
-import Loading from "../../components/Loading";
-import moment from "moment";
-import { useNotifications } from "@mantine/notifications";
-import { ActionType } from "../../state/action-types";
-import React from "react";
+import {
+  Badge,
+  Card,
+  Group,
+  List,
+  Pagination,
+  Switch,
+  Table,
+  Text
+} from '@mantine/core'
+import Head from '../../components/Head'
+import Layout from '../../layout/Layout'
+import { useDispatch, useSelector } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actionCreators, asyncAction, State } from '../../state'
+import { useEffect, useState } from 'react'
+import Loading from '../../components/Loading'
+import moment from 'moment'
+import { useNotifications } from '@mantine/notifications'
+import { ActionType } from '../../state/action-types'
+import React from 'react'
 
 const OrdersList = () => {
-  const dispatch = useDispatch();
-  const notifications = useNotifications();
+  const dispatch = useDispatch()
+  const notifications = useNotifications()
 
-  const [activePage, setActivePage] = useState(1);
+  const [activePage, setActivePage] = useState(1)
 
   const { getOrders, deliverOrder } = bindActionCreators(
     actionCreators,
     dispatch
-  );
+  )
 
-  const { orders, error, loading } = useSelector(
-    (state: State) => state.orders
-  );
+  const { orders, error, loading } = useSelector((state: State) => state.orders)
 
   const { success, error: orderDeliverError } = useSelector(
     (state: State) => state.orderDeliver
-  );
+  )
 
   const handlerDeliverOrder = (orderId: string) => {
     dispatch(asyncAction(deliverOrder(orderId)))
-  };
+  }
 
   const handlerPageChange = (page: number) => {
-    setActivePage(page);
-    getOrders(page);
-  };
+    setActivePage(page)
+    getOrders(page)
+  }
 
   useEffect(() => {
-    setActivePage(1);
-    dispatch(asyncAction(getOrders(1)));
-  }, [dispatch]);
+    setActivePage(1)
+    dispatch(asyncAction(getOrders(1)))
+  }, [dispatch])
 
   useEffect(() => {
     if (orderDeliverError || error) {
       notifications.showNotification({
-        title: "Oh no!",
+        title: 'Oh no!',
         message: error && error.message,
-        color: "red",
-      });
+        color: 'red'
+      })
     }
-  }, [error, orderDeliverError]);
+  }, [error, orderDeliverError])
 
   useEffect(() => {
     if (success) {
       notifications.showNotification({
-        title: "Success!",
-        message: "Marked as Delivered",
-        color: "green",
-      });
+        title: 'Success!',
+        message: 'Marked as Delivered',
+        color: 'green'
+      })
     }
 
     dispatch({
-      type: ActionType.ORDER_DELIVER_RESET,
-    });
-  }, [success]);
+      type: ActionType.ORDER_DELIVER_RESET
+    })
+  }, [success])
 
   return (
     <Layout>
       <Head title="Orders List | Admin" />
 
       <Card shadow="xl" radius="lg">
-        <Group sx={{ marginBottom: "1rem" }} direction="row" position="apart">
+        <Group sx={{ marginBottom: '1rem' }} direction="row" position="apart">
           <Text weight={700}>Orders</Text>
         </Group>
         {loading ? (
@@ -115,16 +122,16 @@ const OrdersList = () => {
                                 <List.Item>
                                   {item.name} x {item.quantity}
                                 </List.Item>
-                              );
+                              )
                             })}
                           </List>
                         </td>
                         <td>
                           <Text size="sm" weight={600}>
-                            {" "}
-                            {order.shipping_address.address},{" "}
-                            {order.shipping_address.city},{" "}
-                            {order.shipping_address.country},{" "}
+                            {' '}
+                            {order.shipping_address.address},{' '}
+                            {order.shipping_address.city},{' '}
+                            {order.shipping_address.country},{' '}
                             {order.shipping_address.postalCode}
                           </Text>
                         </td>
@@ -137,7 +144,7 @@ const OrdersList = () => {
                           {order.is_paid ? (
                             <Badge radius="lg" variant="filled" color="green">
                               {`Paid | ${moment(order.paid_at).format(
-                                "DD-MMM-YYYY HH:mm"
+                                'DD-MMM-YYYY HH:mm'
                               )}`}
                             </Badge>
                           ) : (
@@ -150,7 +157,7 @@ const OrdersList = () => {
                           {order.is_delivered ? (
                             <Badge radius="lg" variant="filled" color="green">
                               {`Delivered | ${moment(order.delivered_at).format(
-                                "DD-MMM-YYYY hh:mm"
+                                'DD-MMM-YYYY hh:mm'
                               )}`}
                             </Badge>
                           ) : (
@@ -161,7 +168,7 @@ const OrdersList = () => {
                         </td>
                         <td>
                           {order.is_delivered ? (
-                            "-"
+                            '-'
                           ) : (
                             <Switch
                               checked={order.is_delivered}
@@ -180,13 +187,13 @@ const OrdersList = () => {
               page={activePage}
               color="dark"
               radius="xl"
-              onChange={(e) => handlerPageChange(e)}
+              onChange={e => handlerPageChange(e)}
             />
           </Group>
         )}
       </Card>
     </Layout>
-  );
-};
+  )
+}
 
-export default OrdersList;
+export default OrdersList

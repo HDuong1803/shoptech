@@ -1,33 +1,33 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Col, Grid, Text } from "@mantine/core";
-import { bindActionCreators } from "redux";
-import { useDispatch, useSelector } from "react-redux";
-import { actionCreators, State } from "../state";
-import { useNavigate, useLocation } from "react-router";
-import Loading from "./Loading";
-import ItemCard from "./items/ItemCard";
-import { useEffect } from "react";
-import React from "react";
+import { Col, Grid, Text } from '@mantine/core'
+import { bindActionCreators } from 'redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { actionCreators, State } from '../state'
+import { useNavigate, useLocation } from 'react-router'
+import Loading from './Loading'
+import ItemCard from './items/ItemCard'
+import { useEffect } from 'react'
+import React from 'react'
 
 const Featured = ({ title, subTitle }: { title: string; subTitle: string }) => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const { topProducts, loading, error } = useSelector(
     (state: State) => state.topProducts
-  );
+  )
 
   useEffect(() => {
-    bindActionCreators(actionCreators, dispatch);
-  }, [dispatch]);
+    bindActionCreators(actionCreators, dispatch)
+  }, [dispatch])
 
   return (
-    <div style={{ margin: "50px 0" }}>
-      <Text align="center" weight={700} sx={{ fontSize: "1.7rem" }}>
+    <div style={{ margin: '50px 0' }}>
+      <Text align="center" weight={700} sx={{ fontSize: '1.7rem' }}>
         {title}
       </Text>
       <Text
-        sx={{ marginBottom: "2rem" }}
+        sx={{ marginBottom: '2rem' }}
         align="center"
         weight={500}
         color="gray"
@@ -57,12 +57,12 @@ const Featured = ({ title, subTitle }: { title: string; subTitle: string }) => {
                   reviews={product.reviews}
                 />
               </Col>
-            );
+            )
           })
         )}
       </Grid>
     </div>
-  );
-};
+  )
+}
 
-export default Featured;
+export default Featured

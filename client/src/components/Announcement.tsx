@@ -1,22 +1,22 @@
-import { Col, Grid, Image, Text } from "@mantine/core";
-import ad from "../images/ad.png";
-import announcement from "../images/announcement.png";
-import React from "react";
+import { Col, Grid, Image, Text } from '@mantine/core'
+import ad from '../images/ad.png'
+import announcement from '../images/announcement.png'
+import React from 'react'
 
 const Announcement = ({
   title,
-  subTitle,
+  subTitle
 }: {
-  title: string;
-  subTitle: string;
+  title: string
+  subTitle: string
 }) => {
   return (
-    <div style={{ margin: "50px 0" }}>
-      <Text align="center" weight={700} sx={{ fontSize: "1.7rem" }}>
+    <div style={{ margin: '50px 0' }}>
+      <Text align="center" weight={700} sx={{ fontSize: '1.7rem' }}>
         {title}
       </Text>
       <Text
-        sx={{ marginBottom: "2rem" }}
+        sx={{ marginBottom: '2rem' }}
         align="center"
         weight={500}
         color="gray"
@@ -35,17 +35,17 @@ const Announcement = ({
           xl={3}
           span={3}
           sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
         >
           <Image radius="lg" fit="contain" src={ad} />
         </Col>
       </Grid>
     </div>
-  );
-};
+  )
+}
 
-export default Announcement;
+export default Announcement

@@ -1,51 +1,51 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Card, Group, Pagination, Table, Text } from "@mantine/core";
-import React, { useState } from "react";
-import Head from "../../components/Head";
-import Layout from "../../layout/Layout";
-import { useDispatch, useSelector } from "react-redux";
-import { bindActionCreators } from "redux";
-import { actionCreators, asyncAction, State } from "../../state";
-import { useEffect } from "react";
-import Loading from "../../components/Loading";
-import moment from "moment";
-import { useNotifications } from "@mantine/notifications";
+import { Card, Group, Pagination, Table, Text } from '@mantine/core'
+import React, { useState } from 'react'
+import Head from '../../components/Head'
+import Layout from '../../layout/Layout'
+import { useDispatch, useSelector } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actionCreators, asyncAction, State } from '../../state'
+import { useEffect } from 'react'
+import Loading from '../../components/Loading'
+import moment from 'moment'
+import { useNotifications } from '@mantine/notifications'
 
 const UsersList = () => {
-  const dispatch = useDispatch();
-  const notifications = useNotifications();
+  const dispatch = useDispatch()
+  const notifications = useNotifications()
 
-  const [activePage, setActivePage] = useState(1);
+  const [activePage, setActivePage] = useState(1)
 
-  const { getUsers, } = bindActionCreators(actionCreators, dispatch);
+  const { getUsers } = bindActionCreators(actionCreators, dispatch)
 
-  const { users, error, loading } = useSelector((state: State) => state.users);
+  const { users, error, loading } = useSelector((state: State) => state.users)
 
   const handlerPageChange = (page: number) => {
-    setActivePage(page);
-    getUsers(page);
-  };
+    setActivePage(page)
+    getUsers(page)
+  }
 
   useEffect(() => {
-    setActivePage(1);
-    dispatch(asyncAction(getUsers(1)));
-  }, [dispatch]);
+    setActivePage(1)
+    dispatch(asyncAction(getUsers(1)))
+  }, [dispatch])
   useEffect(() => {
     if (error) {
       notifications.showNotification({
-        title: "Oh no!",
+        title: 'Oh no!',
         message: error && error.message,
-        color: "red",
-      });
+        color: 'red'
+      })
     }
-  }, [error, notifications]);
+  }, [error, notifications])
 
   return (
     <Layout>
       <Head title="Users List | Admin" />
 
       <Card shadow="md" radius="lg" withBorder>
-        <Group sx={{ marginBottom: "1rem" }} direction="row" position="apart">
+        <Group sx={{ marginBottom: '1rem' }} direction="row" position="apart">
           <Text weight={700}>Users</Text>
         </Group>
         {loading ? (
@@ -69,15 +69,15 @@ const UsersList = () => {
                       <tr key={user._id}>
                         <td>{user.username}</td>
                         <td>{user.email}</td>
-                        <td>
-                        {user.role === 0 ? 'User' : 'Admin'}
-                        </td>
+                        <td>{user.role === 0 ? 'User' : 'Admin'}</td>
                         <td>{user.phone}</td>
                         <td>
-                          {moment(user.last_login_at).format("DD-MMM-YYYY hh:mm")}
+                          {moment(user.last_login_at).format(
+                            'DD-MMM-YYYY hh:mm'
+                          )}
                         </td>
                         <td>
-                          {moment(user.createdAt).format("DD-MMM-YYYY hh:mm")}
+                          {moment(user.createdAt).format('DD-MMM-YYYY hh:mm')}
                         </td>
                       </tr>
                     ))
@@ -89,13 +89,13 @@ const UsersList = () => {
               page={activePage}
               color="dark"
               radius="xl"
-              onChange={(e) => handlerPageChange(e)}
+              onChange={e => handlerPageChange(e)}
             />
           </Group>
         )}
       </Card>
     </Layout>
-  );
-};
+  )
+}
 
-export default UsersList;
+export default UsersList

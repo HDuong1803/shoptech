@@ -1,20 +1,20 @@
-import { Button, Card, Col, Grid, Image, Text } from "@mantine/core";
-import React, { PropsWithChildren } from "react";
+import { Button, Card, Col, Grid, Image, Text } from '@mantine/core'
+import React, { PropsWithChildren } from 'react'
 
-import { useNavigate } from "react-router";
+import { useNavigate } from 'react-router'
 
 interface IItemCard {
-  id: string;
-  name: string;
-  image: string;
-  brand: string;
-  category: string;
-  description: string;
-  rating: number;
-  numReviews: number;
-  price: number;
-  countInStock: number;
-  reviews: any;
+  id: string
+  name: string
+  image: string
+  brand: string
+  category: string
+  description: string
+  rating: number
+  numReviews: number
+  price: number
+  countInStock: number
+  reviews: any
 }
 
 const ItemCard: React.FC<PropsWithChildren<IItemCard>> = ({
@@ -28,15 +28,15 @@ const ItemCard: React.FC<PropsWithChildren<IItemCard>> = ({
   numReviews,
   price,
   countInStock,
-  reviews,
+  reviews
 }) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   return (
     <Card padding="xl" shadow="xs" radius="lg" withBorder>
       <Grid>
         <Col xs={12} sm={12} md={12} span={6}>
-          <Card.Section sx={{ display: "flex", justifyContent: "center" }}>
+          <Card.Section sx={{ display: 'flex', justifyContent: 'center' }}>
             <Image
               fit="contain"
               height={200}
@@ -49,20 +49,20 @@ const ItemCard: React.FC<PropsWithChildren<IItemCard>> = ({
         <Col xs={12} sm={12} md={12} span={6}>
           <Card.Section>
             <Text size="xl" weight={700}>
-              {name.substring(0, 25) + "..."}
+              {name.substring(0, 25) + '...'}
             </Text>
           </Card.Section>
-          <Card.Section sx={{ marginTop: "1rem" }}>
+          <Card.Section sx={{ marginTop: '1rem' }}>
             <Text size="sm" color="gray" align="justify" weight={500}>
-              {description.substring(0, 90) + "..."}
+              {description.substring(0, 90) + '...'}
             </Text>
-          </Card.Section>{" "}
-          <Card.Section sx={{ marginTop: "1rem" }}>
+          </Card.Section>{' '}
+          <Card.Section sx={{ marginTop: '1rem' }}>
             <Text color="gray" align="left" size="xl" weight={700}>
               ${price}
             </Text>
           </Card.Section>
-          <Card.Section sx={{ marginTop: "1rem" }}>
+          <Card.Section sx={{ marginTop: '1rem' }}>
             <Button
               onClick={() => navigate(`/product/${id}`)}
               variant="filled"
@@ -76,7 +76,7 @@ const ItemCard: React.FC<PropsWithChildren<IItemCard>> = ({
         </Col>
       </Grid>
     </Card>
-  );
-};
+  )
+}
 
-export default ItemCard;
+export default ItemCard

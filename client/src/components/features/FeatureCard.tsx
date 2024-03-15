@@ -1,16 +1,16 @@
-import { Card, Text } from "@mantine/core";
-import React, { PropsWithChildren } from "react";
+import { Card, Text } from '@mantine/core'
+import React, { PropsWithChildren } from 'react'
 
 interface IFeatureCard {
-  title: string;
-  icon: any;
-  backgroundColor: string;
-  textColor: string;
+  title: string
+  icon: any
+  backgroundColor: string
+  textColor: string
 }
 
 const FeatureCard: React.FC<PropsWithChildren<IFeatureCard>> = ({
   title,
-  icon,
+  icon
 }) => {
   return (
     <Card
@@ -25,7 +25,7 @@ const FeatureCard: React.FC<PropsWithChildren<IFeatureCard>> = ({
         {title}
       </Text>
     </Card>
-  );
-};
+  )
+}
 
-export default FeatureCard;
+export default FeatureCard

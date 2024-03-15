@@ -1,183 +1,183 @@
-import { ActionType } from "../action-types";
-import { Action } from "../actions/index";
+import { ActionType } from '../action-types'
+import { Action } from '../actions/index'
 
-const userInfoFromStorage = localStorage.getItem("userInfo")
-  ? JSON.parse(localStorage.getItem("userInfo") || "{}")
-  : null;
+const userInfoFromStorage = localStorage.getItem('userInfo')
+  ? JSON.parse(localStorage.getItem('userInfo') || '{}')
+  : null
 
-const userDetailFromStorage = localStorage.getItem("userDetail")
-  ? JSON.parse(localStorage.getItem("userDetail") || "{}")
-  : null;
+const userDetailFromStorage = localStorage.getItem('userDetail')
+  ? JSON.parse(localStorage.getItem('userDetail') || '{}')
+  : null
 
-const listUserFromStorage = localStorage.getItem("listUser")
-  ? JSON.parse(localStorage.getItem("listUser") || "[]")
-  : null;
+const listUserFromStorage = localStorage.getItem('listUser')
+  ? JSON.parse(localStorage.getItem('listUser') || '[]')
+  : null
 const registerReducer = (
   state = {
     userInfo: userInfoFromStorage,
     error: null,
-    loading: false,
+    loading: false
   },
   action: Action
 ) => {
   switch (action.type) {
     case ActionType.USER_REGISTER_REQUEST:
-      return { ...state, loading: true, error: null };
+      return { ...state, loading: true, error: null }
     case ActionType.USER_REGISTER_SUCCESS:
       return {
         ...state,
         userInfo: action.payload,
         loading: false,
-        error: null,
-      };
+        error: null
+      }
     case ActionType.USER_REGISTER_FAIL:
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload }
     default:
-      return state;
+      return state
   }
-};
+}
 
 const loginReducer = (
   state = {
     userInfo: userInfoFromStorage,
     error: null,
-    loading: false,
+    loading: false
   },
   action: Action
 ) => {
   switch (action.type) {
     case ActionType.USER_LOGIN_REQUEST:
-      return { ...state, loading: true, error: null };
+      return { ...state, loading: true, error: null }
     case ActionType.USER_LOGIN_SUCCESS:
       return {
         ...state,
         userInfo: action.payload,
         loading: false,
-        error: null,
-      };
+        error: null
+      }
     case ActionType.USER_LOGIN_FAIL:
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload }
 
     case ActionType.USER_LOGOUT:
-      return { ...state, userInfo: null, loading: false, error: null };
+      return { ...state, userInfo: null, loading: false, error: null }
     default:
-      return state;
+      return state
   }
-};
+}
 
 const getUserReducer = (
   state = {
     user: userDetailFromStorage,
     error: null,
-    loading: false,
+    loading: false
   },
   action: Action
 ) => {
   switch (action.type) {
     case ActionType.GET_USER_REQUEST:
-      return { ...state, loading: true, error: null };
+      return { ...state, loading: true, error: null }
     case ActionType.GET_USER_SUCCESS:
       return {
         ...state,
         user: action.payload,
         loading: false,
-        error: null,
-      };
+        error: null
+      }
     case ActionType.GET_USER_FAIL:
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload }
     default:
-      return state;
+      return state
   }
-};
+}
 
 const getUsersReducer = (
   state = {
     users: listUserFromStorage,
     error: null,
-    loading: false,
+    loading: false
   },
   action: Action
 ) => {
   switch (action.type) {
     case ActionType.GET_USERS_REQUEST:
-      return { ...state, loading: true, error: null };
+      return { ...state, loading: true, error: null }
     case ActionType.GET_USERS_SUCCESS:
       return {
         ...state,
         user: action.payload,
         loading: false,
-        error: null,
-      };
+        error: null
+      }
     case ActionType.GET_USERS_FAIL:
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload }
     default:
-      return state;
+      return state
   }
-};
+}
 
 const updateProfileReducer = (
   state = {
     profileUpdate: {},
     error: null,
-    loading: false,
+    loading: false
   },
   action: Action
 ) => {
   switch (action.type) {
     case ActionType.UPDATE_PROFILE_REQUEST:
-      return { ...state, loading: true, error: null };
+      return { ...state, loading: true, error: null }
     case ActionType.UPDATE_PROFILE_SUCCESS:
       return {
         ...state,
         profileUpdate: action.payload,
         loading: false,
-        error: null,
-      };
+        error: null
+      }
     case ActionType.UPDATE_PROFILE_FAIL:
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload }
     case ActionType.UPDATE_PROFILE_RESET:
       return {
         ...state,
         loading: false,
         profileUpdate: {},
-        error: action.payload,
-      };
+        error: action.payload
+      }
     default:
-      return state;
+      return state
   }
-};
+}
 
 const updateUserReducer = (
   state = {
     userUpdate: {},
     error: null,
-    loading: false,
+    loading: false
   },
   action: Action
 ) => {
   switch (action.type) {
     case ActionType.UPDATE_USER_REQUEST:
-      return { ...state, loading: true, error: null };
+      return { ...state, loading: true, error: null }
     case ActionType.UPDATE_USER_SUCCESS:
       return {
         ...state,
         userUpdate: action.payload,
         loading: false,
-        error: null,
-      };
+        error: null
+      }
     case ActionType.UPDATE_USER_FAIL:
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload }
     case ActionType.UPDATE_PROFILE_RESET:
       return {
         ...state,
         loading: false,
         userUpdate: {},
-        error: action.payload,
-      };
+        error: action.payload
+      }
     default:
-      return state;
+      return state
   }
-};
+}
 
 export {
   registerReducer,
@@ -186,4 +186,4 @@ export {
   updateProfileReducer,
   updateUserReducer,
   getUsersReducer
-};
+}

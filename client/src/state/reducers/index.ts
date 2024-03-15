@@ -1,29 +1,29 @@
-import { combineReducers } from "redux";
-import { getCartReducer, paymentReducer } from "./cartReducer"
+import { combineReducers } from 'redux'
+import { getCartReducer, paymentReducer } from './cartReducer'
 import {
   createOrderReducer,
   getOrderReducer,
   orderPayReducer,
   getOrdersReducer,
   orderDeliverReducer,
-  getMyOrdersReducer,
-} from "./orderReducers";
+  getMyOrdersReducer
+} from './orderReducers'
 import {
   addReviewReducer,
   createProductReducer,
   getProductReducer,
   getProductsReducer,
   getTopProductsReducer,
-  quickSearchReducer,
-} from "./productReducer";
+  quickSearchReducer
+} from './productReducer'
 import {
   loginReducer,
   registerReducer,
   getUserReducer,
   updateProfileReducer,
   updateUserReducer,
-  getUsersReducer,
-} from "./userReducer";
+  getUsersReducer
+} from './userReducer'
 
 const reducers = combineReducers({
   cart: getCartReducer,
@@ -45,9 +45,9 @@ const reducers = combineReducers({
   quickSearch: quickSearchReducer,
   myOrders: getMyOrdersReducer,
   profileUpdate: updateProfileReducer,
-  userUpdate: updateUserReducer,
-});
+  userUpdate: updateUserReducer
+})
 
-export default reducers;
+export default reducers
 
-export type State = ReturnType<typeof reducers>;
+export type State = ReturnType<typeof reducers>

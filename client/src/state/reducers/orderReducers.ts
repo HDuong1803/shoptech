@@ -1,166 +1,166 @@
-import { ActionType } from "../action-types";
-import { Action } from "../actions/index";
+import { ActionType } from '../action-types'
+import { Action } from '../actions/index'
 
 const createOrderReducer = (
   state = {
     orderCreate: {},
     error: null,
-    loading: false,
+    loading: false
   },
   action: Action
 ) => {
   switch (action.type) {
     case ActionType.CREATE_ORDER_REQUEST:
-      return { ...state, loading: true, error: null };
+      return { ...state, loading: true, error: null }
     case ActionType.CREATE_ORDER_SUCCESS:
       return {
         ...state,
         orderCreate: action.payload,
         loading: false,
-        error: null,
-      };
+        error: null
+      }
     case ActionType.CREATE_ORDER_FAIL:
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload }
     case ActionType.CREATE_ORDER_RESET:
-      return { ...state, loading: false, orderCreate: {} };
+      return { ...state, loading: false, orderCreate: {} }
     default:
-      return state;
+      return state
   }
-};
+}
 
 const getOrderReducer = (
   state = {
     order: {},
     error: null,
-    loading: false,
+    loading: false
   },
   action: Action
 ) => {
   switch (action.type) {
     case ActionType.GET_ORDER_REQUEST:
-      return { ...state, loading: true, error: null };
+      return { ...state, loading: true, error: null }
     case ActionType.GET_ORDER_SUCCESS:
       return {
         ...state,
         order: action.payload,
         loading: false,
-        error: null,
-      };
+        error: null
+      }
     case ActionType.GET_ORDER_FAIL:
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload }
     default:
-      return state;
+      return state
   }
-};
+}
 
 const orderPayReducer = (
   state = {
     url: {},
     error: null,
-    loading: false,
+    loading: false
   },
   action: Action
 ) => {
   switch (action.type) {
     case ActionType.ORDER_PAY_REQUEST:
-      return { ...state, loading: true, error: null };
+      return { ...state, loading: true, error: null }
     case ActionType.ORDER_PAY_SUCCESS:
       return {
         ...state,
         url: action.payload,
         loading: false,
-        error: null,
-      };
+        error: null
+      }
     case ActionType.ORDER_PAY_FAIL:
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload }
     case ActionType.ORDER_PAY_RESET:
-      return { ...state, loading: false, success: {}, error: action.payload };
+      return { ...state, loading: false, success: {}, error: action.payload }
     default:
-      return state;
+      return state
   }
-};
+}
 
 const getOrdersReducer = (
   state = {
     orders: [],
     error: null,
-    loading: false,
+    loading: false
   },
   action: Action
 ) => {
   switch (action.type) {
     case ActionType.GET_ORDERS_REQUEST:
-      return { ...state, loading: true, error: null };
+      return { ...state, loading: true, error: null }
     case ActionType.GET_ORDERS_SUCCESS:
       return {
         ...state,
         orders: action.payload,
         loading: false,
-        error: null,
-      };
+        error: null
+      }
     case ActionType.GET_ORDERS_FAIL:
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload }
     default:
-      return state;
+      return state
   }
-};
+}
 
 const orderDeliverReducer = (
   state = {
     success: false,
     error: null,
-    loading: false,
+    loading: false
   },
   action: Action
 ) => {
   switch (action.type) {
     case ActionType.ORDER_DELIVER_REQUEST:
-      return { ...state, loading: true, error: null };
+      return { ...state, loading: true, error: null }
     case ActionType.ORDER_DELIVER_SUCCESS:
       return {
         ...state,
         success: action.payload,
         loading: false,
-        error: null,
-      };
+        error: null
+      }
     case ActionType.ORDER_DELIVER_FAIL:
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload }
     case ActionType.ORDER_DELIVER_RESET:
       return {
         ...state,
         success: false,
         loading: false,
-        error: null,
-      };
+        error: null
+      }
     default:
-      return state;
+      return state
   }
-};
+}
 
 const getMyOrdersReducer = (
   state = {
     myOrders: [],
     error: null,
-    loading: false,
+    loading: false
   },
   action: Action
 ) => {
   switch (action.type) {
     case ActionType.GET_MY_ORDERS_REQUEST:
-      return { ...state, loading: true, error: null };
+      return { ...state, loading: true, error: null }
     case ActionType.GET_MY_ORDERS_SUCCESS:
       return {
         ...state,
         myOrders: action.payload,
         loading: false,
-        error: null,
-      };
+        error: null
+      }
     case ActionType.GET_MY_ORDERS_FAIL:
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload }
     default:
-      return state;
+      return state
   }
-};
+}
 
 export {
   createOrderReducer,
@@ -168,5 +168,5 @@ export {
   orderPayReducer,
   getOrdersReducer,
   orderDeliverReducer,
-  getMyOrdersReducer,
-};
+  getMyOrdersReducer
+}

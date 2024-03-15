@@ -1,28 +1,28 @@
-import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-import { Provider } from "react-redux";
-import { store } from "./state/index";
-import { MantineProvider } from "@mantine/core";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { NotificationsProvider } from "@mantine/notifications";
-import Home from "./pages/Home";
-import Shop from "./pages/Shop";
-import Product from "./pages/Product";
-import Cart from "./pages/Cart";
-import Login from "./pages/authentication/Login";
-import SignUp from "./pages/authentication/SignUp";
-import Shipping from "./pages/Shipping";
-import Payment from "./pages/Payment";
-import PlaceOrder from "./pages/PlaceOrder";
-import Order from "./pages/Order";
-import Profile from "./pages/Profile";
-import { ModalsProvider } from "@mantine/modals";
-import UsersList from "./pages/ admin/UsersList";
-import ProductsList from "./pages/ admin/ProductsList";
-import OrdersList from "./pages/ admin/OrdersList";
-import NotFound from "./pages/NotFound";
+import ReactDOM from 'react-dom'
+import './index.css'
+import App from './App'
+import reportWebVitals from './reportWebVitals'
+import { Provider } from 'react-redux'
+import { store } from './state/index'
+import { MantineProvider } from '@mantine/core'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { NotificationsProvider } from '@mantine/notifications'
+import Home from './pages/Home'
+import Shop from './pages/Shop'
+import Product from './pages/Product'
+import Cart from './pages/Cart'
+import Login from './pages/authentication/Login'
+import SignUp from './pages/authentication/SignUp'
+import Shipping from './pages/Shipping'
+import Payment from './pages/Payment'
+import PlaceOrder from './pages/PlaceOrder'
+import Order from './pages/Order'
+import Profile from './pages/Profile'
+import { ModalsProvider } from '@mantine/modals'
+import UsersList from './pages/ admin/UsersList'
+import ProductsList from './pages/ admin/ProductsList'
+import OrdersList from './pages/ admin/OrdersList'
+import NotFound from './pages/NotFound'
 
 ReactDOM.render(
   <Provider store={store}>
@@ -33,8 +33,8 @@ ReactDOM.render(
           sm: 800,
           md: 1000,
           lg: 1200,
-          xl: 1400,
-        },
+          xl: 1400
+        }
       }}
     >
       <NotificationsProvider position="top-right">
@@ -66,6 +66,6 @@ ReactDOM.render(
       </NotificationsProvider>
     </MantineProvider>
   </Provider>,
-  document.getElementById("root")
-);
-reportWebVitals();
+  document.getElementById('root')
+)
+reportWebVitals()

@@ -1,13 +1,13 @@
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
 body {
   margin: 0;
-  font-family: "Manrope", sans-serif !important;
+  font-family: 'Manrope', sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: "Be Vietnam Pro", sans-serif;
+  font-family: 'Be Vietnam Pro', sans-serif;
 }
 
 html,
@@ -22,20 +22,20 @@ html a {
 .mantine-1y83scd,
 .mantine-lh1194,
 .mantine-1kfvr5r {
-  font-family: "Manrope", sans-serif !important;
+  font-family: 'Manrope', sans-serif !important;
   -webkit-font-smoothing: antialiased !important;
 }
 
 .header-home {
   color: #000;
   text-decoration: none !important;
-  font-family: "Manrope", sans-serif !important;
+  font-family: 'Manrope', sans-serif !important;
   font-weight: 400;
 }
 
 input,
 .mantine-Card-root {
-  font-family: "Manrope", sans-serif !important;
+  font-family: 'Manrope', sans-serif !important;
 }
 
 .flex-container {

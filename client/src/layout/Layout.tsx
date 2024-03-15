@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { PropsWithChildren, useEffect, useState } from "react";
+import React, { PropsWithChildren, useEffect, useState } from 'react'
 import {
   Container,
   useMantineTheme,
@@ -13,50 +13,49 @@ import {
   Col,
   Text,
   Badge,
-  Select,
-} from "@mantine/core";
-import Footer from "../components/Footer";
-import { AiOutlineUsb } from "react-icons/ai";
-import { Link, useNavigate } from "react-router-dom";
-import { BiShoppingBag, BiUser } from "react-icons/bi";
-import { bindActionCreators } from "redux";
-import { useDispatch, useSelector } from "react-redux";
-import { actionCreators, asyncAction, State } from "../state";
-import { getProduct } from "../state/action-creators";
-import { FiSearch } from "react-icons/fi";
+  Select
+} from '@mantine/core'
+import Footer from '../components/Footer'
+import { AiOutlineUsb } from 'react-icons/ai'
+import { Link, useNavigate } from 'react-router-dom'
+import { BiShoppingBag, BiUser } from 'react-icons/bi'
+import { bindActionCreators } from 'redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { actionCreators, asyncAction, State } from '../state'
+import { getProduct } from '../state/action-creators'
+import { FiSearch } from 'react-icons/fi'
 
 interface LayoutProps {
-  children: any;
+  children: any
 }
 
 const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('')
   const [searchData, setSearchData] = useState([])
-  const { userInfo } = useSelector((state: State) => state.userLogin);
-  const { cartItem } = useSelector((state: State) => state.cart);
-  const { quickSearch } = useSelector((state: State) => state.quickSearch);
-  const [opened, setOpened] = useState(false);
-  const theme = useMantineTheme();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const { userInfo } = useSelector((state: State) => state.userLogin)
+  const { cartItem } = useSelector((state: State) => state.cart)
+  const { quickSearch } = useSelector((state: State) => state.quickSearch)
+  const [opened, setOpened] = useState(false)
+  const theme = useMantineTheme()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
-  const { quickSearchProducts } = bindActionCreators(actionCreators, dispatch);
-  const [initialCartItems, setInitialCartItems] = useState(cartItem.cart || []);
-
+  const { quickSearchProducts } = bindActionCreators(actionCreators, dispatch)
+  const [initialCartItems, setInitialCartItems] = useState(cartItem.cart || [])
 
   const handlerNavigate = (route: string) => {
-    navigate(route);
-    setOpened(false);
-  };
+    navigate(route)
+    setOpened(false)
+  }
   const openMobileNavbar = () => {
     if (opened) {
       return (
         <div className="mobile-header">
           <Grid>
             <Col
-              onClick={() => handlerNavigate("/")}
+              onClick={() => handlerNavigate('/')}
               className="flex-container"
-              sx={{ marginTop: "2rem" }}
+              sx={{ marginTop: '2rem' }}
               span={12}
             >
               <AiOutlineUsb />
@@ -65,8 +64,8 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
               </Text>
             </Col>
             <Col
-              onClick={() => handlerNavigate("/")}
-              sx={{ marginTop: "1rem" }}
+              onClick={() => handlerNavigate('/')}
+              sx={{ marginTop: '1rem' }}
               span={12}
             >
               <Text color="gray" weight={500} size="xl" align="center">
@@ -74,8 +73,8 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
               </Text>
             </Col>
             <Col
-              onClick={() => handlerNavigate("/shop")}
-              sx={{ marginTop: "1rem" }}
+              onClick={() => handlerNavigate('/shop')}
+              sx={{ marginTop: '1rem' }}
               span={12}
             >
               <Text color="gray" weight={500} size="xl" align="center">
@@ -83,17 +82,17 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
               </Text>
             </Col>
             <Col
-              onClick={() => handlerNavigate("/cart")}
-              sx={{ marginTop: "1rem" }}
+              onClick={() => handlerNavigate('/cart')}
+              sx={{ marginTop: '1rem' }}
               span={12}
             >
               <Text color="gray" weight={500} size="xl" align="center">
                 0
               </Text>
             </Col>
-            <Col sx={{ marginTop: "1rem" }} span={12}>
+            <Col sx={{ marginTop: '1rem' }} span={12}>
               <Text
-                onClick={() => handlerNavigate("/profile")}
+                onClick={() => handlerNavigate('/profile')}
                 weight={500}
                 size="xl"
                 align="center"
@@ -103,8 +102,8 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
               </Text>
             </Col>
             <Col
-              onClick={() => handlerNavigate("/login")}
-              sx={{ marginTop: "1rem" }}
+              onClick={() => handlerNavigate('/login')}
+              sx={{ marginTop: '1rem' }}
               span={12}
             >
               {!userInfo && (
@@ -115,22 +114,22 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
             </Col>
           </Grid>
         </div>
-      );
+      )
     } else {
       return (
         <>
           <div
             style={{
-              display: "flex",
-              justifyContent: "center",
-              minHeight: "90vh",
+              display: 'flex',
+              justifyContent: 'center',
+              minHeight: '90vh'
             }}
           >
             <Container
               sx={{
-                marginTop: "7rem",
-                maxWidth: "1620px",
-                width: "100%",
+                marginTop: '7rem',
+                maxWidth: '1620px',
+                width: '100%'
               }}
             >
               {children}
@@ -139,42 +138,46 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
 
           <Footer />
         </>
-      );
+      )
     }
-  };
+  }
 
   const handlerSearch = (value: any) => {
     if (!value) {
-      setValue("");
+      setValue('')
     } else {
       // quickSearchProducts(value.toLowerCase());
     }
-  };
+  }
 
   const handlerSearchSelect = (id: any) => {
-    getProduct(id);
-    navigate(`/product/${id}`);
-  };
+    getProduct(id)
+    navigate(`/product/${id}`)
+  }
 
   useEffect(() => {
-    dispatch(asyncAction(actionCreators.getCart()));
-    if(quickSearch){
-      setSearchData(quickSearch.map((item:any, index: any) => ({ ...item, key: index.toString() })))
+    dispatch(asyncAction(actionCreators.getCart()))
+    if (quickSearch) {
+      setSearchData(
+        quickSearch.map((item: any, index: any) => ({
+          ...item,
+          key: index.toString()
+        }))
+      )
     }
     if (cartItem.cart) {
-      setInitialCartItems(cartItem.cart);
+      setInitialCartItems(cartItem.cart)
     }
-
-  }, [cartItem.cart, quickSearch]);
+  }, [cartItem.cart, quickSearch])
 
   return (
     <>
       <Head height={70} padding="md" fixed>
         <div className="flex-container-horizontal-align-space-between height-full-perc ">
-          <MediaQuery largerThan="sm" styles={{ display: "none" }}>
+          <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
             <Burger
               opened={opened}
-              onClick={() => setOpened((o) => !o)}
+              onClick={() => setOpened(o => !o)}
               size="sm"
               color={theme.colors.gray[6]}
               mr="xl"
@@ -182,41 +185,44 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
           </MediaQuery>
           {/* {openMobileNavbar()} */}
           <div className="flex-container-no-horizontal-align">
-            <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
+            <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
               <AiOutlineUsb />
             </MediaQuery>
-            <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
+            <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
               <Link className="header-home" to="/">
-                Techstop{" "}
+                Techstop{' '}
               </Link>
             </MediaQuery>
           </div>
 
           <div className="flex-container-no-horizontal-align">
-            <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-            <Select
+            <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
+              <Select
                 placeholder="Search for an item..."
                 size="sm"
                 nothingFound="No products"
                 icon={<FiSearch />}
-                onSearchChange={(e) => handlerSearch(e)}
-                onChange={(e) => handlerSearchSelect(e)}
+                onSearchChange={e => handlerSearch(e)}
+                onChange={e => handlerSearchSelect(e)}
                 radius="lg"
                 data={searchData || []}
                 searchable
               />
             </MediaQuery>
 
-            <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
+            <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
               <Button
                 radius="lg"
-                sx={{ margin: "10px", backgroundColor: "#373a40" }}
+                sx={{ margin: '10px', backgroundColor: '#373a40' }}
                 leftIcon={<BiShoppingBag />}
-                onClick={() => navigate("/cart")}
+                onClick={() => navigate('/cart')}
               >
                 {userInfo && initialCartItems ? (
                   <Badge variant="filled" color="red">
-      {initialCartItems.reduce((acc: any, item: any) => acc + item.quantity, 0)}
+                    {initialCartItems.reduce(
+                      (acc: any, item: any) => acc + item.quantity,
+                      0
+                    )}
                   </Badge>
                 ) : (
                   <Badge variant="filled" color="red">
@@ -226,11 +232,11 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
               </Button>
             </MediaQuery>
             {userInfo && (
-              <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
+              <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
                 <ActionIcon
                   size="lg"
-                  onClick={() => navigate("/profile")}
-                  sx={{ margin: "10px" }}
+                  onClick={() => navigate('/profile')}
+                  sx={{ margin: '10px' }}
                   variant="default"
                   radius="lg"
                 >
@@ -239,12 +245,12 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
               </MediaQuery>
             )}
             {!userInfo && (
-              <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
+              <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
                 <Button
-                  onClick={() => navigate("/login")}
+                  onClick={() => navigate('/login')}
                   color="dark"
                   variant="filled"
-                  sx={{ margin: "10px" }}
+                  sx={{ margin: '10px' }}
                   radius="lg"
                   size="sm"
                 >
@@ -257,7 +263,7 @@ const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({ children }) => {
       </Head>
       {openMobileNavbar()}
     </>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout

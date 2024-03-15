@@ -1,46 +1,46 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Col, Grid, Pagination } from "@mantine/core";
-import ItemCard from "../components/items/ItemCard";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import Layout from "../layout/Layout";
-import { useNotifications } from "@mantine/notifications";
-import Head from "../components/Head";
+import { Col, Grid, Pagination } from '@mantine/core'
+import ItemCard from '../components/items/ItemCard'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
+import Layout from '../layout/Layout'
+import { useNotifications } from '@mantine/notifications'
+import Head from '../components/Head'
 
-import { bindActionCreators } from "redux";
-import { actionCreators, State } from "../state";
-import Loading from "../components/Loading";
+import { bindActionCreators } from 'redux'
+import { actionCreators, State } from '../state'
+import Loading from '../components/Loading'
 
 const Shop = () => {
-  const dispatch = useDispatch();
-  const notifications = useNotifications();
+  const dispatch = useDispatch()
+  const notifications = useNotifications()
 
-  const [activePage, setActivePage] = useState(0);
+  const [activePage, setActivePage] = useState(0)
 
-  const { getProducts } = bindActionCreators(actionCreators, dispatch);
+  const { getProducts } = bindActionCreators(actionCreators, dispatch)
   const { products, error, loading } = useSelector(
     (state: State) => state.products
-  );
+  )
 
   const handlerPageChange = (page: number) => {
-    setActivePage(page);
-    getProducts(page);
-  };
+    setActivePage(page)
+    getProducts(page)
+  }
 
   useEffect(() => {
-    setActivePage(1);
-    getProducts(1);
-  }, [dispatch]);
+    setActivePage(1)
+    getProducts(1)
+  }, [dispatch])
 
   useEffect(() => {
     if (error) {
       notifications.showNotification({
-        title: "Error!",
+        title: 'Error!',
         message: error,
-        color: "red",
-      });
+        color: 'red'
+      })
     }
-  }, [error, notifications, dispatch]);
+  }, [error, notifications, dispatch])
 
   return (
     <Layout>
@@ -77,19 +77,19 @@ const Shop = () => {
                 </Col>
               ))
             : null}
-          <Col className="flex-container" sx={{ margin: "1rem 0" }} span={12}>
+          <Col className="flex-container" sx={{ margin: '1rem 0' }} span={12}>
             <Pagination
               total={Math.round(products.total / products.count)}
               page={activePage}
               color="dark"
               radius="xl"
-              onChange={(e) => handlerPageChange(e)}
+              onChange={e => handlerPageChange(e)}
             />
           </Col>
         </Grid>
       )}
     </Layout>
-  );
-};
+  )
+}
 
-export default Shop;
+export default Shop

@@ -16,157 +16,153 @@ import {
   Divider,
   Modal,
   Select,
-  Textarea,
-} from "@mantine/core";
-import { useEffect, useRef, useState } from "react";
-import { AiFillStar } from "react-icons/ai";
-import { useParams } from "react-router";
-import { IoIosCloseCircle, IoIosUnlock } from "react-icons/io";
-import Layout from "../layout/Layout";
-import { FaCheck } from "react-icons/fa";
+  Textarea
+} from '@mantine/core'
+import { useEffect, useRef, useState } from 'react'
+import { AiFillStar } from 'react-icons/ai'
+import { useParams } from 'react-router'
+import { IoIosCloseCircle, IoIosUnlock } from 'react-icons/io'
+import Layout from '../layout/Layout'
+import { FaCheck } from 'react-icons/fa'
 
-import { RiShoppingBagLine } from "react-icons/ri";
-import { useDispatch, useSelector } from "react-redux";
-import ReviewCard from "../components/reviews/ReviewCard";
-import { bindActionCreators } from "redux";
-import { actionCreators, State } from "../state";
-import Head from "../components/Head";
-import Loading from "../components/Loading";
-import { useForm } from "@mantine/hooks";
-import { useNotifications } from "@mantine/notifications";
-import { ActionType } from "../state/action-types";
-import React from "react";
+import { RiShoppingBagLine } from 'react-icons/ri'
+import { useDispatch, useSelector } from 'react-redux'
+import ReviewCard from '../components/reviews/ReviewCard'
+import { bindActionCreators } from 'redux'
+import { actionCreators, State } from '../state'
+import Head from '../components/Head'
+import Loading from '../components/Loading'
+import { useForm } from '@mantine/hooks'
+import { useNotifications } from '@mantine/notifications'
+import { ActionType } from '../state/action-types'
+import React from 'react'
 
 const Product = () => {
-  const params = useParams();
-  const dispatch = useDispatch();
-  const notifications = useNotifications();
+  const params = useParams()
+  const dispatch = useDispatch()
+  const notifications = useNotifications()
 
   const form = useForm({
     initialValues: {
-      rating: "",
-      comment: "",
+      rating: '',
+      comment: ''
     },
     validationRules: {
-      rating: (value) => value.trim().length >= 1,
-      comment: (value) => value.trim().length >= 1,
+      rating: value => value.trim().length >= 1,
+      comment: value => value.trim().length >= 1
     },
     errorMessages: {
-      rating: "Rating is not valid",
-      comment: "Comment is not valid",
-    },
-  });
+      rating: 'Rating is not valid',
+      comment: 'Comment is not valid'
+    }
+  })
 
   const { getProduct, addReview, addToCart } = bindActionCreators(
     actionCreators,
     dispatch
-  );
+  )
 
-  const [value, setValue] = useState<any>(1);
-  const [opened, setOpened] = useState(false);
-  const [hasReviewed, setHasReviewed] = useState(false);
+  const [value, setValue] = useState<any>(1)
+  const [opened, setOpened] = useState(false)
+  const [hasReviewed, setHasReviewed] = useState(false)
 
-  const handlers = useRef<NumberInputHandlers>(null);
+  const handlers = useRef<NumberInputHandlers>(null)
 
-  const { product, loading } = useSelector((state: State) => state.product);
+  const { product, loading } = useSelector((state: State) => state.product)
 
-  const { quickSearch } = useSelector((state: State) => state.quickSearch);
+  const { quickSearch } = useSelector((state: State) => state.quickSearch)
 
-  const { userInfo } = useSelector((state: State) => state.userLogin);
+  const { userInfo } = useSelector((state: State) => state.userLogin)
   const {
     review,
     loading: reviewLoading,
-    error: reviewError,
-  } = useSelector((state: State) => state.review);
+    error: reviewError
+  } = useSelector((state: State) => state.review)
 
   const ratingLevels = [
-    { value: "1", label: "1 - Poor" },
-    { value: "2", label: "2 - Fair" },
-    { value: "3", label: "3 - Good" },
-    { value: "4", label: "4 - Very Good" },
-    { value: "5", label: "5 - Excellent" },
-  ];
+    { value: '1', label: '1 - Poor' },
+    { value: '2', label: '2 - Fair' },
+    { value: '3', label: '3 - Good' },
+    { value: '4', label: '4 - Very Good' },
+    { value: '5', label: '5 - Excellent' }
+  ]
 
   const renderFeaturesList = (description: any) => {
-    const features = description.split(", ");
+    const features = description.split(', ')
 
     return (
       <List size="md">
         {features.map((feature: string) => {
           return (
             <List.Item
-              sx={{ color: "gray", lineHeight: "32px", fontWeight: "500" }}
+              sx={{ color: 'gray', lineHeight: '32px', fontWeight: '500' }}
             >
               {feature}
             </List.Item>
-          );
+          )
         })}
       </List>
-    );
-  };
+    )
+  }
 
   const handlerAddReview = (values: any) => {
-    const { rating, comment } = values;
-    addReview(params.id as string, parseInt(rating), comment);
-    setOpened(false);
+    const { rating, comment } = values
+    addReview(params.id as string, parseInt(rating), comment)
+    setOpened(false)
     dispatch({
-      type: ActionType.ADD_REVIEW_RESET,
-    });
-  };
+      type: ActionType.ADD_REVIEW_RESET
+    })
+  }
 
-  const handlerAddToCart = (product_id: string,
+  const handlerAddToCart = (
+    product_id: string,
     name: string,
     quantity: number,
     image: string,
-    price: number) => {
-    addToCart(product_id,
-      name,
-      quantity,
-      image,
-      price);
-  };
+    price: number
+  ) => {
+    addToCart(product_id, name, quantity, image, price)
+  }
 
   useEffect(() => {
     if (reviewError !== null) {
       notifications.showNotification({
-        title: "Error!",
+        title: 'Error!',
         message: reviewError,
-        color: "red",
-      });
+        color: 'red'
+      })
     }
     dispatch({
-      type: ActionType.ADD_REVIEW_RESET,
-    });
-  }, [reviewError]);
+      type: ActionType.ADD_REVIEW_RESET
+    })
+  }, [reviewError])
 
   useEffect(() => {
-    if (review && Object.keys(review).includes("message")) {
+    if (review && Object.keys(review).includes('message')) {
       notifications.showNotification({
-        title: "Success!",
+        title: 'Success!',
         message: review.message,
-        color: "green",
-      });
+        color: 'green'
+      })
     }
-  }, [review]);
+  }, [review])
 
   useEffect(() => {
-    if(product.reviews) {
+    if (product.reviews) {
       const list_user_id = product.reviews.map((user: any) => {
-        return user.user_id;
-      });
+        return user.user_id
+      })
 
-    if (Object.keys(product).length && product.reviews.length) {
-      const userReviewed = list_user_id.includes(userInfo.data.detail._id);
-      setHasReviewed(userReviewed);
+      if (Object.keys(product).length && product.reviews.length) {
+        const userReviewed = list_user_id.includes(userInfo.data.detail._id)
+        setHasReviewed(userReviewed)
+      }
     }
-    }
-
-    
-}, [product, userInfo, setHasReviewed]);
+  }, [product, userInfo, setHasReviewed])
 
   useEffect(() => {
-    getProduct(params.id as string);
-  }, [dispatch, review, quickSearch]);
+    getProduct(params.id as string)
+  }, [dispatch, review, quickSearch])
 
   return (
     <Layout>
@@ -176,11 +172,11 @@ const Product = () => {
         onClose={() => setOpened(false)}
         radius="lg"
       >
-        <form onSubmit={form.onSubmit((values) => handlerAddReview(values))}>
+        <form onSubmit={form.onSubmit(values => handlerAddReview(values))}>
           <Select
             label="Your Rating"
             placeholder="Your Rating"
-            {...form.getInputProps("rating")}
+            {...form.getInputProps('rating')}
             error={form.errors.rating}
             value={value}
             data={ratingLevels}
@@ -188,17 +184,17 @@ const Product = () => {
             required
           />
           <Textarea
-            sx={{ marginTop: "1rem" }}
+            sx={{ marginTop: '1rem' }}
             label="Your Comment"
             placeholder="Your Comment"
-            {...form.getInputProps("comment")}
+            {...form.getInputProps('comment')}
             error={form.errors.comment}
             radius="lg"
             required
           />
           <Button
             type="submit"
-            sx={{ marginTop: "1rem" }}
+            sx={{ marginTop: '1rem' }}
             radius="lg"
             color="dark"
             loading={reviewLoading}
@@ -222,9 +218,9 @@ const Product = () => {
                 />
                 <Col
                   sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
                   }}
                   xs={12}
                   sm={12}
@@ -233,14 +229,14 @@ const Product = () => {
                   xl={4}
                   span={4}
                 >
-                  {" "}
+                  {' '}
                   <Image
                     radius="lg"
                     fit="contain"
                     sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center'
                     }}
                     width={300}
                     height={300}
@@ -258,29 +254,29 @@ const Product = () => {
                       {product.countInStock === 0 ? (
                         <Badge
                           color="red"
-                          sx={{ marginLeft: "10px" }}
+                          sx={{ marginLeft: '10px' }}
                           variant="filled"
                         >
-                          {" "}
+                          {' '}
                           Sold Out
                         </Badge>
                       ) : (
                         <Badge
                           color="green"
-                          sx={{ marginLeft: "10px" }}
+                          sx={{ marginLeft: '10px' }}
                           variant="filled"
                         >
-                          {" "}
+                          {' '}
                           In Stock
                         </Badge>
                       )}
                     </Group>
-                    <Divider />{" "}
-                    <Group sx={{ margin: "1rem 0" }}>
+                    <Divider />{' '}
+                    <Group sx={{ margin: '1rem 0' }}>
                       {renderFeaturesList(product.description)}
                     </Group>
                     <Divider />
-                    <Group position="apart" sx={{ margin: "1rem 0" }}>
+                    <Group position="apart" sx={{ margin: '1rem 0' }}>
                       <Group position="left">
                         <Group spacing={5}>
                           <ActionIcon
@@ -295,13 +291,13 @@ const Product = () => {
                           <NumberInput
                             hideControls
                             value={value}
-                            onChange={(val) => setValue(val)}
+                            onChange={val => setValue(val)}
                             handlersRef={handlers}
                             max={10}
                             min={1}
                             step={1}
                             styles={{
-                              input: { width: 54, textAlign: "center" },
+                              input: { width: 54, textAlign: 'center' }
                             }}
                             radius="lg"
                           />
@@ -327,7 +323,15 @@ const Product = () => {
                           leftIcon={<RiShoppingBagLine />}
                           radius="lg"
                           color="dark"
-                          onClick={() => handlerAddToCart(product._id,product.name,product.quantity,product.image,product.price)}
+                          onClick={() =>
+                            handlerAddToCart(
+                              product._id,
+                              product.name,
+                              product.quantity,
+                              product.image,
+                              product.price
+                            )
+                          }
                         >
                           Add to Cart
                         </Button>
@@ -338,7 +342,7 @@ const Product = () => {
               </Grid>
             )}
           </Card>
-          <Card sx={{ marginTop: "1.5rem" }} radius="lg" shadow="xl" withBorder>
+          <Card sx={{ marginTop: '1.5rem' }} radius="lg" shadow="xl" withBorder>
             {Object.keys(product).length && (
               <Group position="apart">
                 <Text color="gray" size="md" weight={600}>
@@ -346,12 +350,12 @@ const Product = () => {
                 </Text>
                 <div
                   style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center'
                   }}
                 >
-                  <Text weight={600} sx={{ marginRight: "10px" }}>
+                  <Text weight={600} sx={{ marginRight: '10px' }}>
                     {product.rating.toFixed(1)}
                   </Text>
                   <AiFillStar color="orange" size="18" />
@@ -359,43 +363,43 @@ const Product = () => {
               </Group>
             )}
 
-{Object.keys(product).length && (
-        <>
-          {hasReviewed && userInfo ? (
-            <Alert
-              icon={<FaCheck size={16} />}
-              sx={{ marginTop: "1rem" }}
-              color="blue"
-              radius="lg"
-            >
-              You have already reviewed this product
-            </Alert>
-          ) : userInfo ? (
-            <Group sx={{ marginTop: "1rem" }} position="right">
-              <Button
-                radius="lg"
-                sx={{ marginLeft: "10px" }}
-                color="dark"
-                size="xs"
-                onClick={() => setOpened(true)}
-              >
-                Add Review
-              </Button>
-            </Group>
-          ) : (
-            <Alert
-              icon={<IoIosUnlock size={16} />}
-              sx={{ marginTop: "1rem" }}
-              color="blue"
-              radius="lg"
-            >
-              Log In to add a review
-            </Alert>
-          )}
-        </>
-      )}
+            {Object.keys(product).length && (
+              <>
+                {hasReviewed && userInfo ? (
+                  <Alert
+                    icon={<FaCheck size={16} />}
+                    sx={{ marginTop: '1rem' }}
+                    color="blue"
+                    radius="lg"
+                  >
+                    You have already reviewed this product
+                  </Alert>
+                ) : userInfo ? (
+                  <Group sx={{ marginTop: '1rem' }} position="right">
+                    <Button
+                      radius="lg"
+                      sx={{ marginLeft: '10px' }}
+                      color="dark"
+                      size="xs"
+                      onClick={() => setOpened(true)}
+                    >
+                      Add Review
+                    </Button>
+                  </Group>
+                ) : (
+                  <Alert
+                    icon={<IoIosUnlock size={16} />}
+                    sx={{ marginTop: '1rem' }}
+                    color="blue"
+                    radius="lg"
+                  >
+                    Log In to add a review
+                  </Alert>
+                )}
+              </>
+            )}
 
-            <div style={{ marginTop: "1rem" }}>
+            <div style={{ marginTop: '1rem' }}>
               {Object.keys(product).length && product.reviews.length ? (
                 product.reviews.map((review: any) => {
                   return (
@@ -407,12 +411,12 @@ const Product = () => {
                       rating={review.rating}
                       key={review._id}
                     />
-                  );
+                  )
                 })
               ) : (
                 <Alert
                   icon={<IoIosCloseCircle size={16} />}
-                  sx={{ marginTop: "1rem" }}
+                  sx={{ marginTop: '1rem' }}
                   color="blue"
                   radius="lg"
                 >
@@ -424,7 +428,7 @@ const Product = () => {
         </>
       )}
     </Layout>
-  );
-};
+  )
+}
 
-export default Product;
+export default Product
