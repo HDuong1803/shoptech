@@ -1,7 +1,10 @@
 import type { Request, Response } from 'express'
 import winston from 'winston'
 import path from 'path'
-
+/**
+ * Creates a new instance of a Winston logger with the specified formats and transports.
+ * @returns {Logger} - A new instance of a Winston logger.
+ */
 const logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.splat(),

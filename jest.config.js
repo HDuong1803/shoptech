@@ -2,6 +2,14 @@
 module.exports = {
   preset: '@shelf/jest-mongodb',
   testEnvironment: 'node',
+  globals: {
+    'ts-jest': {
+      tsconfig: '<rootDir>/tsconfig.json'
+    }
+  },
+  transform: {
+    '^.+\\.ts?$': 'ts-jest'
+  },
   moduleNameMapper: {
     '@app': '<rootDir>/src/app/index.ts',
     '@constants': '<rootDir>/src/constants/index.ts',
@@ -9,6 +17,6 @@ module.exports = {
     '@schemas': '<rootDir>/src/schemas/index.ts',
     '@providers': '<rootDir>/src/providers/index.ts'
   },
-  modulePathIgnorePatterns: ['<rootDir>/build/', '<rootDir>/node_modules/']
-  // setupFilesAfterEnv: ['<rootDir>/jest.setup.ts']
+  modulePathIgnorePatterns: ['<rootDir>/build/', '<rootDir>/node_modules/'],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts']
 }
