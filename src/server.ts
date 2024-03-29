@@ -18,7 +18,7 @@ initialDatabase()
   .then(() => {
     initialAdmin()
       .then(() => {
-        logger.info(`[InitialAdmin] ${Constant.ADMIN_INITIAL_USERNAME}`)
+        logger.info(`[InitialAdmin] ${Constant.ADMIN_INITIAL_EMAIL}`)
       })
       .catch((error: any) => {
         logger.error(`[InitialAdmin]1 ${error.message}`)

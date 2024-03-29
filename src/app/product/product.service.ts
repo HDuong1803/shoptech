@@ -11,7 +11,7 @@ import { Constant } from '@constants'
 import { ProductDB, UserDB } from '@schemas'
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import mime from 'mime-types'
-import { keccak256 } from 'ethers'
+import { keccak256 } from 'ethers/lib/utils'
 class ProductService {
   public async addProductItem(body: InputItem): Promise<IProduct> {
     const newItem = await ProductDB.create({

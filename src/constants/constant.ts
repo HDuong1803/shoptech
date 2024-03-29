@@ -1,3 +1,6 @@
+import 'dotenv/config'
+import { ethers } from 'ethers'
+
 export interface PayloadJwt {
   email?: string
   role?: number
@@ -14,6 +17,27 @@ const USER_ROLE = {
   USER: 0
 }
 
+const OTP_TIMEOUT = 60000
+
+/**
+ * Generates a verification code for a user based on their username, hashed password, and a timestamp.
+ * @param {string} username - The username of the user.
+ * @param {string} hashed_password - The hashed password of the user.
+ * @param {Date} timestamp - The timestamp to use for generating the verification code.
+ * @returns {string} The verification code as a hashed value.
+ */
+const getVerifyCode = (
+  username: string,
+  hashed_password: string,
+  timestamp: Date
+) => {
+  const secret_key = `${username}-${hashed_password}`
+  const hashed_value = ethers.utils.hashMessage(
+    `${timestamp.getTime()}${secret_key}`
+  )
+  return hashed_value
+}
+
 /**
  * An object containing various constants used throughout the application.
  */
@@ -23,7 +47,7 @@ const Constant = {
   JWT_SECRET: `${process.env.JWT_SECRET}`,
   JWT_SECRET_REFRESH: `${process.env.JWT_SECRET_REFRESH}`,
   ADMIN_INITIAL_PASSWORD: `${process.env.ADMIN_INITIAL_PASSWORD}`,
-  ADMIN_INITIAL_USERNAME: `${process.env.ADMIN_INITIAL_USERNAME}`,
+  ADMIN_INITIAL_EMAIL: `${process.env.ADMIN_INITIAL_EMAIL}`,
   PORT: `${process.env.PORT}`,
   MONGODB_URL: `${process.env.MONGODB_URL}`,
   SECRET: `${process.env.SECRET}`,
@@ -36,7 +60,7 @@ const Constant = {
   STRIPE_SK: `${process.env.STRIPE_SK}`,
   PUBLIC_URL: `${process.env.PUBLIC_URL}`,
   ENDPOINT_SECRET: `${process.env.ENDPOINT_SECRET}`,
-  ADMIN_NAME: 'admin',
+  ADMIN_USERNAME: 'admin',
   ADMIN_PHONE_NUMBER: '0000000000',
 
   NETWORK_STATUS_CODE: {
@@ -75,4 +99,4 @@ const Constant = {
   SHIPPING_PRICE: 0
 }
 
-export { Constant }
+export { Constant, getVerifyCode, OTP_TIMEOUT }
