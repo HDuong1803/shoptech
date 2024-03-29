@@ -1,22 +1,13 @@
-import {
-  type IUser,
-  InputLogin,
-  InputSignUp,
-  type OutputListUser,
-  type OutputLogin,
-  type OutputSignUp
-} from '@app'
+import { type IUser, type OutputListUser } from '@app'
 import { Constant, type Option } from '@constants'
 import { logError, onError, onSuccess } from '@constants'
 import { AdminMiddleware, AuthMiddleware } from '@middlewares'
 import { Singleton } from '@providers'
 import { Request as ExpressRequest } from 'express'
 import {
-  Body,
   Controller,
   Get,
   Query,
-  Post,
   Middlewares,
   Request,
   Route,
@@ -33,105 +24,6 @@ const { NETWORK_STATUS_MESSAGE } = Constant
 @Tags('User')
 @Route('user')
 export class UserController extends Controller {
-  @Post('/signup')
-  @Example<any>(
-    {
-      data: {
-        detail: {
-          username: 'Hai Duong',
-          email: 'dohaiduong@gmail.com',
-          password:
-            '0xc888c9ce9e098d5864d3ded6ebcc140a12142263bace3a23a36f9905f12bd64a',
-          role: 0,
-          phone: '0123456789',
-          refresh_token:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRvaGFpZHVvbmcxODAzQGdtYWlsLmNvbSIsInJvbGUiOjAsImlhdCI6MTcxMDEyOTk3MiwiZXhwIjoxNzEwNzM0NzcyfQ.aVAEsX70x0dnPCj5RENYopsUSZj-iAOrYy7pjaZFZ9g',
-          _id: '65ee83346d40675eb65026b0',
-          createdAt: '2024-03-11T04:06:12.649Z',
-          updatedAt: '2024-03-11T04:06:12.649Z',
-          __v: 0
-        },
-        access_token:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRvaGFpZHVvbmcxODAzQGdtYWlsLmNvbSIsInJvbGUiOjAsImlhdCI6MTcxMDEyOTk3MiwiZXhwIjoxNzEwMjE2MzcyfQ.y5LnnlMMY1SqwLQCm87c6XTAw4qSsg7GBPbi7Z2tX_E',
-        refresh_token:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRvaGFpZHVvbmcxODAzQGdtYWlsLmNvbSIsInJvbGUiOjAsImlhdCI6MTcxMDEyOTk3MiwiZXhwIjoxNzEwNzM0NzcyfQ.aVAEsX70x0dnPCj5RENYopsUSZj-iAOrYy7pjaZFZ9g'
-      },
-      success: true,
-      message: 'Success',
-      count: 1
-    },
-    'Success'
-  )
-  @Response<any>('401', NETWORK_STATUS_MESSAGE.UNAUTHORIZED, {
-    success: false,
-    message: NETWORK_STATUS_MESSAGE.UNAUTHORIZED
-  })
-  @Response<any>('422', NETWORK_STATUS_MESSAGE.VALIDATE_ERROR, {
-    success: false,
-    message: NETWORK_STATUS_MESSAGE.VALIDATE_ERROR
-  })
-  @Response<any>('500', NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR, {
-    success: false,
-    message: NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR
-  })
-  public async userSignUp(
-    @Request() req: ExpressRequest,
-    @Body() body: InputSignUp
-  ): Promise<Option<OutputSignUp>> {
-    try {
-      const res = await Singleton.getUserInstance().userSignUp(body)
-      return onSuccess(res)
-    } catch (error: any) {
-      logError(error, req)
-      return onError(error, this)
-    }
-  }
-
-  @Post('/login')
-  @Example<any>(
-    {
-      data: {
-        detail: {
-          _id: '65defc93ce29856a1d3d3687',
-          password:
-            '0xc888c9ce9e098d5864d3ded6ebcc140a12142263bace3a23a36f9905f12bd64a'
-        },
-        access_token:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTAxMzAwNTksImV4cCI6MTcxMDIxNjQ1OX0.pZ3As0GmbqlMf0i1veMyGxma-e5AK74hC3a25ObRnSg',
-        refresh_token:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTAxMzAwNTksImV4cCI6MTcxMDczNDg1OX0.2Pl02EpIU3unkLgmMiU5O5ANEDOvv0bmxAN-1s-x9ws'
-      },
-      success: true,
-      message: 'Success',
-      count: 1
-    },
-    'Success'
-  )
-  @Response<any>('401', NETWORK_STATUS_MESSAGE.UNAUTHORIZED, {
-    success: false,
-    message: NETWORK_STATUS_MESSAGE.UNAUTHORIZED
-  })
-  @Response<any>('422', NETWORK_STATUS_MESSAGE.VALIDATE_ERROR, {
-    success: false,
-    message: NETWORK_STATUS_MESSAGE.VALIDATE_ERROR
-  })
-  @Response<any>('500', NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR, {
-    success: false,
-    message: NETWORK_STATUS_MESSAGE.INTERNAL_SERVER_ERROR
-  })
-  public async userLogin(
-    @Request() req: ExpressRequest,
-    @Body() body: InputLogin
-  ): Promise<Option<OutputLogin>> {
-    try {
-      const res = await Singleton.getUserInstance().userLogin(body)
-      return onSuccess(res)
-    } catch (error: any) {
-      logError(error, req)
-      return onError(error, this)
-    }
-  }
-
   @Security({
     authorization: []
   })

@@ -1,44 +1,45 @@
 import type {
-  InputLoginAdmin,
+  InputLogin,
   InputRefreshToken,
+  InputSignUp,
   InputVerifyPassword,
+  OutputLogin,
   OutputLogout,
   OutputRefreshToken,
+  OutputSignUp,
   OutputSubmitUser,
   OutputVerifyPassword
 } from '@app'
 import { Constant, ErrorHandler } from '@constants'
 import { hashText, renewJWT, signJWT } from '@providers'
-import { TokenDB, UserDB } from '@schemas'
+import { CartDB, TokenDB, UserDB } from '@schemas'
 import { OAuth2Client, type TokenPayload } from 'google-auth-library'
 
 class AuthService {
-  public async loginAdmin(body: InputLoginAdmin): Promise<any> {
+  public async userLogin(body: InputLogin): Promise<OutputLogin> {
     /**
      * Check if admin exist in database, if not throw error invalid email
      */
-    const isAdminExist = await UserDB.findOne({
-      email: body.email,
-      role: Constant.USER_ROLE.ADMIN
-    })
-
-    if (!isAdminExist) {
+    const isUserExist = await UserDB.findOne({ email: body.email })
+    if (!isUserExist) {
       throw new ErrorHandler(
         {
           email: {
-            message: 'email is not exist',
+            message: 'Email is not exist',
             value: body.email
           }
         },
         Constant.NETWORK_STATUS_MESSAGE.UNAUTHORIZED
       )
     }
+
     /**
      * Hashes the given password using a secure one-way hashing algorithm.
      */
     const hashed_password = hashText(body.password)
     /**
      * Finds a user in the database with the given email and password.
+     * The object will have all attributes except for those specified in this.excludeAdminUserData.
      */
     const res = await UserDB.findOne({
       email: body.email,
@@ -47,21 +48,29 @@ class AuthService {
     if (res) {
       res.last_login_at = new Date()
       await res.save()
+      /**
+       * Generates a JSON Web Token (JWT) with the given user information and secret key.
+       */
       const jwtPayload = signJWT({
         email: res.email,
         role: res.role,
         phone: res.phone
       })
+
       await UserDB.findOneAndUpdate(
         { email: body.email, role: Constant.USER_ROLE.ADMIN },
         { $set: { refresh_token: hashText(jwtPayload.refresh_token) } },
         { upsert: true }
       )
+
       await TokenDB.findOneAndUpdate(
-        { user_id: res.id },
+        {
+          user_id: res.id
+        },
         { $set: { token: hashText(jwtPayload.access_token) } },
         { upsert: true }
       )
+
       return {
         detail: res.toJSON(),
         ...jwtPayload
@@ -76,6 +85,69 @@ class AuthService {
       },
       Constant.NETWORK_STATUS_MESSAGE.UNAUTHORIZED
     )
+  }
+
+  public async userSignUp(body: InputSignUp): Promise<OutputSignUp> {
+    const isUserExist = await UserDB.findOne({ email: body.email })
+    if (isUserExist) {
+      throw new ErrorHandler(
+        {
+          email: {
+            message: 'Email already exists',
+            value: body.email
+          }
+        },
+        Constant.NETWORK_STATUS_MESSAGE.UNAUTHORIZED
+      )
+    }
+
+    /**
+     * Hashes the given password using a secure one-way hashing algorithm.
+     */
+    const hashed_password = hashText(body.password)
+
+    /**
+     * Generates a JSON Web Token (JWT) with the given user information and secret key.
+     */
+    const jwtPayload = signJWT({
+      email: body.email,
+      role: Constant.USER_ROLE.USER
+    })
+
+    /**
+     * Create a new user in the database with the provided information.
+     */
+    let newUser
+    try {
+      newUser = await UserDB.create({
+        username: body.username,
+        email: body.email,
+        phone: body.phone,
+        password: hashed_password,
+        role: Constant.USER_ROLE.USER,
+        refresh_token: jwtPayload.refresh_token
+      })
+    } catch (error) {
+      throw new Error('Failed to signup')
+    }
+
+    await TokenDB.findOneAndUpdate(
+      {
+        user_id: newUser._id
+      },
+      { $set: { token: hashText(jwtPayload.access_token) } },
+      { upsert: true }
+    )
+
+    await CartDB.create({
+      user_id: newUser._id,
+      cart: []
+    })
+
+    return {
+      detail: newUser.toJSON(),
+      ...jwtPayload
+    }
   }
 
   /**
@@ -115,10 +187,10 @@ class AuthService {
    */
   async verifyPassword(
     body: InputVerifyPassword,
-    id: string
+    email: string
   ): Promise<OutputVerifyPassword> {
     const userRes = await UserDB.findOne({
-      _id: id,
+      email,
       password: hashText(body.password)
     })
     return {

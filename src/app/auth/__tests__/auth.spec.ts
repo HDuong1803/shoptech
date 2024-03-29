@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import { AuthService, inputLoginAdminValidate } from '@app'
+import { AuthService, inputLoginValidate } from '@app'
 import { Constant } from '@constants'
 import { initialAdmin, verifyJWT } from '@providers'
 
@@ -27,99 +27,93 @@ describe('auth', () => {
     expect(authService).toBeInstanceOf(AuthService)
   })
 
-  it('Check admin email and password defined', async () => {
+  it('Check email and password defined', async () => {
     expect(email).toBeDefined()
     expect(password).toBeDefined()
   })
 
-  it('Check admin email and password is validate', async () => {
+  it('Check email and password is validate', async () => {
     /**
      * Tests whether the input for the login admin validation function is valid.
      */
-    expect(inputLoginAdminValidate({ email, password })).toBeNull()
+    expect(inputLoginValidate({ email, password })).toBeNull()
     expect(
-      inputLoginAdminValidate({ email: 'abc.def@mail.com', password })
+      inputLoginValidate({ email: 'abc.def@mail.com', password })
+    ).toBeNull()
+    expect(inputLoginValidate({ email: 'abc@mail.com', password })).toBeNull()
+    expect(
+      inputLoginValidate({ email: 'abc_def@mail.com', password })
     ).toBeNull()
     expect(
-      inputLoginAdminValidate({ email: 'abc@mail.com', password })
+      inputLoginValidate({ email: 'abc.def@mail.cc', password })
     ).toBeNull()
     expect(
-      inputLoginAdminValidate({ email: 'abc_def@mail.com', password })
-    ).toBeNull()
-    expect(
-      inputLoginAdminValidate({ email: 'abc.def@mail.cc', password })
-    ).toBeNull()
-    expect(
-      inputLoginAdminValidate({
+      inputLoginValidate({
         email: 'abc.def@mail-archive.com',
         password
       })
     ).toBeNull()
     expect(
-      inputLoginAdminValidate({ email: 'abc.def@mail.org', password })
+      inputLoginValidate({ email: 'abc.def@mail.org', password })
     ).toBeNull()
     expect(
-      inputLoginAdminValidate({ email: 'abc.def@mail.com', password })
+      inputLoginValidate({ email: 'abc.def@mail.com', password })
     ).toBeNull()
   })
 
-  it('Check admin password is not validate', async () => {
+  it('Check password is not validate', async () => {
     /**
-     * Tests the inputLoginAdminValidate function with a given email and password.
+     * Tests the inputLoginValidate function with a given email and password.
      * Expects the function to return false.
      */
-    expect(inputLoginAdminValidate({ email, password: '123456' })).toBeDefined()
+    expect(inputLoginValidate({ email, password: '123456' })).toBeDefined()
+    expect(inputLoginValidate({ email, password: '12345678910' })).toBeDefined()
     expect(
-      inputLoginAdminValidate({ email, password: '12345678910' })
-    ).toBeDefined()
-    expect(
-      inputLoginAdminValidate({ email, password: '123456789ABC' })
+      inputLoginValidate({ email, password: '123456789ABC' })
     ).toBeDefined()
   })
 
-  it('Check admin email is not validate', async () => {
+  it('Check email is not validate', async () => {
     /**
-     * Tests the inputLoginAdminValidate function with a given email and password.
+     * Tests the inputLoginValidate function with a given email and password.
      * Expects the function to return false.
      */
-    expect(inputLoginAdminValidate({ email: 'abc', password })).toBeDefined()
+    expect(inputLoginValidate({ email: 'abc', password })).toBeDefined()
     expect(
-      inputLoginAdminValidate({ email: 'abc-@mail.com', password })
+      inputLoginValidate({ email: 'abc-@mail.com', password })
     ).toBeDefined()
     expect(
-      inputLoginAdminValidate({ email: 'abc..def@mail.com', password })
+      inputLoginValidate({ email: 'abc..def@mail.com', password })
     ).toBeDefined()
     expect(
-      inputLoginAdminValidate({ email: '.abc@mail.com', password })
+      inputLoginValidate({ email: '.abc@mail.com', password })
     ).toBeDefined()
     expect(
-      inputLoginAdminValidate({ email: 'abc#def@mail.com', password })
+      inputLoginValidate({ email: 'abc#def@mail.com', password })
     ).toBeDefined()
     expect(
-      inputLoginAdminValidate({ email: 'abc.def@mail.c', password })
+      inputLoginValidate({ email: 'abc.def@mail.c', password })
     ).toBeDefined()
     expect(
-      inputLoginAdminValidate({
+      inputLoginValidate({
         email: 'abc.def@mail#archive.com',
         password
       })
     ).toBeDefined()
     expect(
-      inputLoginAdminValidate({ email: 'abc.def@mail', password })
+      inputLoginValidate({ email: 'abc.def@mail', password })
     ).toBeDefined()
     expect(
-      inputLoginAdminValidate({ email: 'abc.def@mail..com', password })
+      inputLoginValidate({ email: 'abc.def@mail..com', password })
     ).toBeDefined()
-    expect(
-      inputLoginAdminValidate({ email: `@${email}`, password })
-    ).toBeDefined()
+    expect(inputLoginValidate({ email: `@${email}`, password })).toBeDefined()
   })
 
   it('Login with email and password', async () => {
     /**
      * Logs in an admin user with the given email and password.
      */
-    const resLoginAdmin = await authService.loginAdmin({
+    const resLoginAdmin = await authService.userLogin({
       password,
       email
     })
@@ -130,7 +124,7 @@ describe('auth', () => {
     /**
      * Logs in an admin user with the given email and wrong password.
      */
-    const resLoginAdmin = authService.loginAdmin({
+    const resLoginAdmin = authService.userLogin({
       password: `${password}1`,
       email
     })
@@ -139,12 +133,12 @@ describe('auth', () => {
     )
   })
 
-  it('Get admin info by login', async () => {
+  it('Get user info by login', async () => {
     /**
      * Logs in an admin user with the given email and password.
      * Get admin info by login after submit mnemonic
      */
-    const resLoginAdmin = await authService.loginAdmin({
+    const resLoginAdmin = await authService.userLogin({
       password,
       email
     })
@@ -155,7 +149,7 @@ describe('auth', () => {
     /**
      * Logs in an admin user with the given email and password.
      */
-    const resLoginAdmin = await authService.loginAdmin({
+    const resLoginAdmin = await authService.userLogin({
       password,
       email
     })
@@ -174,7 +168,7 @@ describe('auth', () => {
     /**
      * Logs in an admin user with the given email and password.
      */
-    const resLoginAdmin = await authService.loginAdmin({
+    const resLoginAdmin = await authService.userLogin({
       password,
       email
     })
@@ -204,7 +198,7 @@ describe('auth', () => {
     /**
      * Logs in an admin user with the given email and password.
      */
-    const resLoginAdmin = await authService.loginAdmin({
+    const resLoginAdmin = await authService.userLogin({
       password,
       email
     })
@@ -216,7 +210,7 @@ describe('auth', () => {
       {
         password
       },
-      resLoginAdmin.detail._id.toString()
+      resLoginAdmin.detail?.email as string
     )
     expect(isVerifyPassword.authorized).toBeTruthy()
   })

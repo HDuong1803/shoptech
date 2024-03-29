@@ -1,14 +1,12 @@
-import type { InputLoginAdmin } from '@app'
+import type { InputLogin } from '@app'
 import { type FieldErrors } from 'tsoa'
 
 /**
  * Validates the input for an admin login.
- * @param {InputLoginAdmin} body - The input object containing the email and password.
+ * @param {InputLogin} body - The input object containing the email and password.
  * @returns {boolean} - True if the input is valid, false otherwise.
  */
-export const inputLoginAdminValidate = (
-  body: InputLoginAdmin
-): FieldErrors | null => {
+export const inputLoginValidate = (body: InputLogin): FieldErrors | null => {
   try {
     /**
      * Checks if the length of the email in the request body is between 8 and 256 characters.
