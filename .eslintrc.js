@@ -17,6 +17,7 @@ module.exports = {
     '@typescript-eslint/restrict-template-expressions': 'off',
     '@typescript-eslint/indent': 'off',
     '@typescript-eslint/no-extraneous-class': 'off',
-    '@typescript-eslint/naming-convention': 'off'
+    '@typescript-eslint/naming-convention': 'off',
+    '@typescript-eslint/consistent-type-assertions': 'off'
   }
 }
