@@ -6,9 +6,17 @@ import {
   type OutputVerifyPassword,
   VerifyGoogleInput,
   type OutputLogout,
-  type OutputRefreshToken
+  type OutputRefreshToken,
+  inputLoginAdminValidate
 } from '@app'
-import { Constant, logError, onError, onSuccess, type Option } from '@constants'
+import {
+  Constant,
+  ErrorHandler,
+  logError,
+  onError,
+  onSuccess,
+  type Option
+} from '@constants'
 import { AuthMiddleware } from '@middlewares'
 import { Singleton } from '@providers'
 import { Request as ExpressRequest } from 'express'
@@ -28,6 +36,16 @@ const { NETWORK_STATUS_MESSAGE } = Constant
 @Tags('Auth')
 @Route('auth')
 export class AuthController extends Controller {
+  /**
+   * Logs in an admin user and returns either an authentication token or the admin user's information.
+   * @param {ExpressRequest} req - The Express request object.
+   * @param {InputLoginAdmin} body - The login credentials for the admin user.
+   * @returns {Promise<Option<string | IUser>>} - A promise that resolves to either an authentication token or the admin user's information.
+   * @throws {UnauthorizedError} - If the user is not authorized to access the admin information.
+   * @throws {NotFoundError} - If the admin user is not found.
+   * @throws {ValidationError} - If there is a validation error with the request.
+   * @throws {InternalServerError} - If there is an internal server error.
+   */
   @Post('admin/login')
   @Example<any>(
     {
@@ -74,6 +92,19 @@ export class AuthController extends Controller {
     @Body() body: InputLoginAdmin
   ): Promise<any> {
     try {
+      /**
+       * Validates the input login admin body and throws an error if it is invalid.
+       */
+      const validate = inputLoginAdminValidate(body)
+      if (validate) {
+        throw new ErrorHandler(
+          validate,
+          Constant.NETWORK_STATUS_MESSAGE.VALIDATE_ERROR
+        )
+      }
+      /**
+       * Logs in the admin user using the provided credentials.
+       */
       const res = await Singleton.getAuthInstance().loginAdmin(body)
       return onSuccess(res)
     } catch (error: any) {
@@ -120,6 +151,14 @@ export class AuthController extends Controller {
     }
   }
 
+  /**
+   * Verifies the admin user's password.
+   * @param {ExpressRequest} req - The Express request object.
+   * @param {InputVerifyPassword} body - The body containt password.
+   * @returns {Promise<Option<OutputVerifyPassword>>} - A promise that resolves to either an authentication token.
+   * @throws {NotFoundError} - If the admin/user is not found.
+   * @throws {InternalServerError} - If there is an internal server error.
+   */
   @Post('verify/password')
   @Example<any>(
     {
@@ -162,6 +201,13 @@ export class AuthController extends Controller {
     }
   }
 
+  /**
+   * Logs out the admin/user.
+   * @param {ExpressRequest} req - The Express request object.
+   * @returns {Promise<Option<OutputLogout>>} - A promise that resolves to either an authentication token.
+   * @throws {NotFoundError} - If the admin/user is not found.
+   * @throws {InternalServerError} - If there is an internal server error.
+   */
   @Post('logout')
   @Example<any>(
     {

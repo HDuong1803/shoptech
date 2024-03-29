@@ -14,26 +14,34 @@ import { OAuth2Client, type TokenPayload } from 'google-auth-library'
 
 class AuthService {
   public async loginAdmin(body: InputLoginAdmin): Promise<any> {
+    /**
+     * Check if admin exist in database, if not throw error invalid email
+     */
     const isAdminExist = await UserDB.findOne({
-      username: body.username,
+      email: body.email,
       role: Constant.USER_ROLE.ADMIN
     })
 
     if (!isAdminExist) {
       throw new ErrorHandler(
         {
-          username: {
-            message: 'Username is not exist',
-            value: body.username
+          email: {
+            message: 'email is not exist',
+            value: body.email
           }
         },
         Constant.NETWORK_STATUS_MESSAGE.UNAUTHORIZED
       )
     }
-
+    /**
+     * Hashes the given password using a secure one-way hashing algorithm.
+     */
     const hashed_password = hashText(body.password)
+    /**
+     * Finds a user in the database with the given email and password.
+     */
     const res = await UserDB.findOne({
-      username: body.username,
+      email: body.email,
       password: hashed_password
     })
     if (res) {
@@ -45,7 +53,7 @@ class AuthService {
         phone: res.phone
       })
       await UserDB.findOneAndUpdate(
-        { username: body.username, role: Constant.USER_ROLE.ADMIN },
+        { email: body.email, role: Constant.USER_ROLE.ADMIN },
         { $set: { refresh_token: hashText(jwtPayload.refresh_token) } },
         { upsert: true }
       )
@@ -70,6 +78,11 @@ class AuthService {
     )
   }
 
+  /**
+   * Refreshes the access token of a user or admin.
+   * @param {InputRefreshToken} body - The refresh token of user or admin.
+   * @returns {OutputRefreshToken} - A object.
+   */
   async refreshToken(body: InputRefreshToken): Promise<OutputRefreshToken> {
     try {
       const { access_token, payload } = renewJWT(body.refresh_token)
@@ -92,6 +105,14 @@ class AuthService {
     }
   }
 
+  /**
+   * Verifies the password of a user or admin.
+   * @param {InputVerifyPassword} body - The password of user or admin.
+   * @param {string} address - The address of user or admin.
+   * @returns {Promise<OutputVerifyPassword>} - A promise that resolves to a object.
+   * If the password is not correct, an error is thrown.
+   * If the user or admin is not found, an error is thrown.
+   */
   async verifyPassword(
     body: InputVerifyPassword,
     id: string
@@ -105,11 +126,21 @@ class AuthService {
     }
   }
 
+  /**
+   * Logs out a user or admin.
+   * @param {string} access_token - The access token of user or admin.
+   * @returns {Promise<OutputLogout>} - A promise that resolves to a object.
+   */
   async logout(access_token: string): Promise<OutputLogout> {
     await TokenDB.deleteOne({ token: hashText(access_token) })
     return { logout: true }
   }
 
+  /**
+   * Verifies google token id.
+   * @param {string} google_token_id - The google token id of user or admin.
+   * @returns {Promise<OutputSubmitUser>} - A promise that resolves to a object.
+   */
   async verifyGoogle(google_token_id: string): Promise<OutputSubmitUser> {
     const client = new OAuth2Client()
     const ticket = await client.verifyIdToken({
