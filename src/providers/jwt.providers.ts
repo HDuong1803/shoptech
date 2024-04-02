@@ -18,7 +18,8 @@ const renewJWT = (
   return {
     access_token: signJWT({
       email: payload.email,
-      role: payload.role
+      role: payload.role,
+      phone: payload.phone
     }).access_token,
     payload
   }

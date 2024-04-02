@@ -18,7 +18,7 @@ import { OAuth2Client, type TokenPayload } from 'google-auth-library'
 class AuthService {
   public async userLogin(body: InputLogin): Promise<OutputLogin> {
     /**
-     * Check if admin exist in database, if not throw error invalid email
+     * Check if user exist in database, if not throw error invalid email
      */
     const isUserExist = await UserDB.findOne({ email: body.email })
     if (!isUserExist) {
@@ -180,7 +180,7 @@ class AuthService {
   /**
    * Verifies the password of a user or admin.
    * @param {InputVerifyPassword} body - The password of user or admin.
-   * @param {string} address - The address of user or admin.
+   * @param {string} email - The email of user or admin.
    * @returns {Promise<OutputVerifyPassword>} - A promise that resolves to a object.
    * If the password is not correct, an error is thrown.
    * If the user or admin is not found, an error is thrown.
