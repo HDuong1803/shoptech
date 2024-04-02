@@ -5,9 +5,11 @@ import {
   InputReview,
   type OutputListProduct,
   type OutputSearchProduct,
-  type OutputUpload
+  type OutputUpload,
+  inputItemValidate,
+  inputReviewValidate
 } from '@app'
-import { Constant, type Option } from '@constants'
+import { Constant, ErrorHandler, type Option } from '@constants'
 import { logError, onError, onSuccess } from '@constants'
 import { AdminMiddleware, AuthMiddleware } from '@middlewares'
 import { Singleton } from '@providers'
@@ -316,6 +318,16 @@ export class ProductController extends Controller {
     @Query() product_id: string
   ): Promise<Option<IReview>> {
     try {
+      /**
+       * Validates the input review body and throws an error if it is invalid.
+       */
+      const validate = inputReviewValidate(body)
+      if (validate) {
+        throw new ErrorHandler(
+          validate,
+          Constant.NETWORK_STATUS_MESSAGE.VALIDATE_ERROR
+        )
+      }
       const user_id = req.headers.id as string
       const res = await Singleton.getProductInstance().addProductReview(
         body,
@@ -374,6 +386,16 @@ export class ProductController extends Controller {
     @Body() body: InputItem
   ): Promise<Option<IProduct>> {
     try {
+      /**
+       * Validates the input item body and throws an error if it is invalid.
+       */
+      const validate = inputItemValidate(body)
+      if (validate) {
+        throw new ErrorHandler(
+          validate,
+          Constant.NETWORK_STATUS_MESSAGE.VALIDATE_ERROR
+        )
+      }
       const res = await Singleton.getProductInstance().addProductItem(body)
       return onSuccess(res)
     } catch (error: any) {

@@ -4,6 +4,12 @@ import { stripe } from '@providers'
 import { CartDB, OrderDB, UserDB } from '@schemas'
 
 class OrderService {
+  /**
+   * Retrieves a list of orders with pagination.
+   * @param {number} page - The page number.
+   * @param {number} limit - The maximum number of orders per page.
+   * @returns {Promise<any>} - A promise that resolves to an object containing the list of orders and total count.
+   */
   public async getListOrders(page: number, limit: number): Promise<any> {
     const offset = (page - 1) * limit
 
@@ -21,6 +27,12 @@ class OrderService {
     }
   }
 
+  /**
+   * Retrieves a specific order by its ID.
+   * @param {string} _id - The ID of the order to retrieve.
+   * @returns {Promise<any>} - A promise that resolves to the order object if found.
+   * If the order is not found, an error is thrown.
+   */
   public async getOrder(_id: string): Promise<any> {
     const order = await OrderDB.findById(_id)
     if (order) {
@@ -29,6 +41,11 @@ class OrderService {
     throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
   }
 
+  /**
+   * Updates an order to mark it as paid.
+   * @param {string} _id - The ID of the order to be updated.
+   * @returns {Promise<any>} - A promise that resolves to the updated order object.
+   */
   public async updateOrderToPaid(_id?: string): Promise<any> {
     const order = await OrderDB.findById(_id)
     if (order) {
@@ -46,6 +63,11 @@ class OrderService {
     throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
   }
 
+  /**
+   * Updates an order to mark it as delivered.
+   * @param {string} _id - The ID of the order to be updated.
+   * @returns {Promise<any>} - A promise that resolves to the updated order object.
+   */
   public async updateOrderToDelivered(_id?: string): Promise<any> {
     const order = await OrderDB.findById(_id)
     if (order) {
@@ -59,6 +81,12 @@ class OrderService {
     throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
   }
 
+  /**
+   * Adds order items to create a new order.
+   * @param {InputOrderItem} body - The order item details.
+   * @param {string} user_id - The ID of the user placing the order.
+   * @returns {Promise<any>} - A promise that resolves to the created order object.
+   */
   public async addOrderItems(
     body?: InputOrderItem,
     user_id?: string
@@ -94,6 +122,12 @@ class OrderService {
     return createdOrder
   }
 
+  /**
+   * Retrieves a checkout session URL for payment processing.
+   * @param {string} user_id - The ID of the user making the order.
+   * @param {string} order_id - The ID of the order for checkout.
+   * @returns {Promise<any>} - A promise that resolves to the checkout session URL.
+   */
   public async getCheckout(user_id: string, order_id: string): Promise<any> {
     const user = await UserDB.findById(user_id)
     const order = await OrderDB.findById(order_id)
@@ -131,6 +165,11 @@ class OrderService {
     return session.url
   }
 
+  /**
+   * Retrieves orders placed by a specific user.
+   * @param {string} user_id - The ID of the user.
+   * @returns {Promise<any>} - A promise that resolves to the list of orders for the user.
+   */
   public async getOrderOfUser(user_id: string): Promise<any> {
     const user = await UserDB.findById(user_id)
     const order = await OrderDB.find({ user_id: user?._id.toString() })
