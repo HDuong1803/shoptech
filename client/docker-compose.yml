@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  shop_client:
+    container_name: shop_client
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 3000:3000
+    networks:
+      - shop_network
+
+networks:
+  shop_network:
+    driver: bridge
+    name: shop_network
