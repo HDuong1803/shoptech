@@ -60,6 +60,11 @@ const Constant = {
   STRIPE_SK: `${process.env.STRIPE_SK}`,
   PUBLIC_URL: `${process.env.PUBLIC_URL}`,
   ENDPOINT_SECRET: `${process.env.ENDPOINT_SECRET}`,
+  EMAIL_HOST: `${process.env.EMAIL_HOST}`,
+  EMAIL_USERNAME: `${process.env.EMAIL_USERNAME}`,
+  EMAIL_PASSWORD: `${process.env.EMAIL_PASSWORD}`,
+  EMAIL_FROM: `${process.env.EMAIL_FROM}`,
+
   ADMIN_USERNAME: 'admin',
   ADMIN_PHONE_NUMBER: '0000000000',
 
