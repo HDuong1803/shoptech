@@ -16,8 +16,8 @@ export const inputItemValidate = (body: InputItem): FieldErrors | null => {
       !body?.description ||
       !body?.price ||
       body?.price <= 0 ||
-      !body?.countInStock ||
-      body?.countInStock < 0
+      !body?.count_in_stock ||
+      body?.count_in_stock < 0
     ) {
       return {
         error: {

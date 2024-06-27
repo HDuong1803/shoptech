@@ -17,6 +17,12 @@ const USER_ROLE = {
   USER: 0
 }
 
+const PAYMENT_STATUS = {
+  PENDING: 'PENDING',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED'
+}
+
 const OTP_TIMEOUT = 60000
 
 /**
@@ -48,8 +54,9 @@ const Constant = {
   JWT_SECRET_REFRESH: `${process.env.JWT_SECRET_REFRESH}`,
   ADMIN_INITIAL_PASSWORD: `${process.env.ADMIN_INITIAL_PASSWORD}`,
   ADMIN_INITIAL_EMAIL: `${process.env.ADMIN_INITIAL_EMAIL}`,
+  ADMIN_VERIFICATION_CODE: `${process.env.ADMIN_VERIFICATION_CODE}`,
   PORT: `${process.env.PORT}`,
-  MONGODB_URL: `${process.env.MONGODB_URL}`,
+  DATABASE_URL: `${process.env.DATABASE_URL}`,
   SECRET: `${process.env.SECRET}`,
   GOOGLE_ID: `${process.env.GOOGLE_ID}`,
   GOOGLE_SECRET: `${process.env.GOOGLE_SECRET}`,
@@ -98,10 +105,12 @@ const Constant = {
     LOGIN_BEFORE: 'Please login before',
     OTP_EXPIRED: 'OTP expired',
     INVALID_VERIFY_CODE: 'Invalid verify code',
-    ADMIN_NOT_FOUND: 'Admin not found'
+    ADMIN_NOT_FOUND: 'Admin not found',
+    ALREADY_EXISTS: 'Already exists'
   },
   USER_ROLE,
-  SHIPPING_PRICE: 0
+  SHIPPING_PRICE: 0,
+  PAYMENT_STATUS
 }
 
 export { Constant, getVerifyCode, OTP_TIMEOUT }

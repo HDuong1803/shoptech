@@ -70,8 +70,8 @@ export class OrdersController extends Controller {
           total_price: 1999.98,
           is_paid: true,
           is_delivered: false,
-          createdAt: '2024-03-08T06:54:34.518Z',
-          updatedAt: '2024-03-08T06:54:34.518Z',
+          created_at: '2024-03-08T06:54:34.518Z',
+          updated_at: '2024-03-08T06:54:34.518Z',
           __v: 0
         }
       ],
@@ -150,8 +150,8 @@ export class OrdersController extends Controller {
           total_price: 1999.98,
           is_paid: true,
           is_delivered: false,
-          createdAt: '2024-03-08T06:54:34.518Z',
-          updatedAt: '2024-03-08T06:54:34.518Z',
+          created_at: '2024-03-08T06:54:34.518Z',
+          updated_at: '2024-03-08T06:54:34.518Z',
           __v: 0
         }
       ],
@@ -298,8 +298,8 @@ export class OrdersController extends Controller {
           total_price: 1999.98,
           is_paid: true,
           is_delivered: false,
-          createdAt: '2024-03-08T06:54:34.518Z',
-          updatedAt: '2024-03-08T06:54:34.518Z',
+          created_at: '2024-03-08T06:54:34.518Z',
+          updated_at: '2024-03-08T06:54:34.518Z',
           __v: 0
         }
       ],
@@ -377,8 +377,8 @@ export class OrdersController extends Controller {
           total_price: 1999.98,
           is_paid: true,
           is_delivered: false,
-          createdAt: '2024-03-08T06:54:34.518Z',
-          updatedAt: '2024-03-08T06:54:34.518Z',
+          created_at: '2024-03-08T06:54:34.518Z',
+          updated_at: '2024-03-08T06:54:34.518Z',
           __v: 0
         }
       ],

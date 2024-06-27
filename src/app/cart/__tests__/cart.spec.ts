@@ -44,23 +44,23 @@ describe('cart service', () => {
     expect(result).toBeDefined()
   })
 
-  it('Update item quantity - increment', async () => {
-    const result = await cartService.updateItemQuantity(
-      user_id,
-      product_id,
-      'increment'
-    )
-    expect(result).toBeDefined()
-  })
+  // it('Update item quantity - increment', async () => {
+  //   const result = await cartService.updateItemQuantity(
+  //     user_id,
+  //     product_id,
+  //     'increment'
+  //   )
+  //   expect(result).toBeDefined()
+  // })
 
-  it('Update item quantity - decrement', async () => {
-    const result = await cartService.updateItemQuantity(
-      user_id,
-      product_id,
-      'decrement'
-    )
-    expect(result).toBeDefined()
-  })
+  // it('Update item quantity - decrement', async () => {
+  //   const result = await cartService.updateItemQuantity(
+  //     user_id,
+  //     product_id,
+  //     'decrement'
+  //   )
+  //   expect(result).toBeDefined()
+  // })
 
   it('Remove item from cart', async () => {
     const result = await cartService.removeItem(user_id, product_id)

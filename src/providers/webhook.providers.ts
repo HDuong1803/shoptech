@@ -1,6 +1,6 @@
 import type { Request } from 'express'
 import { Constant } from '@constants'
-import { OrderDB } from '@schemas'
+import { db } from '@utils'
 import { buffer } from 'micro'
 import Stripe from 'stripe'
 
@@ -36,9 +36,14 @@ export async function handler(req: Request): Promise<any> {
         orderId = data.metadata.orderId
         paid = data.payment_status === 'paid'
         if (orderId && paid) {
-          await OrderDB.findByIdAndUpdate(orderId, {
-            is_paid: true,
-            paid_at: new Date(Date.now())
+          await db.order.update({
+            where: {
+              id: orderId
+            },
+            data: {
+              is_paid: true,
+              paid_at: new Date(Date.now())
+            }
           })
         }
       } else {

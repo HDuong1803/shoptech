@@ -63,28 +63,28 @@ export class ProductController extends Controller {
               name: 'Adithya',
               rating: 5,
               comment: 'Light weight and easy to use.',
-              createdAt: '2024-01-01T12:36:27.249Z',
-              updatedAt: '2024-01-01T12:36:27.249Z'
+              created_at: '2024-01-01T12:36:27.249Z',
+              updated_at: '2024-01-01T12:36:27.249Z'
             },
             {
               _id: '61f929b352258858000c6539',
               name: 'Steve',
               rating: 5,
               comment: 'Great laptop',
-              createdAt: '2024-01-01T12:38:11.234Z',
-              updatedAt: '2024-01-01T12:38:11.234Z'
+              created_at: '2024-01-01T12:38:11.234Z',
+              updated_at: '2024-01-01T12:38:11.234Z'
             },
             {
               _id: '61f92a1b75e5339fc3836059',
               name: 'Jay',
               rating: 4,
               comment: 'Good but not excellent',
-              createdAt: '2024-01-01T12:39:55.347Z',
-              updatedAt: '2024-01-01T12:39:55.347Z'
+              created_at: '2024-01-01T12:39:55.347Z',
+              updated_at: '2024-01-01T12:39:55.347Z'
             }
           ],
-          createdAt: '2024-01-30T09:02:32.052Z',
-          updatedAt: '2024-01-01T12:39:55.347Z',
+          created_at: '2024-01-30T09:02:32.052Z',
+          updated_at: '2024-01-01T12:39:55.347Z',
           __v: 3
         },
         {
@@ -101,8 +101,8 @@ export class ProductController extends Controller {
           price: 199.99,
           countInStock: 100,
           reviews: [],
-          createdAt: '2024-01-02T15:03:24.114Z',
-          updatedAt: '2024-01-02T15:03:24.114Z',
+          created_at: '2024-01-02T15:03:24.114Z',
+          updated_at: '2024-01-02T15:03:24.114Z',
           __v: 0
         }
       ],
@@ -157,8 +157,8 @@ export class ProductController extends Controller {
         price: 199.99,
         countInStock: 100,
         reviews: [],
-        createdAt: '2024-01-02T15:03:24.114Z',
-        updatedAt: '2024-01-02T15:03:24.114Z',
+        created_at: '2024-01-02T15:03:24.114Z',
+        updated_at: '2024-01-02T15:03:24.114Z',
         __v: 0
       },
       success: true,
@@ -209,8 +209,8 @@ export class ProductController extends Controller {
         price: 199.99,
         countInStock: 100,
         reviews: [],
-        createdAt: '2024-01-02T15:03:24.114Z',
-        updatedAt: '2024-01-02T15:03:24.114Z',
+        created_at: '2024-01-02T15:03:24.114Z',
+        updated_at: '2024-01-02T15:03:24.114Z',
         __v: 0
       },
       success: true,
@@ -359,8 +359,8 @@ export class ProductController extends Controller {
         price: 199.99,
         countInStock: 100,
         reviews: [],
-        createdAt: '2024-01-02T15:03:24.114Z',
-        updatedAt: '2024-01-02T15:03:24.114Z',
+        created_at: '2024-01-02T15:03:24.114Z',
+        updated_at: '2024-01-02T15:03:24.114Z',
         __v: 0
       },
       success: true,
@@ -421,8 +421,8 @@ export class ProductController extends Controller {
         price: 199.99,
         countInStock: 100,
         reviews: [],
-        createdAt: '2023-07-02T15:03:24.114Z',
-        updatedAt: '2023-07-02T15:03:24.114Z',
+        created_at: '2023-07-02T15:03:24.114Z',
+        updated_at: '2023-07-02T15:03:24.114Z',
         __v: 0
       },
       success: true,

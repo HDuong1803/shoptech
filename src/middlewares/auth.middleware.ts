@@ -1,4 +1,4 @@
-import { TokenDB, UserDB } from '@schemas'
+import { db } from '@utils'
 import { type NextFunction, type Request, type Response } from 'express'
 import { Constant, logError, onError } from '@constants'
 import { hashText } from '@providers'
@@ -25,8 +25,10 @@ const AuthMiddleware = async (
         .json(onError(NETWORK_STATUS_MESSAGE.UNAUTHORIZED))
     }
 
-    const tokenInDB = await TokenDB.findOne({
-      token: hashText(authorization)
+    const tokenInDB = await db.token.findUnique({
+      where: {
+        token: hashText(authorization)
+      }
     })
 
     if (!tokenInDB) {
@@ -65,8 +67,10 @@ const AdminMiddleware = async (
     /**
      * Finds a user in the database with the given address and role of "admin".
      */
-    const userRes = await UserDB.findOne({
-      role: Constant.USER_ROLE.ADMIN
+    const userRes = await db.user.findFirst({
+      where: {
+        role: Constant.USER_ROLE.ADMIN
+      }
     })
     /**
      * Checks if the user response exists. If it does not exist, returns an error response

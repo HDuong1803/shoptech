@@ -1,6 +1,6 @@
-import type { IUser, OutputListUser } from '@app'
+import type { InputUpdateUser, IUser, OutputListUser } from '@app'
 import { Constant } from '@constants'
-import { UserDB } from '@schemas'
+import { db } from '@utils'
 
 class UserService {
   /**
@@ -10,9 +10,9 @@ class UserService {
    * If the user is not found, an error is thrown.
    */
   public async getUser(user_id: string): Promise<IUser> {
-    const user = await UserDB.findById(user_id)
+    const user = await db.user.findUnique({ where: { id: user_id } })
     if (user) {
-      return await user.toJSON()
+      return user
     }
     throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
   }
@@ -29,9 +29,12 @@ class UserService {
   ): Promise<OutputListUser> {
     const offset = (page - 1) * limit
 
-    const users = await UserDB.find().skip(offset).limit(limit).exec()
+    const users = await db.user.findMany({
+      skip: offset,
+      take: limit
+    })
 
-    const totalUsers = await UserDB.countDocuments()
+    const totalUsers = await db.user.count()
 
     return {
       data: users,
@@ -49,28 +52,25 @@ class UserService {
    */
   public async updateUser(
     user_id?: string,
-    name?: string,
-    password?: string,
-    phone?: string
+    body?: InputUpdateUser
   ): Promise<IUser> {
-    if (!user_id) {
-      throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
+    const user = await db.user.findUnique({ where: { id: user_id } })
+
+    if (!user) {
+      throw new Error(Constant.NETWORK_STATUS_MESSAGE.UNAUTHORIZED)
     }
-    const res = await UserDB.findById(user_id)
-    if (!res) {
-      throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
-    }
-    if (name) {
-      res.username = name
-    }
-    if (password) {
-      res.password = password
-    }
-    if (phone) {
-      res.phone = phone
-    }
-    await res.save()
-    return res
+
+    const updatedUser = await db.user.update({
+      where: { id: user_id },
+      data: {
+        username: body?.username ?? user.username,
+        password: body?.password ?? user.password,
+        phone: body?.phone ?? user.phone,
+        avatar_url: body?.avatar_url ?? user.avatar_url
+      }
+    })
+
+    return updatedUser
   }
 }
 

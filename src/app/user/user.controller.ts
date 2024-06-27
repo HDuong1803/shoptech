@@ -1,4 +1,4 @@
-import { type IUser, type OutputListUser } from '@app'
+import { InputUpdateUser, type IUser, type OutputListUser } from '@app'
 import { Constant, type Option } from '@constants'
 import { logError, onError, onSuccess } from '@constants'
 import { AdminMiddleware, AuthMiddleware } from '@middlewares'
@@ -16,7 +16,7 @@ import {
   Example,
   Response,
   Put,
-  BodyProp
+  Body
 } from 'tsoa'
 
 const { NETWORK_STATUS_MESSAGE } = Constant
@@ -41,8 +41,8 @@ export class UserController extends Controller {
         phone: '0123456789',
         refresh_token:
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRvaGFpZHVvbmdAZ21haWwuY29tIiwicm9sZSI6MCwicGhvbmUiOiIwMTIzNDU2Nzg5IiwiaWF0IjoxNzA5MTEyNDY3LCJleHAiOjE3MDk3MTcyNjd9.6XOsho37RCTYvrwjSVcB5tqiPaYyIIQA_Z2dnKqzQZk',
-        createdAt: '2024-02-28T09:27:47.341Z',
-        updatedAt: '2024-02-28T09:27:47.341Z',
+        created_at: '2024-02-28T09:27:47.341Z',
+        updated_at: '2024-02-28T09:27:47.341Z',
         __v: 0
       },
       success: true,
@@ -89,8 +89,8 @@ export class UserController extends Controller {
           phone: '0000000000',
           refresh_token:
             '0xb847a239586a0166465cc55cc329e584cc6267eb00070c292d0f9bcb8624e369',
-          createdAt: '2024-02-26T08:39:40.396Z',
-          updatedAt: '2024-03-11T02:49:46.992Z',
+          created_at: '2024-02-26T08:39:40.396Z',
+          updated_at: '2024-03-11T02:49:46.992Z',
           __v: 0,
           last_login_at: '2024-03-11T02:49:46.663Z'
         },
@@ -104,8 +104,8 @@ export class UserController extends Controller {
           phone: '0123456789',
           refresh_token:
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRvaGFpZHVvbmdAZ21haWwuY29tIiwicm9sZSI6MCwicGhvbmUiOiIwMTIzNDU2Nzg5IiwiaWF0IjoxNzA5MTEyNDY3LCJleHAiOjE3MDk3MTcyNjd9.6XOsho37RCTYvrwjSVcB5tqiPaYyIIQA_Z2dnKqzQZk',
-          createdAt: '2024-02-28T09:27:47.341Z',
-          updatedAt: '2024-02-28T09:27:47.341Z',
+          created_at: '2024-02-28T09:27:47.341Z',
+          updated_at: '2024-02-28T09:27:47.341Z',
           __v: 0
         }
       ],
@@ -158,8 +158,8 @@ export class UserController extends Controller {
         phone: '0123456789',
         refresh_token:
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRvaGFpZHVvbmdAZ21haWwuY29tIiwicm9sZSI6MCwicGhvbmUiOiIwMTIzNDU2Nzg5IiwiaWF0IjoxNzA5MTEyNDY3LCJleHAiOjE3MDk3MTcyNjd9.6XOsho37RCTYvrwjSVcB5tqiPaYyIIQA_Z2dnKqzQZk',
-        createdAt: '2024-02-28T09:27:47.341Z',
-        updatedAt: '2024-02-28T09:27:47.341Z',
+        created_at: '2024-02-28T09:27:47.341Z',
+        updated_at: '2024-02-28T09:27:47.341Z',
         __v: 0
       },
       success: true,
@@ -182,18 +182,11 @@ export class UserController extends Controller {
   })
   public async updateUser(
     @Request() req: ExpressRequest,
-    @BodyProp() name: string,
-    @BodyProp() password: string,
-    @BodyProp() phone: string
+    @Body() body: InputUpdateUser
   ): Promise<Option<IUser>> {
     try {
       const user_id = req.headers.id as string
-      const result = await Singleton.getUserInstance().updateUser(
-        user_id,
-        name,
-        phone,
-        password
-      )
+      const result = await Singleton.getUserInstance().updateUser(user_id, body)
       return onSuccess(result)
     } catch (error: any) {
       logError(error, req)

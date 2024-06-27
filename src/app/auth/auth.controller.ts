@@ -121,8 +121,8 @@ export class AuthController extends Controller {
           refresh_token:
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRvaGFpZHVvbmcxODAzQGdtYWlsLmNvbSIsInJvbGUiOjAsImlhdCI6MTcxMDEyOTk3MiwiZXhwIjoxNzEwNzM0NzcyfQ.aVAEsX70x0dnPCj5RENYopsUSZj-iAOrYy7pjaZFZ9g',
           _id: '65ee83346d40675eb65026b0',
-          createdAt: '2024-03-11T04:06:12.649Z',
-          updatedAt: '2024-03-11T04:06:12.649Z',
+          created_at: '2024-03-11T04:06:12.649Z',
+          updated_at: '2024-03-11T04:06:12.649Z',
           __v: 0
         },
         access_token:

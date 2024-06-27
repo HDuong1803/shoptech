@@ -1,21 +1,19 @@
 export interface IReview {
-  user_id?: string
-  username?: string
-  rating?: number
-  comment?: string
+  user_id?: string | null
+  rating?: number | null
+  comment?: string | null
+  product_id?: string | null
 }
 export interface IProduct {
-  name?: string
-  image?: string
-  brand?: string
-  category?: string
-  description?: string
-  rating?: number
-  numReviews?: number
-  price?: number
-  countInStock?: number
-  purchases?: number
-  reviews?: IReview[]
+  name: string | null
+  image: string | null
+  brand: string | null
+  category: string | null
+  description: string | null
+  rating: number | null
+  num_reviews: number | null
+  price: number | null
+  count_in_stock: number | null
 }
 
 export interface OutputSearchProduct {
@@ -34,7 +32,7 @@ export interface InputItem {
   category?: string
   description?: string
   price?: number
-  countInStock?: number
+  count_in_stock?: number
 }
 
 export interface InputReview {

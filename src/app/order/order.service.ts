@@ -1,7 +1,7 @@
 import { type InputOrderItem } from '@app'
 import { Constant } from '@constants'
 import { stripe } from '@providers'
-import { CartDB, OrderDB, UserDB } from '@schemas'
+import { db } from '@utils'
 
 class OrderService {
   /**
@@ -13,13 +13,18 @@ class OrderService {
   public async getListOrders(page: number, limit: number): Promise<any> {
     const offset = (page - 1) * limit
 
-    const listOrders = await OrderDB.find()
-      .sort({ created_at: -1 })
-      .skip(offset)
-      .limit(limit)
-      .exec()
+    const listOrders = await db.order.findMany({
+      orderBy: { id: 'desc' },
+      skip: offset,
+      take: limit,
+      include: {
+        items: true,
+        shipping_address: true,
+        payment_result: true
+      }
+    })
 
-    const totalOrder = await OrderDB.countDocuments()
+    const totalOrder = await db.order.count()
 
     return {
       data: listOrders,
@@ -34,9 +39,9 @@ class OrderService {
    * If the order is not found, an error is thrown.
    */
   public async getOrder(_id: string): Promise<any> {
-    const order = await OrderDB.findById(_id)
+    const order = await db.order.findFirst({ where: { id: _id } })
     if (order) {
-      return order.toJSON()
+      return order
     }
     throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
   }
@@ -47,18 +52,37 @@ class OrderService {
    * @returns {Promise<any>} - A promise that resolves to the updated order object.
    */
   public async updateOrderToPaid(_id?: string): Promise<any> {
-    const order = await OrderDB.findById(_id)
-    if (order) {
-      order.is_paid = true
-      order.paid_at = new Date(Date.now())
-      order.payment_result = {
-        status: order.payment_result?.status,
-        update_time: order.payment_result?.update_time,
-        email_address: order.payment_result?.email_address
+    const order = await db.order.findFirst({
+      where: { id: _id },
+      include: {
+        payment_result: true
       }
-      const updatedOrder = await order.save()
+    })
+    if (order) {
+      await db.order.update({
+        where: {
+          id: _id
+        },
+        data: {
+          is_paid: true,
+          paid_at: new Date(Date.now()),
+          payment_result: {
+            update: {
+              status: order.payment_result?.status,
+              update_time: order.payment_result?.update_time,
+              email_address: order.payment_result?.email_address
+            }
+          }
+        },
+        include: {
+          items: true,
+          shipping_address: true,
+          payment_result: true
+          // user: true
+        }
+      })
 
-      return updatedOrder.toJSON()
+      return order
     }
     throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
   }
@@ -69,14 +93,18 @@ class OrderService {
    * @returns {Promise<any>} - A promise that resolves to the updated order object.
    */
   public async updateOrderToDelivered(_id?: string): Promise<any> {
-    const order = await OrderDB.findById(_id)
+    const order = await db.order.findFirst({ where: { id: _id } })
     if (order) {
-      order.is_delivered = true
-      order.delivered_at = new Date(Date.now())
-
-      const updatedOrder = await order.save()
-
-      return updatedOrder.toJSON()
+      const updatedOrder = await db.order.update({
+        where: {
+          id: _id
+        },
+        data: {
+          is_delivered: true,
+          delivered_at: new Date()
+        }
+      })
+      return updatedOrder
     }
     throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
   }
@@ -91,34 +119,66 @@ class OrderService {
     body?: InputOrderItem,
     user_id?: string
   ): Promise<any> {
-    const user = await UserDB.findById(user_id)
-    const dataCart = await CartDB.findOne({ user_id: user?._id })
-    const orderItems = dataCart?.cart?.map((item: any) => {
-      const orderItems = {
-        product_id: item.product_id,
-        name: item.name,
-        quantity: item.quantity,
-        image: item.image,
-        price: item.price
-      }
-      return orderItems
+    const user = await db.user.findUnique({ where: { id: user_id } })
+
+    if (!user) {
+      throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
+    }
+
+    const dataCart = await db.cart.findFirst({
+      where: { user_id: user.id },
+      include: { items: true }
     })
-    const totalPrice = orderItems?.reduce(
-      (total: number, item) => total + item.price * item.quantity,
+
+    if (!dataCart) {
+      throw new Error('Cart not found for the user')
+    }
+
+    const orderItems = dataCart.items.map(item => ({
+      product_id: item.product_id,
+      name: item.name,
+      quantity: item.quantity,
+      image: item.image,
+      price: item.price
+    }))
+
+    const totalPrice = orderItems.reduce(
+      (total, item) => total + Number(item.price) * Number(item.quantity),
       0
     )
 
-    const createdOrder = await OrderDB.create({
-      user_id,
-      username: user?.username,
-      email: user?.email,
-      order_items: orderItems,
-      shipping_address: body?.shipping_address,
-      payment_method: body?.payment_method,
-      shipping_price: Constant.SHIPPING_PRICE,
-      total_price: (Number(totalPrice) + Constant.SHIPPING_PRICE).toFixed(2),
-      is_paid: false
+    const createdOrder = await db.order.create({
+      data: {
+        user_id,
+        username: user.username,
+        email: user.email,
+        items: {
+          createMany: {
+            data: orderItems
+          }
+        },
+        shipping_address: {
+          create: {
+            address: body?.shipping_address?.address,
+            city: body?.shipping_address?.city,
+            postal_code: body?.shipping_address?.postal_code,
+            country: body?.shipping_address?.country
+          }
+        },
+        payment_method: body?.payment_method,
+        payment_result: {
+          create: {
+            status: Constant.PAYMENT_STATUS.PENDING,
+            update_time: new Date(Date.now()),
+            email_address: user.email
+          }
+        },
+        shipping_price: Constant.SHIPPING_PRICE,
+        total_price: Number((totalPrice + Constant.SHIPPING_PRICE).toFixed(2)),
+        is_paid: false
+      }
     })
+
     return createdOrder
   }
 
@@ -129,15 +189,28 @@ class OrderService {
    * @returns {Promise<any>} - A promise that resolves to the checkout session URL.
    */
   public async getCheckout(user_id: string, order_id: string): Promise<any> {
-    const user = await UserDB.findById(user_id)
-    const order = await OrderDB.findById(order_id)
+    const user = await db.user.findUnique({ where: { id: user_id } })
 
-    if (!user?.email || !order?.order_items) {
+    if (!user?.email) {
       throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
     }
 
-    const line_items = order.order_items.map(item => {
-      if (!item.name || !item.image || !item.price || !item.quantity) {
+    const order = await db.order.findUnique({
+      where: { id: order_id },
+      include: { items: true }
+    })
+
+    if (!order) {
+      throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
+    }
+
+    const line_items = order.items.map(item => {
+      if (
+        !item.name ||
+        !item.image ||
+        item.price === null ||
+        item.quantity === null
+      ) {
         throw new Error('Missing required item information')
       }
 
@@ -162,6 +235,7 @@ class OrderService {
       cancel_url: Constant.PUBLIC_URL + '/cart?canceled=1',
       metadata: { orderId: order_id.toString(), test: 'ok' }
     })
+
     return session.url
   }
 
@@ -171,8 +245,8 @@ class OrderService {
    * @returns {Promise<any>} - A promise that resolves to the list of orders for the user.
    */
   public async getOrderOfUser(user_id: string): Promise<any> {
-    const user = await UserDB.findById(user_id)
-    const order = await OrderDB.find({ user_id: user?._id.toString() })
+    const user = await db.user.findFirstOrThrow({ where: { id: user_id } })
+    const order = await db.order.findMany({ where: { user_id: user?.id } })
     if (!order) {
       throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
     }

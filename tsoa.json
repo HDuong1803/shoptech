@@ -50,8 +50,8 @@
       "@app": ["./src/app/index.ts"],
       "@constants": ["./src/constants/index.ts"],
       "@middlewares": ["./src/middlewares/index.ts"],
-      "@schemas": ["./src/schemas/index.ts"],
-      "@providers": ["./src/providers/index.ts"]
+      "@providers": ["./src/providers/index.ts"],
+      "@utils": ["./src/utils/index.ts"]
     }
   }
 }

@@ -1,0 +1,29 @@
+{
+  "_id": {
+    "$oid": "65defc93ce29856a1d3d3687"
+  },
+  "username": "Hai Duong",
+  "email": "dohaiduong@gmail.com",
+  "password": "0xc888c9ce9e098d5864d3ded6ebcc140a12142263bace3a23a36f9905f12bd64a",
+  "role": 0,
+  "phone": "0123456789",
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRvaGFpZHVvbmdAZ21haWwuY29tIiwicm9sZSI6MCwicGhvbmUiOiIwMTIzNDU2Nzg5IiwiaWF0IjoxNzA5MTEyNDY3LCJleHAiOjE3MDk3MTcyNjd9.6XOsho37RCTYvrwjSVcB5tqiPaYyIIQA_Z2dnKqzQZk",
+  "created_at": {
+    "$date": "2024-02-28T09:27:47.341Z"
+  },
+  "updated_at": {
+    "$date": "2024-04-01T09:36:04.322Z"
+  },
+  "__v": 0,
+  "cart": {
+    "items": []
+  },
+  "hash": "d21414503e6dc1726911bc87456aa6023ec1b378525b961fbea13977ed290cd73e8c34f78794c39a5d6190b6e87dfe0fd393ce3d83c6e0ef3ec221646d0c5dc602658078ed1ffb51db265e2e597ab9a0205e089644a1815cc2060262393ff45cac2cb8a187267eedf6d355285d7dd74c3e287444773b13c9a47e3c226bf1a240065246a300bfde1e90b2c595c4f722ddc56f48aee8f1b86a64084488ff5bfa480d34d70cf3632fadd9b13a3c71ec7e8808cd93c2f3eaa0328bf7340f453c179eb52cad4885af335e63111e68f45998f29e02e7cc11548a5ce759ec9194b6a8d98988bcd8976b69d2f5becb3f863014b2d6806d966e387c25f1fad61d517a85c66a78c971226876ee4d5656744a29fd17a5ba3c508c7ada91d45eeeaa0e5cfda8094119f14e154e9d236636d23bf79725f17b7fa819b6b93bb06892f1d42d6213230957169976c2186195601f4d04f0b237778ccc1224c917c4725ee1e26d0f2920817b9bb3386b5e6f1043e617e5d121d801133771d07516e3045d4c536316dc2382181454ed697731d8000d44b503c7373860170c4aba7c36c80fb341ee5392a4dc1297b7ae093c06e5bf950cbd41ff379bb98c4a68daa8aa0ebe614c88b3342a80ed6292906a206b863f2f410be1aece0965f4ed94e1ff3f94f2bfbfd012a3879b3d712b81ce496cbace994c3f252757549af0c17b790e58f885d3ea7414ab",
+  "loginAttempts": 0,
+  "resetPasswordExpiration": {
+    "$date": "2024-04-01T10:36:03.787Z"
+  },
+  "resetPasswordToken": "fa7556974cca8a05f161447b97a0f8c1c2776802",
+  "roles": ["customer"],
+  "salt": "299f577345b3613b9005f614110c456a365baff894f8562f386f1f3efa62ab33"
+}

@@ -1,4 +1,4 @@
-import type { userAttributes } from '@schemas'
+import type { IUser, OutputLogin } from '@app'
 
 /**
  * Interface for the input fields of the admin login form.
@@ -32,12 +32,12 @@ export interface InputVerifyPassword {
 /**
  * Interface for the output of the login admin function.
  * @interface OutputLoginAdmin
- * @property {userAttributes | null} [detail] - The user details.
+ * @property {IUser | null} [detail] - The user details.
  * @property {string | null} [access_token] - The access token for the user.
  * @property {string | null} [refresh_token] - The refresh token for the user.
  */
 export interface OutputLoginAdmin {
-  detail: userAttributes | null
+  detail: IUser | null
   access_token: string | null
   refresh_token: string | null
 }
@@ -47,8 +47,8 @@ export interface OutputLoginAdmin {
  * @typedef {OutputLoginAdmin} OutputSubmitAdmin
  */
 export type OutputSubmitAdmin = OutputLoginAdmin
-export type OutputLoginUser = OutputLoginAdmin
-export type OutputSubmitUser = OutputLoginAdmin
+export type OutputLoginUser = OutputLogin
+export type OutputSubmitUser = OutputLogin
 
 /**
  * Interface for the output of a refresh token request.

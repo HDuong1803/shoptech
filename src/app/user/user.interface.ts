@@ -1,13 +1,28 @@
 export interface IUser {
-  id?: number
-  name?: string
+  id?: string
+  username?: string | null
   email?: string
-  role?: number
-  phone?: string
-  create_at?: Date
-  token?: string
+  verified?: boolean | null
+  password?: string | null
+  verification_code?: string | null
+  avatar_url?: string | null
+  role?: number | null
+  phone?: string | null
+  two_factor_auth?: boolean | null
+  two_factor_secret: string | null
+  refresh_token?: string | null
+  google_id?: string | null
+  last_login_at?: Date | null
+  created_at?: Date | null
+  updated_at?: Date | null
 }
 
+export interface InputUpdateUser {
+  username?: string | null
+  password?: string | null
+  phone?: string | null
+  avatar_url?: string | null
+}
 export interface OutputListUser {
   data: IUser[]
   total?: number

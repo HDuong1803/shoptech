@@ -1,0 +1,938 @@
+[
+  {
+    "_id": {
+      "$oid": "65f26bc0fda2bef94626a0ac"
+    },
+    "user_id": {
+      "$oid": "65defc93ce29856a1d3d3687"
+    },
+    "username": "Hai Duong",
+    "email": "dohaiduong@gmail.com",
+    "order_items": [
+      {
+        "product_id": {
+          "$oid": "61f65428e1273b6867abb86c"
+        },
+        "name": "Microsoft Surface Laptop 13.5 inch",
+        "quantity": 2,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x712da98e5f152b205eb19884d87bf56206de3b24407c6f5f0c72fafbecefabf6",
+        "price": 1599.99,
+        "_id": {
+          "$oid": "65f26bc0fda2bef94626a0ad"
+        }
+      },
+      {
+        "product_id": {
+          "$oid": "61fabb3154d0d0a51edccee6"
+        },
+        "name": "Apple iPhone XR Yellow 265GB",
+        "quantity": 2,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x9c5978edd1988c392368804f31e3917a6243741cdc9a5d52774d6e9e602491a9",
+        "price": 399.99,
+        "_id": {
+          "$oid": "65f26bc0fda2bef94626a0ae"
+        }
+      }
+    ],
+    "shipping_address": {
+      "address": "cau giay",
+      "city": "ha noi",
+      "postal_code": "10000",
+      "country": "Vietnam",
+      "_id": {
+        "$oid": "65f26bc0fda2bef94626a0af"
+      }
+    },
+    "payment_method": "Credit Card",
+    "shipping_price": 0,
+    "total_price": 3999.96,
+    "is_paid": false,
+    "is_delivered": false,
+    "created_at": {
+      "$date": "2024-03-14T03:15:12.941Z"
+    },
+    "updated_at": {
+      "$date": "2024-03-14T03:15:12.941Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "65f26c3ffda2bef94626a187"
+    },
+    "user_id": {
+      "$oid": "65defc93ce29856a1d3d3687"
+    },
+    "username": "Hai Duong",
+    "email": "dohaiduong@gmail.com",
+    "order_items": [
+      {
+        "product_id": {
+          "$oid": "61f65428e1273b6867abb86c"
+        },
+        "name": "Microsoft Surface Laptop 13.5 inch",
+        "quantity": 1,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x712da98e5f152b205eb19884d87bf56206de3b24407c6f5f0c72fafbecefabf6",
+        "price": 1599.99,
+        "_id": {
+          "$oid": "65f26c3ffda2bef94626a188"
+        }
+      },
+      {
+        "product_id": {
+          "$oid": "61fabb3154d0d0a51edccee6"
+        },
+        "name": "Apple iPhone XR Yellow 265GB",
+        "quantity": 1,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x9c5978edd1988c392368804f31e3917a6243741cdc9a5d52774d6e9e602491a9",
+        "price": 399.99,
+        "_id": {
+          "$oid": "65f26c3ffda2bef94626a189"
+        }
+      }
+    ],
+    "shipping_address": {
+      "address": "cau giay",
+      "city": "ha noi",
+      "postal_code": "10000",
+      "country": "Vietnam",
+      "_id": {
+        "$oid": "65f26c3ffda2bef94626a18a"
+      }
+    },
+    "payment_method": "Credit Card",
+    "shipping_price": 0,
+    "total_price": 1999.98,
+    "is_paid": false,
+    "is_delivered": true,
+    "created_at": {
+      "$date": "2024-03-14T03:17:19.645Z"
+    },
+    "updated_at": {
+      "$date": "2024-03-14T03:19:30.160Z"
+    },
+    "__v": 0,
+    "delivered_at": {
+      "$date": "2024-03-14T03:19:30.158Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "65f26c50fda2bef94626a1a7"
+    },
+    "user_id": {
+      "$oid": "65defc93ce29856a1d3d3687"
+    },
+    "username": "Hai Duong",
+    "email": "dohaiduong@gmail.com",
+    "order_items": [
+      {
+        "product_id": {
+          "$oid": "61f65428e1273b6867abb86c"
+        },
+        "name": "Microsoft Surface Laptop 13.5 inch",
+        "quantity": 2,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x712da98e5f152b205eb19884d87bf56206de3b24407c6f5f0c72fafbecefabf6",
+        "price": 1599.99,
+        "_id": {
+          "$oid": "65f26c50fda2bef94626a1a8"
+        }
+      },
+      {
+        "product_id": {
+          "$oid": "61fabb3154d0d0a51edccee6"
+        },
+        "name": "Apple iPhone XR Yellow 265GB",
+        "quantity": 1,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x9c5978edd1988c392368804f31e3917a6243741cdc9a5d52774d6e9e602491a9",
+        "price": 399.99,
+        "_id": {
+          "$oid": "65f26c50fda2bef94626a1a9"
+        }
+      }
+    ],
+    "shipping_address": {
+      "address": "cau giay",
+      "city": "ha noi",
+      "postal_code": "10000",
+      "country": "Vietnam",
+      "_id": {
+        "$oid": "65f26c50fda2bef94626a1aa"
+      }
+    },
+    "payment_method": "Credit Card",
+    "shipping_price": 0,
+    "total_price": 3599.97,
+    "is_paid": true,
+    "is_delivered": false,
+    "created_at": {
+      "$date": "2024-03-14T03:17:36.864Z"
+    },
+    "updated_at": {
+      "$date": "2024-03-14T03:17:36.864Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "65f26c5cfda2bef94626a1cd"
+    },
+    "user_id": {
+      "$oid": "65defc93ce29856a1d3d3687"
+    },
+    "username": "Hai Duong",
+    "email": "dohaiduong@gmail.com",
+    "order_items": [
+      {
+        "product_id": {
+          "$oid": "61f65428e1273b6867abb86c"
+        },
+        "name": "Microsoft Surface Laptop 13.5 inch",
+        "quantity": 1,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x712da98e5f152b205eb19884d87bf56206de3b24407c6f5f0c72fafbecefabf6",
+        "price": 1599.99,
+        "_id": {
+          "$oid": "65f26c5cfda2bef94626a1ce"
+        }
+      },
+      {
+        "product_id": {
+          "$oid": "61fabb3154d0d0a51edccee6"
+        },
+        "name": "Apple iPhone XR Yellow 265GB",
+        "quantity": 2,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x9c5978edd1988c392368804f31e3917a6243741cdc9a5d52774d6e9e602491a9",
+        "price": 399.99,
+        "_id": {
+          "$oid": "65f26c5cfda2bef94626a1cf"
+        }
+      }
+    ],
+    "shipping_address": {
+      "address": "cau giay",
+      "city": "ha noi",
+      "postal_code": "10000",
+      "country": "Vietnam",
+      "_id": {
+        "$oid": "65f26c5cfda2bef94626a1d0"
+      }
+    },
+    "payment_method": "Credit Card",
+    "shipping_price": 0,
+    "total_price": 2399.97,
+    "is_paid": true,
+    "is_delivered": true,
+    "created_at": {
+      "$date": "2024-03-14T03:17:48.295Z"
+    },
+    "updated_at": {
+      "$date": "2024-03-14T03:19:32.851Z"
+    },
+    "__v": 0,
+    "delivered_at": {
+      "$date": "2024-03-14T03:19:32.850Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "65f26c67fda2bef94626a1ed"
+    },
+    "user_id": {
+      "$oid": "65defc93ce29856a1d3d3687"
+    },
+    "username": "Hai Duong",
+    "email": "dohaiduong@gmail.com",
+    "order_items": [
+      {
+        "product_id": {
+          "$oid": "61f65428e1273b6867abb86c"
+        },
+        "name": "Microsoft Surface Laptop 13.5 inch",
+        "quantity": 2,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x712da98e5f152b205eb19884d87bf56206de3b24407c6f5f0c72fafbecefabf6",
+        "price": 1599.99,
+        "_id": {
+          "$oid": "65f26c67fda2bef94626a1ee"
+        }
+      },
+      {
+        "product_id": {
+          "$oid": "61fabb3154d0d0a51edccee6"
+        },
+        "name": "Apple iPhone XR Yellow 265GB",
+        "quantity": 2,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x9c5978edd1988c392368804f31e3917a6243741cdc9a5d52774d6e9e602491a9",
+        "price": 399.99,
+        "_id": {
+          "$oid": "65f26c67fda2bef94626a1ef"
+        }
+      }
+    ],
+    "shipping_address": {
+      "address": "cau giay",
+      "city": "ha noi",
+      "postal_code": "10000",
+      "country": "Vietnam",
+      "_id": {
+        "$oid": "65f26c67fda2bef94626a1f0"
+      }
+    },
+    "payment_method": "Credit Card",
+    "shipping_price": 0,
+    "total_price": 3999.96,
+    "is_paid": false,
+    "is_delivered": true,
+    "created_at": {
+      "$date": "2024-03-14T03:17:59.550Z"
+    },
+    "updated_at": {
+      "$date": "2024-03-14T03:19:28.337Z"
+    },
+    "__v": 0,
+    "delivered_at": {
+      "$date": "2024-03-14T03:19:28.333Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "65f26c72fda2bef94626a20d"
+    },
+    "user_id": {
+      "$oid": "65defc93ce29856a1d3d3687"
+    },
+    "username": "Hai Duong",
+    "email": "dohaiduong@gmail.com",
+    "order_items": [
+      {
+        "product_id": {
+          "$oid": "61f65428e1273b6867abb86c"
+        },
+        "name": "Microsoft Surface Laptop 13.5 inch",
+        "quantity": 2,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x712da98e5f152b205eb19884d87bf56206de3b24407c6f5f0c72fafbecefabf6",
+        "price": 1599.99,
+        "_id": {
+          "$oid": "65f26c72fda2bef94626a20e"
+        }
+      },
+      {
+        "product_id": {
+          "$oid": "61fabb3154d0d0a51edccee6"
+        },
+        "name": "Apple iPhone XR Yellow 265GB",
+        "quantity": 3,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x9c5978edd1988c392368804f31e3917a6243741cdc9a5d52774d6e9e602491a9",
+        "price": 399.99,
+        "_id": {
+          "$oid": "65f26c72fda2bef94626a20f"
+        }
+      }
+    ],
+    "shipping_address": {
+      "address": "cau giay",
+      "city": "ha noi",
+      "postal_code": "10000",
+      "country": "Vietnam",
+      "_id": {
+        "$oid": "65f26c72fda2bef94626a210"
+      }
+    },
+    "payment_method": "Credit Card",
+    "shipping_price": 0,
+    "total_price": 4399.95,
+    "is_paid": false,
+    "is_delivered": false,
+    "created_at": {
+      "$date": "2024-03-14T03:18:10.461Z"
+    },
+    "updated_at": {
+      "$date": "2024-03-14T03:18:10.461Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "65f26c85fda2bef94626a238"
+    },
+    "user_id": {
+      "$oid": "65defc93ce29856a1d3d3687"
+    },
+    "username": "Hai Duong",
+    "email": "dohaiduong@gmail.com",
+    "order_items": [
+      {
+        "product_id": {
+          "$oid": "61f65428e1273b6867abb86c"
+        },
+        "name": "Microsoft Surface Laptop 13.5 inch",
+        "quantity": 3,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x712da98e5f152b205eb19884d87bf56206de3b24407c6f5f0c72fafbecefabf6",
+        "price": 1599.99,
+        "_id": {
+          "$oid": "65f26c85fda2bef94626a239"
+        }
+      },
+      {
+        "product_id": {
+          "$oid": "61fabb3154d0d0a51edccee6"
+        },
+        "name": "Apple iPhone XR Yellow 265GB",
+        "quantity": 3,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x9c5978edd1988c392368804f31e3917a6243741cdc9a5d52774d6e9e602491a9",
+        "price": 399.99,
+        "_id": {
+          "$oid": "65f26c85fda2bef94626a23a"
+        }
+      }
+    ],
+    "shipping_address": {
+      "address": "cau giay",
+      "city": "ha noi",
+      "postal_code": "10000",
+      "country": "Vietnam",
+      "_id": {
+        "$oid": "65f26c85fda2bef94626a23b"
+      }
+    },
+    "payment_method": "Credit Card",
+    "shipping_price": 0,
+    "total_price": 5999.94,
+    "is_paid": false,
+    "is_delivered": false,
+    "created_at": {
+      "$date": "2024-03-14T03:18:29.906Z"
+    },
+    "updated_at": {
+      "$date": "2024-03-14T03:18:29.906Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "65f26c99fda2bef94626a26f"
+    },
+    "user_id": {
+      "$oid": "65defc93ce29856a1d3d3687"
+    },
+    "username": "Hai Duong",
+    "email": "dohaiduong@gmail.com",
+    "order_items": [
+      {
+        "product_id": {
+          "$oid": "61f65428e1273b6867abb86c"
+        },
+        "name": "Microsoft Surface Laptop 13.5 inch",
+        "quantity": 1,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x712da98e5f152b205eb19884d87bf56206de3b24407c6f5f0c72fafbecefabf6",
+        "price": 1599.99,
+        "_id": {
+          "$oid": "65f26c99fda2bef94626a270"
+        }
+      },
+      {
+        "product_id": {
+          "$oid": "61fabb3154d0d0a51edccee6"
+        },
+        "name": "Apple iPhone XR Yellow 265GB",
+        "quantity": 3,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x9c5978edd1988c392368804f31e3917a6243741cdc9a5d52774d6e9e602491a9",
+        "price": 399.99,
+        "_id": {
+          "$oid": "65f26c99fda2bef94626a271"
+        }
+      }
+    ],
+    "shipping_address": {
+      "address": "cau giay",
+      "city": "ha noi",
+      "postal_code": "10000",
+      "country": "Vietnam",
+      "_id": {
+        "$oid": "65f26c99fda2bef94626a272"
+      }
+    },
+    "payment_method": "Credit Card",
+    "shipping_price": 0,
+    "total_price": 2799.96,
+    "is_paid": true,
+    "is_delivered": true,
+    "created_at": {
+      "$date": "2024-03-14T03:18:49.723Z"
+    },
+    "updated_at": {
+      "$date": "2024-03-14T03:19:26.655Z"
+    },
+    "__v": 0,
+    "delivered_at": {
+      "$date": "2024-03-14T03:19:26.652Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "65f29f4a92f15603c7b8a46b"
+    },
+    "user_id": {
+      "$oid": "65defc93ce29856a1d3d3687"
+    },
+    "username": "Hai Duong",
+    "email": "dohaiduong@gmail.com",
+    "order_items": [
+      {
+        "product_id": {
+          "$oid": "61f65428e1273b6867abb86c"
+        },
+        "name": "Microsoft Surface Laptop 13.5 inch",
+        "quantity": 1,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x712da98e5f152b205eb19884d87bf56206de3b24407c6f5f0c72fafbecefabf6",
+        "price": 1599.99,
+        "_id": {
+          "$oid": "65f29f4a92f15603c7b8a46c"
+        }
+      },
+      {
+        "product_id": {
+          "$oid": "61fabb3154d0d0a51edccee6"
+        },
+        "name": "Apple iPhone XR Yellow 265GB",
+        "quantity": 2,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x9c5978edd1988c392368804f31e3917a6243741cdc9a5d52774d6e9e602491a9",
+        "price": 399.99,
+        "_id": {
+          "$oid": "65f29f4a92f15603c7b8a46d"
+        }
+      }
+    ],
+    "shipping_address": {
+      "address": "cau giay",
+      "city": "ha noi",
+      "postal_code": "10000",
+      "country": "Vietnam",
+      "_id": {
+        "$oid": "65f29f4a92f15603c7b8a46e"
+      }
+    },
+    "payment_method": "Credit Card",
+    "shipping_price": 0,
+    "total_price": 2399.97,
+    "is_paid": false,
+    "is_delivered": false,
+    "created_at": {
+      "$date": "2024-03-14T06:55:06.043Z"
+    },
+    "updated_at": {
+      "$date": "2024-03-14T06:55:06.043Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "65f2a05992f15603c7b8a4d5"
+    },
+    "user_id": {
+      "$oid": "65defc93ce29856a1d3d3687"
+    },
+    "username": "Hai Duong",
+    "email": "dohaiduong@gmail.com",
+    "order_items": [
+      {
+        "product_id": {
+          "$oid": "61f65428e1273b6867abb86c"
+        },
+        "name": "Microsoft Surface Laptop 13.5 inch",
+        "quantity": 1,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x712da98e5f152b205eb19884d87bf56206de3b24407c6f5f0c72fafbecefabf6",
+        "price": 1599.99,
+        "_id": {
+          "$oid": "65f2a05992f15603c7b8a4d6"
+        }
+      },
+      {
+        "product_id": {
+          "$oid": "61fabb3154d0d0a51edccee6"
+        },
+        "name": "Apple iPhone XR Yellow 265GB",
+        "quantity": 1,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x9c5978edd1988c392368804f31e3917a6243741cdc9a5d52774d6e9e602491a9",
+        "price": 399.99,
+        "_id": {
+          "$oid": "65f2a05992f15603c7b8a4d7"
+        }
+      }
+    ],
+    "shipping_address": {
+      "address": "cau giay",
+      "city": "ha noi",
+      "postal_code": "10000",
+      "country": "Vietnam",
+      "_id": {
+        "$oid": "65f2a05992f15603c7b8a4d8"
+      }
+    },
+    "payment_method": "Credit Card",
+    "shipping_price": 0,
+    "total_price": 1999.98,
+    "is_paid": false,
+    "is_delivered": false,
+    "created_at": {
+      "$date": "2024-03-14T06:59:37.383Z"
+    },
+    "updated_at": {
+      "$date": "2024-03-14T06:59:37.383Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "65f2a2d63a7770a7e00eab51"
+    },
+    "user_id": {
+      "$oid": "65defc93ce29856a1d3d3687"
+    },
+    "username": "Hai Duong",
+    "email": "dohaiduong@gmail.com",
+    "order_items": [
+      {
+        "product_id": {
+          "$oid": "61f65428e1273b6867abb86c"
+        },
+        "name": "Microsoft Surface Laptop 13.5 inch",
+        "quantity": 1,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x712da98e5f152b205eb19884d87bf56206de3b24407c6f5f0c72fafbecefabf6",
+        "price": 1599.99,
+        "_id": {
+          "$oid": "65f2a2d63a7770a7e00eab52"
+        }
+      },
+      {
+        "product_id": {
+          "$oid": "61fabb3154d0d0a51edccee6"
+        },
+        "name": "Apple iPhone XR Yellow 265GB",
+        "quantity": 1,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x9c5978edd1988c392368804f31e3917a6243741cdc9a5d52774d6e9e602491a9",
+        "price": 399.99,
+        "_id": {
+          "$oid": "65f2a2d63a7770a7e00eab53"
+        }
+      }
+    ],
+    "shipping_address": {
+      "address": "cau giay",
+      "city": "ha noi",
+      "postal_code": "10000",
+      "country": "Vietnam",
+      "_id": {
+        "$oid": "65f2a2d63a7770a7e00eab54"
+      }
+    },
+    "payment_method": "Credit Card",
+    "shipping_price": 0,
+    "total_price": 1999.98,
+    "is_paid": true,
+    "is_delivered": true,
+    "created_at": {
+      "$date": "2024-03-14T07:10:14.813Z"
+    },
+    "updated_at": {
+      "$date": "2024-03-14T07:38:01.844Z"
+    },
+    "__v": 0,
+    "paid_at": {
+      "$date": "2024-03-14T07:32:34.410Z"
+    },
+    "delivered_at": {
+      "$date": "2024-03-14T07:38:01.840Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "65f2bc6ebd3bf704a9aa7ae9"
+    },
+    "user_id": {
+      "$oid": "65defc93ce29856a1d3d3687"
+    },
+    "username": "Hai Duong",
+    "email": "dohaiduong@gmail.com",
+    "order_items": [
+      {
+        "product_id": {
+          "$oid": "61f65428e1273b6867abb86c"
+        },
+        "name": "Microsoft Surface Laptop 13.5 inch",
+        "quantity": 1,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x712da98e5f152b205eb19884d87bf56206de3b24407c6f5f0c72fafbecefabf6",
+        "price": 1599.99,
+        "_id": {
+          "$oid": "65f2bc6ebd3bf704a9aa7aea"
+        }
+      },
+      {
+        "product_id": {
+          "$oid": "61fabb3154d0d0a51edccee6"
+        },
+        "name": "Apple iPhone XR Yellow 265GB",
+        "quantity": 1,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x9c5978edd1988c392368804f31e3917a6243741cdc9a5d52774d6e9e602491a9",
+        "price": 399.99,
+        "_id": {
+          "$oid": "65f2bc6ebd3bf704a9aa7aeb"
+        }
+      }
+    ],
+    "shipping_address": {
+      "address": "cau giay",
+      "city": "ha noi",
+      "postal_code": "10000",
+      "country": "Vietnam",
+      "_id": {
+        "$oid": "65f2bc6ebd3bf704a9aa7aec"
+      }
+    },
+    "payment_method": "Credit Card",
+    "shipping_price": 0,
+    "total_price": 1999.98,
+    "is_paid": false,
+    "is_delivered": false,
+    "created_at": {
+      "$date": "2024-03-14T08:59:26.166Z"
+    },
+    "updated_at": {
+      "$date": "2024-03-14T08:59:26.166Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "65f2bd4bbd3bf704a9aa7b20"
+    },
+    "user_id": {
+      "$oid": "65defc93ce29856a1d3d3687"
+    },
+    "username": "Hai Duong",
+    "email": "dohaiduong@gmail.com",
+    "order_items": [
+      {
+        "product_id": {
+          "$oid": "61f65428e1273b6867abb86c"
+        },
+        "name": "Microsoft Surface Laptop 13.5 inch",
+        "quantity": 1,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x712da98e5f152b205eb19884d87bf56206de3b24407c6f5f0c72fafbecefabf6",
+        "price": 1599.99,
+        "_id": {
+          "$oid": "65f2bd4bbd3bf704a9aa7b21"
+        }
+      },
+      {
+        "product_id": {
+          "$oid": "61fabb3154d0d0a51edccee6"
+        },
+        "name": "Apple iPhone XR Yellow 265GB",
+        "quantity": 1,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x9c5978edd1988c392368804f31e3917a6243741cdc9a5d52774d6e9e602491a9",
+        "price": 399.99,
+        "_id": {
+          "$oid": "65f2bd4bbd3bf704a9aa7b22"
+        }
+      }
+    ],
+    "shipping_address": {
+      "address": "cau giay",
+      "city": "ha noi",
+      "postal_code": "10000",
+      "country": "Vietnam",
+      "_id": {
+        "$oid": "65f2bd4bbd3bf704a9aa7b23"
+      }
+    },
+    "payment_method": "Credit Card",
+    "shipping_price": 0,
+    "total_price": 1999.98,
+    "is_paid": false,
+    "is_delivered": false,
+    "created_at": {
+      "$date": "2024-03-14T09:03:07.973Z"
+    },
+    "updated_at": {
+      "$date": "2024-03-14T09:03:07.973Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "65f2be2ce750f12165633067"
+    },
+    "user_id": {
+      "$oid": "65defc93ce29856a1d3d3687"
+    },
+    "username": "Hai Duong",
+    "email": "dohaiduong@gmail.com",
+    "order_items": [
+      {
+        "product_id": {
+          "$oid": "61f65428e1273b6867abb86c"
+        },
+        "name": "Microsoft Surface Laptop 13.5 inch",
+        "quantity": 1,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x712da98e5f152b205eb19884d87bf56206de3b24407c6f5f0c72fafbecefabf6",
+        "price": 1599.99,
+        "_id": {
+          "$oid": "65f2be2ce750f12165633068"
+        }
+      },
+      {
+        "product_id": {
+          "$oid": "61fabb3154d0d0a51edccee6"
+        },
+        "name": "Apple iPhone XR Yellow 265GB",
+        "quantity": 1,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x9c5978edd1988c392368804f31e3917a6243741cdc9a5d52774d6e9e602491a9",
+        "price": 399.99,
+        "_id": {
+          "$oid": "65f2be2ce750f12165633069"
+        }
+      }
+    ],
+    "shipping_address": {
+      "address": "cau giay",
+      "city": "ha noi",
+      "postal_code": "10000",
+      "country": "Vietnam",
+      "_id": {
+        "$oid": "65f2be2ce750f1216563306a"
+      }
+    },
+    "payment_method": "Credit Card",
+    "shipping_price": 0,
+    "total_price": 1999.98,
+    "is_paid": true,
+    "is_delivered": false,
+    "created_at": {
+      "$date": "2024-03-14T09:06:52.475Z"
+    },
+    "updated_at": {
+      "$date": "2024-03-14T09:07:05.055Z"
+    },
+    "__v": 0,
+    "paid_at": {
+      "$date": "2024-03-14T09:07:05.053Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "65f2be96bd3bf704a9aa7b4a"
+    },
+    "user_id": {
+      "$oid": "65defc93ce29856a1d3d3687"
+    },
+    "username": "Hai Duong",
+    "email": "dohaiduong@gmail.com",
+    "order_items": [
+      {
+        "product_id": {
+          "$oid": "61f65428e1273b6867abb86c"
+        },
+        "name": "Microsoft Surface Laptop 13.5 inch",
+        "quantity": 1,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x712da98e5f152b205eb19884d87bf56206de3b24407c6f5f0c72fafbecefabf6",
+        "price": 1599.99,
+        "_id": {
+          "$oid": "65f2be96bd3bf704a9aa7b4b"
+        }
+      },
+      {
+        "product_id": {
+          "$oid": "61fabb3154d0d0a51edccee6"
+        },
+        "name": "Apple iPhone XR Yellow 265GB",
+        "quantity": 1,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x9c5978edd1988c392368804f31e3917a6243741cdc9a5d52774d6e9e602491a9",
+        "price": 399.99,
+        "_id": {
+          "$oid": "65f2be96bd3bf704a9aa7b4c"
+        }
+      }
+    ],
+    "shipping_address": {
+      "address": "cau giay",
+      "city": "ha noi",
+      "postal_code": "10000",
+      "country": "Vietnam",
+      "_id": {
+        "$oid": "65f2be96bd3bf704a9aa7b4d"
+      }
+    },
+    "payment_method": "Credit Card",
+    "shipping_price": 0,
+    "total_price": 1999.98,
+    "is_paid": true,
+    "is_delivered": false,
+    "created_at": {
+      "$date": "2024-03-14T09:08:38.938Z"
+    },
+    "updated_at": {
+      "$date": "2024-03-14T09:08:54.326Z"
+    },
+    "__v": 0,
+    "paid_at": {
+      "$date": "2024-03-14T09:08:54.325Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "65f2bed9bd3bf704a9aa7b72"
+    },
+    "user_id": {
+      "$oid": "65defc93ce29856a1d3d3687"
+    },
+    "username": "Hai Duong",
+    "email": "dohaiduong@gmail.com",
+    "order_items": [
+      {
+        "product_id": {
+          "$oid": "61f65428e1273b6867abb86c"
+        },
+        "name": "Microsoft Surface Laptop 13.5 inch",
+        "quantity": 1,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x712da98e5f152b205eb19884d87bf56206de3b24407c6f5f0c72fafbecefabf6",
+        "price": 1599.99,
+        "_id": {
+          "$oid": "65f2bed9bd3bf704a9aa7b73"
+        }
+      },
+      {
+        "product_id": {
+          "$oid": "61fabb3154d0d0a51edccee6"
+        },
+        "name": "Apple iPhone XR Yellow 265GB",
+        "quantity": 1,
+        "image": "https://hd-ecommerce.s3.amazonaws.com/0x9c5978edd1988c392368804f31e3917a6243741cdc9a5d52774d6e9e602491a9",
+        "price": 399.99,
+        "_id": {
+          "$oid": "65f2bed9bd3bf704a9aa7b74"
+        }
+      }
+    ],
+    "shipping_address": {
+      "address": "cau giay",
+      "city": "ha noi",
+      "postal_code": "10000",
+      "country": "Vietnam",
+      "_id": {
+        "$oid": "65f2bed9bd3bf704a9aa7b75"
+      }
+    },
+    "payment_method": "Credit Card",
+    "shipping_price": 0,
+    "total_price": 1999.98,
+    "is_paid": false,
+    "is_delivered": false,
+    "created_at": {
+      "$date": "2024-03-14T09:09:45.160Z"
+    },
+    "updated_at": {
+      "$date": "2024-03-14T09:09:45.160Z"
+    },
+    "__v": 0
+  }
+]

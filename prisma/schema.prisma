@@ -1,0 +1,134 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// schema.prisma
+
+model CartItem {
+  id         String  @id @default(cuid())
+  product_id String?
+  name       String?
+  quantity   Int?
+  image      String?
+  price      Float?
+  cart       Cart    @relation(fields: [cart_id], references: [id])
+  cart_id    String
+}
+
+model Cart {
+  id      String     @id @default(cuid())
+  user_id String
+  user    User       @relation(fields: [user_id], references: [id])
+  items   CartItem[]
+}
+
+model OrderItem {
+  id         String  @id @default(cuid())
+  product_id String?
+  name       String?
+  quantity   Int?
+  image      String?
+  price      Float?
+  order      Order   @relation(fields: [order_id], references: [id])
+  order_id   String
+}
+
+model Order {
+  id                  String          @id @default(cuid())
+  user_id             String?
+  username            String?
+  email               String?
+  items               OrderItem[]
+  shipping_address    ShippingAddress @relation(fields: [shipping_address_id], references: [id])
+  payment_method      String?
+  payment_result      PaymentResult   @relation(fields: [payment_result_id], references: [id])
+  shipping_price      Float?
+  total_price         Float?
+  is_paid             Boolean?
+  paid_at             DateTime?
+  is_delivered        Boolean?
+  delivered_at        DateTime?
+  shipping_address_id String
+  payment_result_id   String
+}
+
+model ShippingAddress {
+  id          String  @id @default(cuid())
+  address     String?
+  city        String?
+  postal_code String?
+  country     String?
+  Order       Order[]
+}
+
+model PaymentResult {
+  id            String    @id @default(cuid())
+  status        String?
+  update_time   DateTime?
+  email_address String?
+  Order         Order[]
+}
+
+model Review {
+  id         String  @id @default(cuid())
+  user_id    String?
+  rating     Float?
+  comment    String?
+  product_id String?
+
+  Product Product? @relation(fields: [product_id], references: [id])
+}
+
+model Product {
+  id             String   @id @default(cuid())
+  name           String?
+  image          String?
+  brand          String?
+  category       String?
+  description    String?
+  reviews        Review[]
+  rating         Float?   @default(0)
+  num_reviews    Int?     @default(0)
+  price          Float?
+  count_in_stock Int?
+}
+
+model Token {
+  id         String    @id @default(cuid())
+  token      String?   @unique
+  created_at DateTime?
+  user_id    String    @unique
+  user       User      @relation(fields: [user_id], references: [id])
+}
+
+model User {
+  id                String    @id @default(cuid())
+  username          String?
+  email             String    @unique
+  verified          Boolean?
+  password          String?
+  verification_code String?
+  avatar_url        String?
+  role              Int?
+  phone             String?
+  two_factor_auth   Boolean?  @default(false)
+  two_factor_secret String?
+  refresh_token     String?
+  google_id         String?   @db.VarChar(256)
+  last_login_at     DateTime?
+  created_at        DateTime?
+  updated_at        DateTime?
+  cart              Cart[]
+  token             Token[]
+}

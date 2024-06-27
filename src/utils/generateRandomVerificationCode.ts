@@ -1,4 +1,4 @@
-const generateRandomVerificationCode = (length: number) => {
+export const generateRandomVerificationCode = (length: number) => {
   const charset =
     'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
   let code = ''
@@ -8,4 +8,3 @@ const generateRandomVerificationCode = (length: number) => {
   }
   return code
 }
-export default generateRandomVerificationCode

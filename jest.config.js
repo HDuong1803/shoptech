@@ -1,6 +1,6 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
-  preset: '@shelf/jest-mongodb',
+  preset: 'ts-jest',
   testEnvironment: 'node',
   globals: {
     'ts-jest': {
@@ -14,8 +14,8 @@ module.exports = {
     '@app': '<rootDir>/src/app/index.ts',
     '@constants': '<rootDir>/src/constants/index.ts',
     '@middlewares': '<rootDir>/src/middlewares/index.ts',
-    '@schemas': '<rootDir>/src/schemas/index.ts',
-    '@providers': '<rootDir>/src/providers/index.ts'
+    '@providers': '<rootDir>/src/providers/index.ts',
+    '@utils': '<rootDir>/src/utils/index.ts'
   },
   modulePathIgnorePatterns: ['<rootDir>/build/', '<rootDir>/node_modules/'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts']

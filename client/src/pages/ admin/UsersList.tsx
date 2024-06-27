@@ -77,7 +77,7 @@ const UsersList = () => {
                           )}
                         </td>
                         <td>
-                          {moment(user.createdAt).format('DD-MMM-YYYY hh:mm')}
+                          {moment(user.created_at).format('DD-MMM-YYYY hh:mm')}
                         </td>
                       </tr>
                     ))

@@ -12,15 +12,20 @@ import type {
 } from '@app'
 import { Constant, ErrorHandler } from '@constants'
 import { hashText, renewJWT, signJWT } from '@providers'
-import { CartDB, TokenDB, UserDB } from '@schemas'
 import { OAuth2Client, type TokenPayload } from 'google-auth-library'
+import { generateRandomVerificationCode, db } from '@utils'
+// import { authenticator } from 'otplib'
 
 class AuthService {
   public async userLogin(body: InputLogin): Promise<OutputLogin> {
     /**
      * Check if user exist in database, if not throw error invalid email
      */
-    const isUserExist = await UserDB.findOne({ email: body.email })
+    const isUserExist = await db.user.findFirst({
+      where: {
+        email: body.email
+      }
+    })
     if (!isUserExist) {
       throw new ErrorHandler(
         {
@@ -33,6 +38,34 @@ class AuthService {
       )
     }
 
+    // const ENABLE_LOGIN_2FA = false
+
+    // // 2FA is enbaled but token is not provided
+    // if (
+    //   ENABLE_LOGIN_2FA &&
+    //   isUserExist.two_factor_auth &&
+    //   (typeof body.token !== 'string' || body.token.trim()?.length !== 6)
+    // ) {
+    //   throw new Error('2FA token error')
+    // }
+
+    // // Validate 2FA token
+    // if (
+    //   ENABLE_LOGIN_2FA &&
+    //   isUserExist.two_factor_auth &&
+    //   typeof body.token === 'string' &&
+    //   isUserExist.two_factor_secret
+    // ) {
+    //   if (
+    //     !authenticator.verify({
+    //       token: body.token,
+    //       secret: isUserExist.two_factor_secret
+    //     })
+    //   ) {
+    //     throw new Error('2FA token error')
+    //   }
+    // }
+
     /**
      * Hashes the given password using a secure one-way hashing algorithm.
      */
@@ -41,38 +74,50 @@ class AuthService {
      * Finds a user in the database with the given email and password.
      * The object will have all attributes except for those specified in this.excludeAdminUserData.
      */
-    const res = await UserDB.findOne({
-      email: body.email,
-      password: hashed_password
+    const res = await db.user.findFirstOrThrow({
+      where: {
+        email: body.email,
+        password: hashed_password
+      }
     })
     if (res) {
       res.last_login_at = new Date()
-      await res.save()
+      await db.user.update({
+        where: { id: res.id },
+        data: { last_login_at: res.last_login_at }
+      })
+
       /**
        * Generates a JSON Web Token (JWT) with the given user information and secret key.
        */
       const jwtPayload = signJWT({
         email: res.email,
-        role: res.role,
-        phone: res.phone
+        role: res.role as number,
+        phone: res.phone as string
       })
 
-      await UserDB.findOneAndUpdate(
-        { email: body.email, role: Constant.USER_ROLE.ADMIN },
-        { $set: { refresh_token: hashText(jwtPayload.refresh_token) } },
-        { upsert: true }
-      )
+      await db.user.upsert({
+        where: {
+          id: res.id
+        },
+        update: { refresh_token: hashText(jwtPayload.refresh_token) },
+        create: { ...res, refresh_token: hashText(jwtPayload.refresh_token) }
+      })
 
-      await TokenDB.findOneAndUpdate(
-        {
+      await db.token.upsert({
+        where: {
           user_id: res.id
         },
-        { $set: { token: hashText(jwtPayload.access_token) } },
-        { upsert: true }
-      )
+        update: { token: hashText(jwtPayload.access_token) },
+        create: {
+          token: hashText(jwtPayload.access_token),
+          created_at: new Date(),
+          user: { connect: { id: res.id } }
+        }
+      })
 
       return {
-        detail: res.toJSON(),
+        detail: res,
         ...jwtPayload
       }
     }
@@ -88,7 +133,9 @@ class AuthService {
   }
 
   public async userSignUp(body: InputSignUp): Promise<OutputSignUp> {
-    const isUserExist = await UserDB.findOne({ email: body.email })
+    const isUserExist = await db.user.findFirst({
+      where: { email: body.email }
+    })
     if (isUserExist) {
       throw new ErrorHandler(
         {
@@ -119,33 +166,48 @@ class AuthService {
      */
     let newUser
     try {
-      newUser = await UserDB.create({
-        username: body.username,
-        email: body.email,
-        phone: body.phone,
-        password: hashed_password,
-        role: Constant.USER_ROLE.USER,
-        refresh_token: jwtPayload.refresh_token
+      newUser = await db.user.create({
+        data: {
+          username: body.username,
+          email: body.email,
+          verified: false,
+          verification_code: generateRandomVerificationCode(6),
+          avatar_url: null,
+          phone: body.phone,
+          password: hashed_password,
+          two_factor_auth: false,
+          two_factor_secret: null,
+          role: Constant.USER_ROLE.USER,
+          google_id: null,
+          refresh_token: jwtPayload.refresh_token
+        }
       })
     } catch (error) {
       throw new Error('Failed to signup')
     }
 
-    await TokenDB.findOneAndUpdate(
-      {
-        user_id: newUser._id
+    await db.token.upsert({
+      where: {
+        user_id: newUser.id
       },
-      { $set: { token: hashText(jwtPayload.access_token) } },
-      { upsert: true }
-    )
+      update: { token: hashText(jwtPayload.access_token) },
+      create: {
+        token: hashText(jwtPayload.access_token),
+        created_at: new Date(),
+        user: { connect: { id: newUser.id } }
+      }
+    })
 
-    await CartDB.create({
-      user_id: newUser._id,
-      cart: []
+    await db.cart.create({
+      data: {
+        user: {
+          connect: { id: newUser.id }
+        }
+      }
     })
 
     return {
-      detail: newUser.toJSON(),
+      detail: newUser,
       ...jwtPayload
     }
   }
@@ -158,17 +220,21 @@ class AuthService {
   async refreshToken(body: InputRefreshToken): Promise<OutputRefreshToken> {
     try {
       const { access_token, payload } = renewJWT(body.refresh_token)
-      const userRes = await UserDB.findOne({
-        email: payload.email
+      const userRes = await db.user.findFirstOrThrow({
+        where: { email: payload.email }
       })
       if (!userRes) {
         throw new Error(Constant.NETWORK_STATUS_MESSAGE.UNAUTHORIZED)
       }
-      await TokenDB.findOneAndUpdate(
-        { user_id: userRes.id },
-        { token: hashText(access_token) },
-        { upsert: true, new: true }
-      )
+      await db.token.upsert({
+        where: { user_id: userRes.id },
+        update: { token: hashText(access_token) },
+        create: {
+          token: hashText(access_token),
+          created_at: new Date(),
+          user: { connect: { id: userRes.id } }
+        }
+      })
       return {
         access_token
       }
@@ -189,9 +255,11 @@ class AuthService {
     body: InputVerifyPassword,
     email: string
   ): Promise<OutputVerifyPassword> {
-    const userRes = await UserDB.findOne({
-      email,
-      password: hashText(body.password)
+    const userRes = await db.user.findFirst({
+      where: {
+        email,
+        password: hashText(body.password)
+      }
     })
     return {
       authorized: !!userRes
@@ -204,7 +272,7 @@ class AuthService {
    * @returns {Promise<OutputLogout>} - A promise that resolves to a object.
    */
   async logout(access_token: string): Promise<OutputLogout> {
-    await TokenDB.deleteOne({ token: hashText(access_token) })
+    await db.token.delete({ where: { token: hashText(access_token) } })
     return { logout: true }
   }
 
@@ -224,38 +292,63 @@ class AuthService {
       throw new Error(Constant.NETWORK_STATUS_MESSAGE.NOT_FOUND)
     }
 
-    const res = await UserDB.findOneAndUpdate(
-      { email },
-      { $set: { email, username: name, role: Constant.USER_ROLE.USER } },
-      { upsert: true, new: true }
-    )
+    const res = await db.user.upsert({
+      where: { email },
+      update: { email, username: name, role: Constant.USER_ROLE.USER },
+      create: {
+        email,
+        username: name,
+        verified: false,
+        verification_code: generateRandomVerificationCode(6),
+        avatar_url: null,
+        phone: null,
+        password: null,
+        two_factor_auth: false,
+        two_factor_secret: null,
+        role: Constant.USER_ROLE.USER,
+        google_id: google_token_id,
+        refresh_token: null
+      }
+    })
     /**
      * Updates the last login time for a user and saves the changes to the database.
      */
     res.last_login_at = new Date()
-    await res.save()
+    await db.user.update({
+      where: { id: res.id },
+      data: { last_login_at: res.last_login_at }
+    })
     /**
      * Generates a JSON Web Token (JWT) with the given user information and secret key.
      */
     const jwtPayload = signJWT({
       email: res.email,
-      role: res.role,
-      phone: res.phone
+      role: res.role as number,
+      phone: res.phone as string
     })
-    await UserDB.findOneAndUpdate(
-      { email, role: Constant.USER_ROLE.USER },
-      { $set: { refresh_token: hashText(jwtPayload.refresh_token) } },
-      { upsert: true }
-    )
-    await TokenDB.findOneAndUpdate(
-      {
+
+    await db.user.upsert({
+      where: {
+        email,
+        role: Constant.USER_ROLE.ADMIN
+      },
+      update: { refresh_token: hashText(jwtPayload.refresh_token) },
+      create: { ...res, refresh_token: hashText(jwtPayload.refresh_token) }
+    })
+
+    await db.token.upsert({
+      where: {
         user_id: res.id
       },
-      { $set: { token: hashText(jwtPayload.access_token) } },
-      { upsert: true }
-    )
+      update: { token: hashText(jwtPayload.access_token) },
+      create: {
+        token: hashText(jwtPayload.access_token),
+        created_at: new Date(),
+        user: { connect: { id: res.id } }
+      }
+    })
     return {
-      detail: res.toJSON(),
+      detail: res,
       ...jwtPayload
     }
   }
