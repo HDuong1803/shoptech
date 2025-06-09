@@ -78,16 +78,15 @@ const Cart = () => {
     )
     setInitialCartItems(updated)
   }
-
-  useEffect(() => {
-    if (cartItem.cart) {
-      setInitialCartItems(cartItem.cart)
-    }
-  }, [cartItem.cart])
-
   useEffect(() => {
     dispatch(asyncAction(getCart()))
   }, [])
+
+  useEffect(() => {
+    if (cartItem.items) {
+      setInitialCartItems(cartItem.items)
+    }
+  }, [cartItem.items])
 
   return (
     <Layout>

@@ -66,18 +66,18 @@ const UsersList = () => {
               <tbody>
                 {users
                   ? users.map((user: any) => (
-                      <tr key={user._id}>
-                        <td>{user.username}</td>
-                        <td>{user.email}</td>
-                        <td>{user.role === 0 ? 'User' : 'Admin'}</td>
-                        <td>{user.phone}</td>
+                      <tr key={user.id}>
+                        <td>{user?.username}</td>
+                        <td>{user?.email}</td>
+                        <td>{user?.role === 0 ? 'User' : 'Admin'}</td>
+                        <td>{user?.phone}</td>
                         <td>
-                          {moment(user.last_login_at).format(
+                          {moment(user?.last_login_at).format(
                             'DD-MMM-YYYY hh:mm'
                           )}
                         </td>
                         <td>
-                          {moment(user.created_at).format('DD-MMM-YYYY hh:mm')}
+                          {moment(user?.created_at).format('DD-MMM-YYYY hh:mm')}
                         </td>
                       </tr>
                     ))
@@ -85,7 +85,7 @@ const UsersList = () => {
               </tbody>
             </Table>
             <Pagination
-              total={Math.round(users.total / users.count)}
+              total={Math.round(users?.total / 8) || 1}
               page={activePage}
               color="dark"
               radius="xl"

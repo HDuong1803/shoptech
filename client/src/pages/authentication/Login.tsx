@@ -69,7 +69,7 @@ const Login = () => {
     if (error) {
       notifications.showNotification({
         title: 'Oh no!',
-        message: 'Email or password is incorrect',
+        message: 'Email or password is incorrect '+ error,
         color: 'red'
       })
     }
@@ -100,7 +100,7 @@ const Login = () => {
                 color="gray"
                 radius="lg"
               >
-                Use [email: dohaiduong@gmail.com | password: 123456] to browse
+                Use [email: admin@example.com | password: 123456aA@] to browse
                 as an admin.
               </Alert>
             </Col>

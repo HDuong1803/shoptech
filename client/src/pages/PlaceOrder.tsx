@@ -35,7 +35,7 @@ const PlaceOrder = () => {
 
   useEffect(() => {
     if (Object.keys(orderCreate).length) {
-      navigate(`/order/${orderCreate._id}`)
+      navigate(`/order/${orderCreate.id}`)
     }
     if (cartItem.cart) {
       setInitialCartItems(cartItem.cart)

@@ -38,12 +38,12 @@ const ProductsList = () => {
   const [opened, setOpened] = useState(false)
   const [openUpdate, setOpenUpdate] = useState(false)
   const [openRemove, setOpenRemove] = useState(false)
-  const [selectedItem, setSelectedItem] = useState('')
+  const [selectedItem, setSelectedItem] = useState<any>(null)
   const [image, setImage] = useState('')
   const [uploading, setUploading] = useState(false)
   const [initialProductsItems, setInitialProductsItems] = useState([])
   const [selectedImage, setSelectedImage] = useState('')
-  const [Success, setSuccess] = useState(false)
+  const [success, setSuccess] = useState(false)
 
   const { getProducts, createProduct, updateProduct, removeProduct } =
     bindActionCreators(actionCreators, dispatch)
@@ -60,31 +60,29 @@ const ProductsList = () => {
 
   const form = useForm({
     initialValues: {
-      name: selectedItem,
+      name: '',
       image: '',
       brand: '',
       description: '',
       category: '',
       price: 10,
-      count: 100
+      count_in_stock: 100
     },
     validationRules: {
       name: value => value.trim().length > 2,
-      // image: (value) => value.trim().length > 2,
       brand: value => value.trim().length > 2,
       description: value => value.trim().length > 2,
       category: value => value.trim().length > 2,
       price: value => value > 0,
-      count: value => value > 0
+      count_in_stock: value => value > 0
     },
     errorMessages: {
-      name: 'Provide a valid name',
-      image: 'Provide a valid image',
-      brand: 'Provide a valid brand',
-      description: 'Provide a valid description',
-      category: 'Provide a valid category',
-      price: 'Provide a valid price',
-      count: 'Provide a valid count'
+      name: 'Name must be at least 3 characters',
+      brand: 'Brand must be at least 3 characters',
+      description: 'Description must be at least 3 characters',
+      category: 'Category must be at least 3 characters',
+      price: 'Price must be greater than 0',
+      count_in_stock: 'Count must be greater than 0'
     }
   })
 
@@ -96,7 +94,7 @@ const ProductsList = () => {
       description: product.description,
       category: product.category,
       price: product.price,
-      count: product.countInStock
+      count_in_stock: product.count_in_stock
     })
     setSelectedItem(product)
     setSelectedImage(product.image)
@@ -117,8 +115,11 @@ const ProductsList = () => {
     setInitialProductsItems(updated)
     setSuccess(true)
   }
+
   const uploadFileHandler = async (e: any) => {
     const file = e.target.files[0]
+    if (!file) return
+
     const formData = new FormData()
     formData.append('image', file)
     setUploading(true)
@@ -135,43 +136,39 @@ const ProductsList = () => {
         formData,
         config
       )
-      setImage(data.data)
-      setUploading(false)
-
+      setImage(data.data.data) // Lấy đúng URL từ response
       form.setValues(currentValues => ({
         ...currentValues,
-        image: data.data
+        image: data.data.data
       }))
+      setUploading(false)
     } catch (error) {
       console.error(error)
+      notifications.showNotification({
+        title: 'Upload Error',
+        message: 'Failed to upload image',
+        color: 'red'
+      })
       setUploading(false)
     }
   }
 
   const handlerPageChange = (page: number) => {
     setActivePage(page)
-    getProducts(page)
+    dispatch(asyncAction(getProducts(page)))
   }
+
   const handlerOpenForm = () => {
     setOpened(true)
     form.reset()
+    setImage('')
   }
 
   const handlerAddProduct = (values: any) => {
-    const { name, image, brand, description, category, price, countInStock } =
-      values
-
+    const { name, image, brand, description, category, price, count_in_stock } = values
     dispatch(
       asyncAction(
-        createProduct(
-          name,
-          image,
-          brand,
-          category,
-          description,
-          price,
-          countInStock
-        )
+        createProduct(name, image, brand, category, description, price, count_in_stock)
       )
     )
     setOpened(false)
@@ -179,37 +176,54 @@ const ProductsList = () => {
   }
 
   const handlerUpdateProduct = (values: any) => {
-    const jsonData = JSON.stringify(selectedItem)
-    const product_id = JSON.parse(jsonData)._id
-    const { name, image, brand, description, category, price, count } = values
-    updateProduct(
-      product_id,
-      name,
-      image,
-      brand,
-      category,
-      description,
-      price,
-      count
+    if (!selectedItem) return
+    const product_id = selectedItem.id
+    const { name, image, brand, description, category, price, count_in_stock } = values
+    dispatch(
+      asyncAction(
+        updateProduct(
+          product_id,
+          name,
+          image,
+          brand,
+          category,
+          description,
+          price,
+          count_in_stock
+        )
+      )
     )
     setOpenUpdate(false)
     setSuccess(true)
   }
 
   useEffect(() => {
-    if (Success) {
+    if (success) {
       notifications.showNotification({
         title: 'Success!',
-        message: 'Success',
+        message: 'Operation completed successfully',
         color: 'green'
       })
+      setSuccess(false)
     }
-  }, [Success])
+    if (error || createProductError) {
+      notifications.showNotification({
+        title: 'Error',
+        message: error || createProductError,
+        color: 'red'
+      })
+    }
+  }, [success, error, createProductError])
 
   useEffect(() => {
-    setActivePage(1)
     dispatch(asyncAction(getProducts(1)))
   }, [dispatch])
+
+  useEffect(() => {
+    if (products && products.data) {
+      setInitialProductsItems(products.data)
+    }
+  }, [products])
 
   return (
     <Layout>
@@ -218,20 +232,17 @@ const ProductsList = () => {
         title="Delete Item?"
         radius="lg"
         onClose={() => setOpenRemove(false)}
-        opened={openRemove}
-      >
+        opened={openRemove}>
         <Text weight={600} size="sm">
-          Are you sure that you want to remove this item?
+          Are you sure you want to remove this item?
         </Text>
         <Grid sx={{ marginTop: '1rem' }}>
           <Col span={6}>
-            {' '}
             <Button
               onClick={() => setOpenRemove(false)}
               color="gray"
               radius="lg"
-              fullWidth
-            >
+              fullWidth>
               Cancel
             </Button>
           </Col>
@@ -240,8 +251,7 @@ const ProductsList = () => {
               onClick={() => handlerDeleteItem(selectedItem)}
               color="red"
               radius="lg"
-              fullWidth
-            >
+              fullWidth>
               Yes
             </Button>
           </Col>
@@ -250,31 +260,27 @@ const ProductsList = () => {
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
-        title="Product Details"
-        radius="lg"
-      >
-        <form onSubmit={form.onSubmit(values => handlerAddProduct(values))}>
+        title="Add Product"
+        radius="lg">
+        <form onSubmit={form.onSubmit(handlerAddProduct)}>
           <Group direction="column" grow>
             <TextInput
               label="Product Name"
-              placeholder="Product Name"
+              placeholder="Enter product name"
               {...form.getInputProps('name')}
               radius="lg"
-              error={form.errors.name}
             />
             <TextInput
               label="Product Brand"
-              placeholder="Product Brand"
+              placeholder="Enter brand"
               {...form.getInputProps('brand')}
               radius="lg"
-              error={form.errors.brand}
             />
             <Textarea
               label="Product Description"
-              placeholder="Product Description"
+              placeholder="Enter description"
               {...form.getInputProps('description')}
               radius="lg"
-              error={form.errors.description}
             />
             <Select
               data={[
@@ -285,19 +291,22 @@ const ProductsList = () => {
               ]}
               radius="lg"
               label="Product Category"
-              placeholder="Product Category"
+              placeholder="Select category"
               {...form.getInputProps('category')}
-              error={form.errors.category}
             />
             <NumberInput
               label="Product Count"
-              placeholder="Product Count"
-              {...form.getInputProps('count')}
+              placeholder="Enter stock count"
+              {...form.getInputProps('count_in_stock')}
               radius="lg"
-              error={form.errors.count}
             />
-            {image && <Text>{image}</Text>}
-
+            <TextInput
+              label="Product Image"
+              placeholder="Upload image"
+              value={image}
+              readOnly
+              radius="lg"
+            />
             {uploading ? (
               <Loading />
             ) : (
@@ -308,12 +317,10 @@ const ProductsList = () => {
                 onChange={uploadFileHandler}
               />
             )}
-
             <NumberInput
               label="Product Price"
-              placeholder="Product Price"
+              placeholder="Enter price"
               {...form.getInputProps('price')}
-              error={form.errors.price}
               radius="lg"
             />
             <Button type="submit" color="dark" radius="lg">
@@ -325,31 +332,27 @@ const ProductsList = () => {
       <Modal
         opened={openUpdate}
         onClose={() => setOpenUpdate(false)}
-        title="Product Details"
-        radius="lg"
-      >
-        <form onSubmit={form.onSubmit(values => handlerUpdateProduct(values))}>
+        title="Update Product"
+        radius="lg">
+        <form onSubmit={form.onSubmit(handlerUpdateProduct)}>
           <Group direction="column" grow>
             <TextInput
               label="Product Name"
-              placeholder="Product Name"
+              placeholder="Enter product name"
               {...form.getInputProps('name')}
               radius="lg"
-              error={form.errors.name}
             />
             <TextInput
               label="Product Brand"
-              placeholder="Product Brand"
+              placeholder="Enter brand"
               {...form.getInputProps('brand')}
               radius="lg"
-              error={form.errors.brand}
             />
             <Textarea
               label="Product Description"
-              placeholder="Product Description"
+              placeholder="Enter description"
               {...form.getInputProps('description')}
               radius="lg"
-              error={form.errors.description}
             />
             <Select
               data={[
@@ -360,18 +363,22 @@ const ProductsList = () => {
               ]}
               radius="lg"
               label="Product Category"
-              placeholder="Product Category"
+              placeholder="Select category"
               {...form.getInputProps('category')}
-              error={form.errors.category}
             />
             <NumberInput
               label="Product Count"
-              placeholder="Product Count"
-              {...form.getInputProps('count')}
+              placeholder="Enter stock count"
+              {...form.getInputProps('count_in_stock')}
               radius="lg"
-              error={form.errors.count}
             />
-
+            <TextInput
+              label="Product Image"
+              placeholder="Upload image"
+              value={image || selectedImage}
+              readOnly
+              radius="lg"
+            />
             {uploading ? (
               <Loading />
             ) : (
@@ -382,13 +389,10 @@ const ProductsList = () => {
                 onChange={uploadFileHandler}
               />
             )}
-            {selectedImage && <Text>{selectedImage}</Text>}
-
             <NumberInput
               label="Product Price"
-              placeholder="Product Price"
+              placeholder="Enter price"
               {...form.getInputProps('price')}
-              error={form.errors.price}
               radius="lg"
             />
             <Button type="submit" color="dark" radius="lg">
@@ -400,11 +404,11 @@ const ProductsList = () => {
       <Card shadow="md" radius="lg">
         <Group sx={{ marginBottom: '1rem' }} direction="row" position="apart">
           <Text weight={700}>Products</Text>
-          <Button radius="lg" color="dark" onClick={() => handlerOpenForm()}>
+          <Button radius="lg" color="dark" onClick={handlerOpenForm}>
             Add New Product
           </Button>
         </Group>
-        {loading ? (
+        {loading || createProductLoading ? (
           <Loading />
         ) : (
           <Group position="center" direction="column">
@@ -425,7 +429,7 @@ const ProductsList = () => {
               <tbody>
                 {products && products.data
                   ? products.data.map((product: any) => (
-                      <tr key={product._id}>
+                      <tr key={product.id}>
                         <td>{product.brand}</td>
                         <td>{product.name}</td>
                         <td>{product.description.substring(0, 50) + '...'}</td>
@@ -439,14 +443,13 @@ const ProductsList = () => {
                           />
                         </td>
                         <td>{product.category}</td>
-                        <td>{product.countInStock}</td>
+                        <td>{product.count_in_stock}</td>
                         <td>${product.price}</td>
                         <td>
                           <Button
                             color="dark"
                             radius="xl"
-                            onClick={() => handlerSetDetails(product)}
-                          >
+                            onClick={() => handlerSetDetails(product)}>
                             <BiDetail />
                           </Button>
                         </td>
@@ -454,8 +457,7 @@ const ProductsList = () => {
                           <Button
                             color="red"
                             radius="xl"
-                            onClick={() => selectItem(product._id)}
-                          >
+                            onClick={() => selectItem(product.id)}>
                             <BiTrashAlt />
                           </Button>
                         </td>
@@ -465,11 +467,15 @@ const ProductsList = () => {
               </tbody>
             </Table>
             <Pagination
-              total={Math.round(products.total / products.count)}
+              total={
+                products && products.total
+                  ? Math.ceil(products.total / 8)
+                  : 1
+              }
               page={activePage}
               color="dark"
               radius="xl"
-              onChange={e => handlerPageChange(e)}
+              onChange={handlerPageChange}
             />
           </Group>
         )}

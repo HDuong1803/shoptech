@@ -23,7 +23,7 @@ export const addToCart = (
       price
     }
     const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`).data
-      .detail._id
+      .detail.id
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ export const addToCart = (
     dispatch({
       type: ActionType.CART_ADD_ITEM,
       payload: {
-        product: data.data._id,
+        product_id: data.data.id,
         name: data.data.name,
         quantity: data.data.quantity,
         image: data.data.image,
@@ -57,8 +57,8 @@ export const getCart = () => {
         type: ActionType.GET_CART_REQUEST
       })
       const token = `${localStorage.getItem('access_token')}`
-      const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`).data
-        .detail._id
+      const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`)?.data
+        ?.detail?.id
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ export const getCart = () => {
     } catch (error: any) {
       dispatch({
         type: ActionType.GET_CART_FAIL,
-        payload: error.response.data.message
+        payload: error.response?.data?.message
       })
     }
   }
@@ -88,7 +88,7 @@ export const updateCart = (product_id: string, action: string) => {
     }
 
     const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`).data
-      .detail._id
+      .detail.id
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -112,7 +112,7 @@ export const removeFromCart = (product_id: string) => {
   return async (dispatch: Dispatch<Action>) => {
     const token = `${localStorage.getItem('access_token')}`
     const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`).data
-      .detail._id
+      .detail.id
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -171,7 +171,7 @@ export const getProducts = (page: number) => {
     } catch (error: any) {
       dispatch({
         type: ActionType.GET_PRODUCTS_FAIL,
-        payload: error.response.data.message
+        payload: error?.response?.data?.message
       })
     }
   }
@@ -184,7 +184,7 @@ export const createProduct = (
   category: string,
   description: string,
   price: number,
-  countInStock: number
+  count_in_stock: number
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
@@ -198,15 +198,14 @@ export const createProduct = (
           Authorization: `${token}`
         }
       }
-      const image: string = images[0]
       const formData = {
         name,
-        image,
+        image: images,
         brand,
         category,
         description,
         price,
-        countInStock
+        count_in_stock
       }
 
       const { data } = await axios.post(
@@ -236,7 +235,7 @@ export const updateProduct = (
   category?: string,
   description?: string,
   price?: number,
-  countInStock?: number
+  count_in_stock?: number
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
@@ -257,7 +256,7 @@ export const updateProduct = (
         category,
         description,
         price,
-        countInStock
+        count_in_stock
       }
 
       const { data } = await axios.put(
@@ -286,7 +285,7 @@ export const updateProduct = (
 //       action,
 //     };
 
-//     const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail._id;
+//     const user_id = JSON.parse(`${localStorage.getItem("userInfo")}`).data.detail.id;
 //       const config = {
 //         headers: {
 //           "Content-Type": "application/json",
@@ -334,8 +333,9 @@ export const quickSearchProducts = (keyword?: string) => {
       })
 
       const { data } = await axios.get(
-        `${SERVER.baseURL}/product/search?keyword=${keyword}`
-      )
+        `${SERVER.baseURL}/product/search?keyword=${encodeURIComponent(keyword || '')}`
+      );
+
       dispatch({
         type: ActionType.QUICK_SEARCH_SUCCESS,
         payload: data.data
@@ -382,8 +382,8 @@ export const addReview = (id: string, rating: number, comment: string) => {
 
       const token = `${localStorage.getItem('access_token')}`
 
-      const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`).data
-        .detail._id
+      const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`)?.data
+        ?.detail?.id
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -405,9 +405,9 @@ export const addReview = (id: string, rating: number, comment: string) => {
     } catch (error: any) {
       dispatch({
         type: ActionType.ADD_REVIEW_FAIL,
-        payload: error.response.data.message
-          ? error.response.data.message
-          : error.message
+        payload: error?.response?.data?.message
+          ? error?.response?.data?.message
+          : error?.message
       })
     }
   }
@@ -439,7 +439,7 @@ export const register = (
       }
 
       const { data } = await axios.post(
-        `${SERVER.baseURL}/user/signup`,
+        `${SERVER.baseURL}/auth/signup`,
         formData,
         config
       )
@@ -483,7 +483,7 @@ export const login = (email: string, password: string) => {
       }
 
       const { data } = await axios.post(
-        `${SERVER.baseURL}/user/login`,
+        `${SERVER.baseURL}/auth/login`,
         formData,
         config
       )
@@ -530,8 +530,8 @@ export const createOrder = (shipping_address: any, payment_method: string) => {
       })
 
       const token = `${localStorage.getItem('access_token')}`
-      const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`).data
-        .detail._id
+      const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`)?.data
+        ?.detail?.id
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -572,8 +572,8 @@ export const getOrder = (id: any) => {
       })
 
       const token = `${localStorage.getItem('access_token')}`
-      const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`).data
-        .detail._id
+      const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`)?.data
+        ?.detail?.id
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -637,8 +637,8 @@ export const payOrder = (order_id: any) => {
 
       const token = `${localStorage.getItem('access_token')}`
 
-      const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`).data
-        .detail._id
+      const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`)?.data
+        ?.detail?.id || JSON.parse(`${localStorage.getItem('userInfo')}`)?.id
       const config = {
         headers: {
           accept: 'application/json',
@@ -673,8 +673,8 @@ export const getUser = () => {
 
       const token = `${localStorage.getItem('access_token')}`
 
-      const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`).data
-        .detail._id
+      const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`)?.data
+        ?.detail?.id
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -689,7 +689,7 @@ export const getUser = () => {
         type: ActionType.GET_USER_SUCCESS,
         payload: data.data
       })
-      localStorage.setItem('userDetail', JSON.stringify(data.data))
+      localStorage.setItem('userInfo', JSON.stringify(data.data))
     } catch (error: any) {
       dispatch({
         type: ActionType.GET_USER_FAIL,
@@ -706,7 +706,7 @@ export const getUsers = (page: any) => {
         type: ActionType.GET_USERS_REQUEST
       })
 
-      const token = `${localStorage.getItem('access_token')}`
+      const token = `${localStorage.getItem('access_token') || ''}`
 
       const config = {
         headers: {
@@ -777,8 +777,8 @@ export const getMyOrders = () => {
 
       const token = `${localStorage.getItem('access_token')}`
 
-      const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`).data
-        .detail._id
+      const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`)?.data
+        ?.detail?.id
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -814,8 +814,8 @@ export const updateProfile = (
 
       const token = `${localStorage.getItem('access_token')}`
 
-      const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`).data
-        .detail._id
+      const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`)?.data
+        ?.detail?.id
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -862,8 +862,8 @@ export const updateUser = (id: string, isAdmin: boolean) => {
 
       const token = `${localStorage.getItem('access_token')}`
 
-      const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`).data
-        .detail._id
+      const user_id = JSON.parse(`${localStorage.getItem('userInfo')}`)?.data
+        ?.detail?.id
       const config = {
         headers: {
           'Content-Type': 'application/json',

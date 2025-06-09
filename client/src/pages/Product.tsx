@@ -73,6 +73,8 @@ const Product = () => {
   const { quickSearch } = useSelector((state: State) => state.quickSearch)
 
   const { userInfo } = useSelector((state: State) => state.userLogin)
+  const { user } = useSelector((state: State) => state.user)
+  
   const {
     review,
     loading: reviewLoading,
@@ -115,13 +117,12 @@ const Product = () => {
   }
 
   const handlerAddToCart = (
-    product_id: string,
     name: string,
     quantity: number,
     image: string,
     price: number
   ) => {
-    addToCart(product_id, name, quantity, image, price)
+    addToCart(product.id, name, quantity, image, price)
   }
 
   useEffect(() => {
@@ -154,11 +155,11 @@ const Product = () => {
       })
 
       if (Object.keys(product).length && product.reviews.length) {
-        const userReviewed = list_user_id.includes(userInfo.data.detail._id)
+        const userReviewed = list_user_id.includes(user.id)
         setHasReviewed(userReviewed)
       }
     }
-  }, [product, userInfo, setHasReviewed])
+  }, [product, user, setHasReviewed])
 
   useEffect(() => {
     getProduct(params.id as string)
@@ -251,7 +252,7 @@ const Product = () => {
                         {product.name}
                       </Text>
 
-                      {product.countInStock === 0 ? (
+                      {product.count_in_stock === 0 ? (
                         <Badge
                           color="red"
                           sx={{ marginLeft: '10px' }}
@@ -325,9 +326,8 @@ const Product = () => {
                           color="dark"
                           onClick={() =>
                             handlerAddToCart(
-                              product._id,
                               product.name,
-                              product.quantity,
+                              product.quantity || 1,
                               product.image,
                               product.price
                             )
@@ -406,10 +406,10 @@ const Product = () => {
                     <ReviewCard
                       comment={review.comment}
                       date={review.created_at}
-                      id={review._id}
+                      id={review.id}
                       username={review.username}
                       rating={review.rating}
-                      key={review._id}
+                      key={review.id}
                     />
                   )
                 })

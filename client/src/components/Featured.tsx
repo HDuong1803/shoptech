@@ -44,7 +44,7 @@ const Featured = ({ title, subTitle }: { title: string; subTitle: string }) => {
             return (
               <Col xs={12} sm={6} md={4} lg={3} span={3}>
                 <ItemCard
-                  id={product._id}
+                  id={product.id}
                   name={product.name}
                   image={product.image}
                   brand={product.brand}
@@ -53,7 +53,7 @@ const Featured = ({ title, subTitle }: { title: string; subTitle: string }) => {
                   rating={product.rating}
                   numReviews={product.numReviews}
                   price={product.price}
-                  countInStock={product.countInStock}
+                  count_in_stock={product.count_in_stock}
                   reviews={product.reviews}
                 />
               </Col>

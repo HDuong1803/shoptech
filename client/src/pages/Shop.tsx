@@ -53,7 +53,7 @@ const Shop = () => {
           {products && products.data
             ? products.data.map((product: any) => (
                 <Col
-                  key={product._id}
+                  key={product.id}
                   xs={12}
                   sm={6}
                   md={4}
@@ -62,7 +62,7 @@ const Shop = () => {
                   span={3}
                 >
                   <ItemCard
-                    id={product._id}
+                    id={product.id}
                     name={product.name}
                     image={product.image}
                     brand={product.brand}
@@ -71,7 +71,7 @@ const Shop = () => {
                     rating={product.rating}
                     numReviews={product.numReviews}
                     price={product.price}
-                    countInStock={product.countInStock}
+                    count_in_stock={product.count_in_stock}
                     reviews={product.reviews}
                   />
                 </Col>
@@ -79,7 +79,7 @@ const Shop = () => {
             : null}
           <Col className="flex-container" sx={{ margin: '1rem 0' }} span={12}>
             <Pagination
-              total={Math.round(products.total / products.count)}
+              total={Math.round(products.total / 8) || 1}
               page={activePage}
               color="dark"
               radius="xl"

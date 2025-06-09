@@ -13,7 +13,7 @@ interface IItemCard {
   rating: number
   numReviews: number
   price: number
-  countInStock: number
+  count_in_stock: number
   reviews: any
 }
 
@@ -27,7 +27,7 @@ const ItemCard: React.FC<PropsWithChildren<IItemCard>> = ({
   rating,
   numReviews,
   price,
-  countInStock,
+  count_in_stock,
   reviews
 }) => {
   const navigate = useNavigate()

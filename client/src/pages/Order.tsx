@@ -52,7 +52,7 @@ const Order = () => {
     dispatch(asyncAction(getUser()))
     dispatch(asyncAction(getOrder(params.order)))
   }, [dispatch])
-
+  console.log('url', url)
   useEffect(() => {
     const isValidUrl = (url: any) => {
       const pattern = new RegExp(
@@ -61,10 +61,13 @@ const Order = () => {
       return pattern.test(url)
     }
 
-    if (url && isValidUrl(url)) {
+    console.log(1)
+    if (url) {
+      console.log(2)
       setIsLoading(false)
       window.location.href = url
     }
+    console.log(3)
   }, [url])
 
   return (

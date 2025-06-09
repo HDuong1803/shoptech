@@ -5,10 +5,11 @@ const userInfoFromStorage = localStorage.getItem('userInfo')
   ? JSON.parse(localStorage.getItem('userInfo') || '{}')
   : null
 
-const userDetailFromStorage = localStorage.getItem('userDetail')
-  ? JSON.parse(localStorage.getItem('userDetail') || '{}')
+const userDetailFromStorage = localStorage.getItem('userInfo')
+  ? JSON.parse(localStorage.getItem('userInfo') || '{}')
   : null
 
+const userDetail = userDetailFromStorage?.data?.detail
 const listUserFromStorage = localStorage.getItem('listUser')
   ? JSON.parse(localStorage.getItem('listUser') || '[]')
   : null
@@ -67,7 +68,7 @@ const loginReducer = (
 
 const getUserReducer = (
   state = {
-    user: userDetailFromStorage,
+    user: userDetail,
     error: null,
     loading: false
   },

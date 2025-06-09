@@ -104,7 +104,7 @@ const OrdersList = () => {
               <tbody>
                 {orders && orders.length
                   ? orders.map((order: any) => (
-                      <tr key={order._id}>
+                      <tr key={order.id}>
                         <td>
                           <Text size="sm" weight={600}>
                             {order.username}
@@ -172,7 +172,7 @@ const OrdersList = () => {
                           ) : (
                             <Switch
                               checked={order.is_delivered}
-                              onChange={() => handlerDeliverOrder(order._id)}
+                              onChange={() => handlerDeliverOrder(order.id)}
                               color="dark"
                             />
                           )}
@@ -183,7 +183,7 @@ const OrdersList = () => {
               </tbody>
             </Table>
             <Pagination
-              total={Math.round(orders.total / orders.count)}
+              total={Math.round(orders.total / 8) || 1}
               page={activePage}
               color="dark"
               radius="xl"

@@ -23,9 +23,10 @@ import UsersList from './pages/ admin/UsersList'
 import ProductsList from './pages/ admin/ProductsList'
 import OrdersList from './pages/ admin/OrdersList'
 import NotFound from './pages/NotFound'
+const ProviderTyped = Provider as any
 
 ReactDOM.render(
-  <Provider store={store}>
+  <ProviderTyped store={store}>
     <MantineProvider
       theme={{
         breakpoints: {
@@ -65,7 +66,7 @@ ReactDOM.render(
         </ModalsProvider>
       </NotificationsProvider>
     </MantineProvider>
-  </Provider>,
+  </ProviderTyped>,
   document.getElementById('root')
 )
 reportWebVitals()

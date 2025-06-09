@@ -101,7 +101,7 @@ const Profile = () => {
       navigate('/login')
     } else if (userInfo) {
       dispatch(asyncAction(getUser()))
-      if (user.role === 1) {
+      if (user?.role === 1) {
         setIsAdmin(true)
       } else {
         setIsUser(true)
@@ -312,10 +312,10 @@ const Profile = () => {
                 <tbody>
                   {myOrder && myOrder.length
                     ? myOrder.map((order: any) => (
-                        <tr key={order._id}>
+                        <tr key={order.id}>
                           <td>
                             <NavLink
-                              to={`/order/${order._id}`}
+                              to={`/order/${order.id}`}
                               style={{ textDecoration: 'none', color: '#000' }}
                             >
                               <List size="sm">
@@ -335,7 +335,7 @@ const Profile = () => {
                           </td>
                           <td>
                             <NavLink
-                              to={`/order/${order._id}`}
+                              to={`/order/${order.id}`}
                               style={{ textDecoration: 'none', color: '#000' }}
                             >
                               <Text size="sm" weight={600}>
@@ -350,7 +350,7 @@ const Profile = () => {
 
                           <td>
                             <NavLink
-                              to={`/order/${order._id}`}
+                              to={`/order/${order.id}`}
                               style={{ textDecoration: 'none', color: '#000' }}
                             >
                               <Text size="sm" weight={600}>
@@ -362,7 +362,7 @@ const Profile = () => {
                           </td>
                           <td>
                             <NavLink
-                              to={`/order/${order._id}`}
+                              to={`/order/${order.id}`}
                               style={{ textDecoration: 'none', color: '#000' }}
                             >
                               <Text size="sm" weight={600}>
@@ -372,7 +372,7 @@ const Profile = () => {
                           </td>
                           <td>
                             <NavLink
-                              to={`/order/${order._id}`}
+                              to={`/order/${order.id}`}
                               style={{ textDecoration: 'none', color: '#000' }}
                             >
                               {order.is_paid ? (
@@ -394,7 +394,7 @@ const Profile = () => {
                           </td>
                           <td>
                             <NavLink
-                              to={`/order/${order._id}`}
+                              to={`/order/${order.id}`}
                               style={{ textDecoration: 'none', color: '#000' }}
                             >
                               {order.is_delivered ? (

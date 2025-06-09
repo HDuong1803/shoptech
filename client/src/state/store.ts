@@ -10,7 +10,11 @@ const asyncAction = createAsyncThunk(
 )
 const store = configureStore({
   reducer: reducers,
-  middleware: getDefaultMiddleware => getDefaultMiddleware()
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredPaths: ['user.error', 'createProduct.error']
+      }
+    })
 })
-
 export { store, asyncAction }
